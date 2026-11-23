@@ -4,13 +4,15 @@
   "version": "2.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
-    "build": "vite build",
+    "dev": "node tools/build-blog.mjs && vite --host 127.0.0.1",
+    "blog": "node tools/build-blog.mjs",
+    "build": "node tools/build-blog.mjs && vite build",
     "serve": "node server.mjs"
   },
   "devDependencies": {
     "@iconify-json/solar": "^1.2.17",
     "@iconify/utils": "^3.1.7",
+    "marked": "^15.0.12",
     "puppeteer-core": "^25.18.1",
     "vite": "^8.3.8"
   }

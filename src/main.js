@@ -1,5 +1,9 @@
 // ClaudeIran landing — Keel redesign (behaviour from the redesign's page script) + early-access form.
 import './styles.css';
+import './blog.css';
+import { initEarlyAccess, cleanPhone, PHONE_OK } from './early-access.js';
+
+initEarlyAccess({ source: 'header', triggers: 'a[href="#early-access"], a[href="/#early-access"]' });
 (function(){
  'use strict';
  var root=document.documentElement; root.classList.add('js');
@@ -9,6 +13,7 @@ import './styles.css';
  var mb=document.getElementById('menuBtn'), mn=document.getElementById('mnav');
  mb.addEventListener('click',function(){var o=mn.classList.toggle('open');mb.setAttribute('aria-expanded',String(o));mb.setAttribute('aria-label',o?'بستن منو':'باز کردن منو')});
  mn.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){mn.classList.remove('open');mb.setAttribute('aria-expanded','false')})});
+ addEventListener('keydown',function(e){if(e.key==='Escape'&&mn.classList.contains('open')){mn.classList.remove('open');mb.setAttribute('aria-expanded','false');mb.focus()}});
 
  /* dense Keel bar field: n thin bars shaped from a few anchor heights; last share highlighted */
  function field(el,anchors,n,hiFrom,seed){
@@ -380,11 +385,10 @@ if (form) {
   const card = form.closest('.form-card');
   const alertBox = form.querySelector('[data-form-alert]');
   const submit = form.querySelector('button[type="submit"]');
-  const toLatin = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
   const rules = {
     name: v => { const t = v.trim(); return !t ? 'required' : t.length < 2 || t.length > 80 ? 'invalid' : null; },
     email: v => { const t = v.trim(); return !t ? 'required' : /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,24}$/.test(t) ? null : 'invalid'; },
-    mobile: v => (!v.trim() || /^(?:\+98|0098|0)?9\d{9}$/.test(toLatin(v).replace(/[\s-]/g, ''))) ? null : 'invalid',
+    mobile: v => { const t = cleanPhone(v); return !t ? 'required' : PHONE_OK(t) ? null : 'invalid'; },
     role: v => v ? null : 'required',
     usecase: v => { const t = v.trim(); return !t || t.length < 10 ? 'required' : t.length > 500 ? 'invalid' : null; },
     consent: (_, el) => el.checked ? null : 'required',
@@ -414,11 +418,13 @@ if (form) {
     const data = {
       name: form.elements.name.value.trim(),
       email: form.elements.email.value.trim(),
-      mobile: toLatin(form.elements.mobile.value).replace(/[\s-]/g, ''),
+      mobile: cleanPhone(form.elements.mobile.value),
       role: form.elements.role.value,
       usecase: form.elements.usecase.value.trim(),
       consent: form.elements.consent.checked,
       website: form.elements.website.value,
+      source: 'section',
+      page: location.pathname,
     };
     form.classList.add('is-submitting');
     submit.disabled = true;

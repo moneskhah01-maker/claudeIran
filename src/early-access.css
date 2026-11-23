@@ -1,0 +1,81 @@
+/* Early-access dialog — Keel language: white panel (28px), ink side panel with a
+   Persepolis relief, terracotta only for the dot / glow / success mark.
+   Desktop: centred two-column card. Phones: bottom sheet, form only. */
+html.ea-lock{overflow:hidden}
+dialog.ea{border:0;padding:16px;margin:auto;background:transparent;color:var(--ink);width:min(100%,960px);max-width:none;max-height:100dvh;overflow:visible}
+dialog.ea[open]{display:grid;place-items:center}
+dialog.ea::backdrop{background:rgba(24,28,37,.5);-webkit-backdrop-filter:blur(8px) saturate(120%);backdrop-filter:blur(8px) saturate(120%)}
+.ea-card{display:grid;grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr);width:100%;max-height:calc(100dvh - 32px);background:var(--white);border-radius:var(--r-xl);overflow:hidden;box-shadow:0 70px 140px -50px rgba(24,28,37,.6),0 20px 40px -24px rgba(24,28,37,.35)}
+
+/* side panel */
+.ea-side{position:relative;isolation:isolate;overflow:hidden;background:var(--ink);color:var(--white);padding:32px 30px 34px;display:flex;flex-direction:column;gap:14px;min-height:580px;margin:8px;margin-inline-end:0;border-radius:calc(var(--r-xl) - 6px)}
+.ea-side::after{content:"";position:absolute;z-index:-2;inset-block-end:-34%;inset-inline-start:-40%;width:110%;aspect-ratio:1;background:radial-gradient(closest-side,rgba(217,119,87,.42),rgba(217,119,87,0));pointer-events:none}
+.ea-side img{position:absolute;z-index:-1;top:64px;inset-inline-end:-22%;width:96%;max-width:none;opacity:.92;pointer-events:none;filter:drop-shadow(0 30px 40px rgba(0,0,0,.35));-webkit-mask-image:linear-gradient(180deg,#000 34%,transparent 80%);mask-image:linear-gradient(180deg,#000 34%,transparent 80%)}
+.ea-side .eyebrow{color:var(--white)}
+.ea-side .eyebrow .en{color:var(--on-dark-2)}
+.ea-side .eyebrow .dot{box-shadow:0 0 0 4px rgba(217,119,87,.25)}
+.ea-side-h{margin:auto 0 0;font-size:clamp(26px,2.4vw,32px);font-weight:300;line-height:1.5}
+.ea-side-h b{font-weight:800}
+.ea-side-list{list-style:none;margin:6px 0 0;padding:16px 0 0;border-top:1px solid var(--dark-line);display:grid;gap:10px}
+.ea-side-list li{display:flex;align-items:center;gap:10px;font-size:var(--fs-sm);color:#DADCE1;line-height:1.6}
+.ea-side-list .ico{width:16px;height:16px;color:var(--primary);stroke-width:2.4}
+
+/* form side */
+.ea-main{position:relative;padding:40px 40px 30px;overflow-y:auto;overscroll-behavior:contain;min-width:0;min-height:0;max-height:calc(100dvh - 32px)}
+dialog.ea .field input{font-size:16px}
+.ea-close{position:absolute;top:18px;inset-inline-end:18px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card-2);display:grid;place-items:center;transition:background .2s,border-color .2s,transform .35s var(--spring,ease)}
+.ea-close .ico{width:18px;height:18px;transform:rotate(45deg)}
+.ea-close:hover{background:var(--white);border-color:var(--ink);transform:rotate(90deg)}
+.ea-kicker{display:inline-flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-pill);padding:5px 13px 5px 11px;font-size:var(--fs-xs);font-weight:600;color:var(--text-2)}
+.ea-kicker .dot{width:6px;height:6px;box-shadow:0 0 0 3px var(--p-16)}
+.ea h2{margin:18px 0 0;font-size:clamp(24px,2.3vw,30px);font-weight:800;line-height:1.45;letter-spacing:0}
+.ea-lead{margin:10px 0 0;font-size:var(--fs-sm);line-height:1.95;color:var(--text-2);max-width:42ch}
+.ea-form{display:grid;gap:16px;margin-top:26px}
+.ea-form .consent{font-size:var(--fs-sm);line-height:1.85}
+.ea-form .form-alert{margin:0}
+.ea-submit{width:100%;min-height:54px;font-size:var(--fs-base);margin-top:2px}
+.is-submitting .ea-submit{opacity:.85;cursor:progress}
+.ea-fine{display:flex;gap:9px;align-items:flex-start;margin:0;font-size:var(--fs-xs);line-height:1.8;color:var(--secondary)}
+.ea-fine .ico{width:14px;height:14px;margin-top:3px;color:var(--text-2)}
+
+/* success */
+dialog.ea.is-done .ea-main{display:grid;align-content:center}
+.ea-done{text-align:center;padding:64px 6px 24px;display:grid;justify-items:center;gap:4px}
+.ea-done[hidden]{display:none}
+.ea-done:focus{outline:none}
+.ea-done .ok{width:68px;height:68px;border-radius:50%;background:var(--primary);display:grid;place-items:center;margin-bottom:10px;box-shadow:0 0 0 9px var(--p-16)}
+.ea-done .ok .ico{width:30px;height:30px;color:var(--ink);stroke-width:2.4}
+.ea-done h2{margin:6px 0 4px}
+.ea-done p{margin:0 auto 6px;max-width:34em;font-size:var(--fs-sm);line-height:1.95;color:var(--secondary)}
+.ea-done .btn{margin-top:18px;min-width:140px}
+dialog.ea.is-done .ea-done .ok{animation:ea-pop .5s var(--spring,ease) both}
+
+/* motion: opening answers the click; reduced motion = no animation (global rule) */
+dialog.ea[open] .ea-card{animation:ea-in .46s var(--spring,ease) both}
+dialog.ea[open]::backdrop{animation:ea-fade .3s ease both}
+dialog.ea.is-closing .ea-card{animation:ea-out .18s ease-in both}
+dialog.ea.is-closing::backdrop{animation:ea-fade .18s ease-in reverse both}
+@keyframes ea-in{from{opacity:0;transform:translateY(22px) scale(.965)}}
+@keyframes ea-out{to{opacity:0;transform:translateY(12px) scale(.98)}}
+@keyframes ea-fade{from{opacity:0}}
+@keyframes ea-pop{from{transform:scale(.6);opacity:0}}
+
+@media (max-width:900px){
+ dialog.ea{width:min(100%,580px)}
+ .ea-card{grid-template-columns:1fr}
+ .ea-side{display:none}
+}
+@media (max-width:760px){
+ dialog.ea{padding:0;width:100%;margin:auto 0 0}
+ dialog.ea[open]{display:block}
+ .ea-card{border-radius:26px 26px 0 0;max-height:94dvh}
+ .ea-main{padding:30px 20px calc(22px + env(safe-area-inset-bottom));max-height:94dvh}
+ .ea-main::before{content:"";position:absolute;top:10px;left:50%;width:42px;height:4px;margin-left:-21px;border-radius:4px;background:var(--line-2)}
+ .ea-close{top:16px;inset-inline-end:14px}
+ .ea h2{font-size:24px;margin-top:16px}
+ .ea-done{padding:44px 4px 12px}
+ dialog.ea[open] .ea-card{animation:ea-up .42s cubic-bezier(.22,.9,.3,1) both}
+ dialog.ea.is-closing .ea-card{animation:ea-down .2s ease-in both}
+ @keyframes ea-up{from{transform:translateY(100%)}}
+ @keyframes ea-down{to{transform:translateY(100%)}}
+}
