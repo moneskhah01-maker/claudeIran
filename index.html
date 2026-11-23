@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claude API برای تیم‌ها؛ کلید جدا، هزینهٔ شفاف | کلاود ایران</title>
+<meta name="description" content="دسترسی کنترل‌شده به Claude API برای تیم‌ها: کلید جدا برای هر پروژه، بودجه و سقف مصرف، هزینهٔ تخمینی پیش از ارسال و تسویهٔ دقیق تا سطح توکن. پیش از عرضه.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="%SITE_URL%/">
+<link rel="alternate" hreflang="fa-IR" href="%SITE_URL%/">
+<link rel="alternate" hreflang="x-default" href="%SITE_URL%/">
+<meta name="theme-color" content="#E9E9EB">
+<meta name="color-scheme" content="light">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:site_name" content="کلاود ایران">
+<meta property="og:url" content="%SITE_URL%/">
+<meta property="og:title" content="کلاود ایران: دسترسی کنترل‌شده به Claude API">
+<meta property="og:description" content="کلید جدا برای هر پروژه، بودجه و سقف خروجی، و تسویهٔ دقیق تا سطح توکن. محصول پیش از عرضه است و ظرفیت پایلوت محدود.">
+<meta property="og:image" content="%SITE_URL%/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="کلاود ایران، دسترسی کنترل‌شده به Claude API با کلید جدا برای هر پروژه و تسویهٔ دقیق هزینه">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="دسترسی کنترل‌شده به Claude API | کلاود ایران">
+<meta name="twitter:description" content="کلید جدا، بودجهٔ روشن و تسویهٔ دقیق برای هر درخواست. عضویت در فهرست دسترسی زودهنگام باز است.">
+<meta name="twitter:image" content="%SITE_URL%/og-image.png">
+<meta name="twitter:image:alt" content="کلاود ایران، دسترسی کنترل‌شده به Claude API با کلید جدا برای هر پروژه و تسویهٔ دقیق هزینه">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preload" href="/fonts/Vazirmatn-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Manrope-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/img/capital-persepolis.webp" as="image" fetchpriority="high">
+<script type="module" src="/src/main.js"></script>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+ <symbol id="i-arrow-ur" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+ <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></symbol>
+ <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+ <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 6.5-2.5 7.5-2.5 8.5h17C20.5 16.5 18 15.5 18 9ZM10 20.5a2.2 2.2 0 0 0 4 0"/></symbol>
+ <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+ <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></symbol>
+ <symbol id="i-check-sq" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/></symbol>
+ <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8.5-8.5M16 6.5l2.5 2.5M14 8.5l2 2"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+ <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+ <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16M8 16v-4m4 4V8m4 8v-6"/></symbol>
+ <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3.5 8.5 4.5-8.5 4.5L3.5 8 12 3.5ZM3.5 12.5 12 17l8.5-4.5M3.5 16.5 12 21l8.5-4.5"/></symbol>
+ <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="14" rx="3"/><path d="M3 9.5h18M16 14.5h2"/></symbol>
+ <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 19.5 6v5.5c0 4.8-3.3 8-7.5 9.5-4.2-1.5-7.5-4.7-7.5-9.5V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></symbol>
+ <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 0 1-13 5.1M4.5 12a7.5 7.5 0 0 1 13-5.1M17.5 3.5v3.4h-3.4M6.5 20.5v-3.4h3.4"/></symbol>
+ <symbol id="i-code" viewBox="0 0 24 24"><path d="m8.5 8-4 4 4 4m7-8 4 4-4 4"/></symbol>
+ <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="3"/><path d="m7 9.5 3 2.5-3 2.5M12.5 15h4.5"/></symbol>
+ <symbol id="i-hash" viewBox="0 0 24 24"><path d="M9 4 7.5 20M16.5 4 15 20M4.5 9h15M4 15h15"/></symbol>
+ <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></symbol>
+ <symbol id="i-brand" viewBox="0 0 32 32"><path d="m16 3.5 10.5 12.5L16 28.5 5.5 16 16 3.5Z" stroke-width="2.6"/><path d="M11 16h10" stroke-width="2.6" stroke-linecap="round"/></symbol>
+</svg>
+<a class="skip" href="#main">پرش به محتوای اصلی</a>
+
+<div class="announce" role="note"><span class="dot" aria-hidden="true"></span><span>کلاود ایران در مرحله پیش‌عرضه است؛ ثبت‌نام برای پایلوت اولیه باز است.</span><a href="#early-access">جزئیات عضویت</a></div>
+
+<div class="sheet">
+<!-- 01 HERO -->
+<header class="hero-panel hero" id="top">
+ <div class="wrap">
+  <div class="nav">
+   <a class="brand" href="#top" aria-label="کلاود ایران — بازگشت به ابتدای صفحه"><svg class="ico" aria-hidden="true"><use href="#i-brand"/></svg><span>کلاود ایران</span></a>
+   <nav class="navpill" aria-label="ناوبری اصلی">
+    <a href="#features" aria-current="true">مزیت‌ها</a><a href="#dashboard">داشبورد</a><a href="#how">روش کار</a><a href="#products">محصولات</a><a href="#developers">توسعه‌دهندگان</a><a href="#faq">سؤالات</a>
+   </nav>
+   <div class="nav-end">
+    <a class="btn btn-dark" href="#early-access">درخواست دسترسی <svg class="ico flip" aria-hidden="true"><use href="#i-arrow-ur"/></svg></a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mnav" aria-label="باز کردن منو"><svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg></button>
+   </div>
+  </div>
+  <nav class="mnav" id="mnav" aria-label="ناوبری موبایل">
+   <a href="#features">مزیت‌ها</a><a href="#dashboard">داشبورد</a><a href="#how">روش کار</a><a href="#products">محصولات</a><a href="#developers">توسعه‌دهندگان</a><a href="#faq">سؤالات متداول</a><a href="#early-access">درخواست دسترسی زودهنگام ↖</a>
+  </nav>
+
+  <div class="hero-grid">
+   <div class="hero-copy rv">
+    <span class="hero-status"><span class="dot" aria-hidden="true"></span>پلتفرم API · در مرحله پیش‌عرضه</span>
+    <h1><span class="en" lang="en">Claude API</span><b>زیر کنترل شما.</b><span class="aside">شفاف تا سطح توکن.</span></h1>
+    <p class="lead">کلید اختصاصی هر پروژه، بودجه‌ قابل‌کنترل و صورت‌حساب شفاف تا سطح توکن؛ زیرساختی برای تیم‌هایی که می‌خواهند با اطمینان بیشتری محصول بسازند.</p>
+    <div class="hero-cta">
+     <a class="btn btn-dark" href="#early-access">عضویت در فهرست دسترسی <svg class="ico flip" aria-hidden="true"><use href="#i-arrow-ur"/></svg></a>
+     <a class="btn btn-line" href="/console.html">مشاهده کنسول تعاملی</a>
+    </div>
+    <ul class="checks" aria-label="اصول محصول">
+     <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>هزینه مشخص پیش از ارسال</li>
+     <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>کلید جدا برای هر پروژه</li>
+     <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>تسویه بر اساس مصرف واقعی</li>
+    </ul>
+   </div>
+   <div class="hero-visual rv" aria-label="سرستون هخامنشی تخت جمشید با کارت‌های نمونه رابط کاربری؛ داده‌ها نمایشی هستند">
+    <img class="statue" src="/img/capital-persepolis.webp" width="1300" height="1602" alt="سرستون سنگی دوسر اسب از تخت جمشید، دوره هخامنشی" fetchpriority="high">
+    <div class="float f-conf" aria-hidden="true">
+     <h3>بودجه ماهانه</h3>
+     <div class="big num">68%</div>
+     <small>مصرف‌شده · نمونه</small>
+     <div class="steps"><i style="height:42%"></i><i style="height:30%"></i><i class="hi" style="height:88%"><span class="pill pill-p num">68%</span></i><i class="lo" style="height:22%"></i></div>
+     <div class="legend"><span><i class="p"></i>مصرف</span><span>رزرو</span><span><i></i>آزاد</span></div>
+    </div>
+    <div class="float f-run" aria-hidden="true">
+     <div class="row"><h3>تطبیق کیف پول</h3><span class="pill pill-ondark"><span class="dot" aria-hidden="true"></span>تراز شد</span></div>
+     <div class="big"><span class="num">100%</span></div>
+     <small>رابط نمونه · دادهٔ غیرواقعی</small>
+     <svg viewBox="0 0 200 42" preserveAspectRatio="none"><defs><linearGradient id="lg1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#D97757" stop-opacity=".35"/><stop offset="1" stop-color="#D97757" stop-opacity="0"/></linearGradient></defs><path d="M0 32C20 30 30 22 48 25S78 36 98 28 130 12 150 17 180 14 196 6V42H0Z" fill="url(#lg1)"/><path d="M0 32C20 30 30 22 48 25S78 36 98 28 130 12 150 17 180 14 196 6" fill="none" stroke="#D97757" stroke-width="2.2" stroke-linecap="round"/><circle cx="196" cy="6" r="3.6" fill="#D97757"/></svg>
+    </div>
+   </div>
+  </div>
+ </div>
+</header>
+
+<main id="main">
+ <!-- dashboard device overlapping the hero -->
+ <section class="device rv" aria-label="نمای شماتیک داشبورد مصرف و بودجه کلاود ایران؛ داده‌ها ساختگی هستند" id="dashboard-preview">
+  <div class="screen">
+   <div class="d-top">
+    <span class="brand"><svg class="ico" aria-hidden="true"><use href="#i-brand"/></svg><span class="en">claudeiran</span></span>
+    <a class="d-chip" href="/console.html?modal=project"><svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg>پروژه جدید</a>
+    <button class="d-chip" type="button" id="dPeriod" aria-pressed="false">۳۰ روز گذشته</button>
+    <div class="tabs" role="group" aria-label="بخش‌های پیش‌نمایش کنسول" id="dTabs"><button type="button" data-dtab="overview" aria-pressed="true">نمای کلی</button><button type="button" data-dtab="usage" aria-pressed="false">گزارش مصرف</button><button type="button" data-dtab="projects" aria-pressed="false">پروژه‌ها</button><button type="button" data-dtab="keys" aria-pressed="false">کلیدهای API</button><button type="button" data-dtab="requests" aria-pressed="false">درخواست‌ها</button></div>
+    <button class="d-icon bell" type="button" id="dBell" aria-label="هشدارهای نمونه" aria-expanded="false" aria-controls="dPop"><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg></button>
+    <a class="d-avatar en" href="/console.html" aria-label="باز کردن کنسول تعاملی">CI</a>
+    <div class="d-pop" id="dPop" hidden>
+     <b>هشدارها · نمونه</b>
+     <a href="/console.html?view=security">بودجه به ۶۸٪ رسید<small>سقف ماهانه ۲ میلیون تومان · ۲ ساعت پیش</small></a>
+     <a href="/console.html">تأیید لازم است<small>کلید آزمایشی تازه برای «تحلیل اسناد»</small></a>
+     <a class="all" href="/console.html">همه هشدارها در کنسول تعاملی ↖</a>
+    </div>
+   </div>
+   <div class="d-grid" id="dGrid">
+    <div>
+     <div class="d-cash">
+      <div><div class="label">اعتبار قابل استفاده</div><div class="big num"><span data-count>8.45</span><span class="tail">M</span></div><div class="unit">تومان · داده نمونه</div></div>
+      <span class="tag-demo">نسخه نمایشی · اطلاعات نمونه</span>
+     </div>
+     <div class="tiles" id="dTiles">
+      <div class="tile"><div class="t-top"><b class="num">68%</b><span class="pill pill-soft">ماهانه</span></div><small>بودجه مصرف‌شده</small></div>
+      <div class="tile"><div class="t-top"><b class="num">03</b><span class="pill pill-soft"><span class="dot" aria-hidden="true" style="width:6px;height:6px;box-shadow:none"></span>فعال</span></div><small>کلیدهای API فعال</small></div>
+      <div class="tile"><div class="t-top"><b class="num">18,420</b></div><small>درخواست · ۷ روز</small></div>
+      <div class="tile"><div class="t-top"><b class="num">1.8s</b></div><small>میانگین زمان پاسخ</small></div>
+     </div>
+     <div class="chart-card">
+      <div class="head"><div><h3 id="dChartH">روند مصرف API</h3><p id="dChartP">۷ روز گذشته · توکن خروجی · نمونه</p></div><span class="pill pill-grey" id="dChartPill">۷ روز گذشته</span></div>
+      <div class="barfield grow" id="heroBars" aria-hidden="true"></div>
+      <div class="axis" id="dAxis" aria-hidden="true"><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span><span class="hi">ش</span><span class="hi">ی</span></div>
+      <p class="d-read" id="dRead" aria-hidden="true"></p>
+     </div>
+    </div>
+    <div>
+     <div class="d-side">
+      <div class="mini">
+       <h3>بودجه ماهانه چقدر مصرف شده است؟</h3>
+       <div class="big num">68%</div><small>مصرف‌شده</small>
+       <div class="steps" style="height:96px"><i style="height:40%" data-v="هفته ۱ · 22%"></i><i style="height:30%" data-v="هفته ۲ · 18%"></i><i class="hi" style="height:86%"><span class="pill pill-p num">68%</span></i><i class="lo" style="height:20%" data-v="پیش‌بینی · 20%"></i></div>
+       <div class="legend"><span><i class="p"></i>مصرف</span><span>رزرو</span><span><i></i>آزاد</span></div>
+      </div>
+      <div class="mini gauge" id="dGauge">
+       <h3>توزیع بودجه · ماه جاری</h3>
+       <div class="big num" id="dGaugeV">68%</div><small id="dGaugeL">بودجهٔ تخصیص‌یافته</small>
+       <svg viewBox="0 0 200 116" aria-hidden="true"><path class="g-free" d="M14 104a86 86 0 0 1 172 0" fill="none" stroke="#3A404C" stroke-width="7" stroke-linecap="round"/><path class="g-used" d="M14 104a86 86 0 0 1 172 0" fill="none" stroke="#D97757" stroke-width="7" stroke-linecap="round" pathLength="100" stroke-dasharray="68 100"/><path class="g-res" d="M14 104a86 86 0 0 1 172 0" fill="none" stroke="#8A8D95" stroke-width="7" pathLength="100" stroke-dasharray="0 68.6 14.4 100" opacity=".6"/></svg>
+       <div class="legend"><span data-g="used" data-v="68%" data-l="بودجهٔ مصرف‌شده"><i class="p"></i>مصرف‌شده</span><span data-g="res" data-v="14.4%" data-l="رزرو موقت · در انتظار تسویه"><i style="background:#8A8D95"></i>رزرو</span><span data-g="free" data-v="17.6%" data-l="بودجهٔ آزاد"><i></i>آزاد</span></div>
+      </div>
+     </div>
+     <div class="proj">
+      <div class="head"><h3 id="dTblH">پروژه‌های اخیر</h3><a class="tag-demo" id="dTblLink" href="/console.html?view=projects">همه پروژه‌ها ↖</a></div>
+      <table class="ktable" id="dTbl">
+       <thead><tr><th scope="col">پروژه</th><th scope="col">مدل</th><th scope="col">وضعیت</th></tr></thead>
+       <tbody>
+        <tr><td>دستیار پشتیبانی</td><td class="dim en">Claude Sonnet</td><td><span class="st"><i></i>فعال</span></td></tr>
+        <tr><td>استودیوی محتوا</td><td class="dim en">Claude Haiku</td><td><span class="st"><i></i>فعال</span></td></tr>
+       </tbody>
+      </table>
+      <p class="foot-note">کانسپت رابط محصول · داده نمایشی</p>
+     </div>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <!-- 02 works-with strip (only what the source names) -->
+ <section class="strip" aria-label="ساختار فنی">
+  <div class="wrap">
+   <p>ساختاری آشنا برای توسعه‌دهنده — مسیرهای نسخه‌دار، شناسه درخواست و نمونه‌کد</p>
+   <div class="banner" id="techBanner">
+    <div class="marquee">
+     <div class="mq-inner">
+      <ul class="mq-track">
+    <li><svg class="ico" aria-hidden="true"><use href="#i-code"/></svg>REST API</li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-terminal"/></svg>cURL</li>
+    <li>Node.js</li>
+    <li>Python</li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg>Versioned endpoints</li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-hash"/></svg>Request IDs</li>
+      </ul>
+      <ul class="mq-track" aria-hidden="true">
+    <li><svg class="ico" aria-hidden="true"><use href="#i-code"/></svg>REST API</li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-terminal"/></svg>cURL</li>
+    <li>Node.js</li>
+    <li>Python</li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg>Versioned endpoints</li>
+    <li><svg class="ico" aria-hidden="true"><use href="#i-hash"/></svg>Request IDs</li>
+      </ul>
+     </div>
+    </div>
+    <button class="mq-toggle" type="button" id="mqToggle" aria-pressed="false" aria-label="توقف حرکت نوار"><svg class="ico i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg><svg class="ico i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5-10-6.5Z"/></svg></button>
+   </div>
+  </div>
+ </section>
+
+ <!-- 03 THE FIX / VALUES -->
+ <section class="sec fix center" id="features">
+  <div class="wrap">
+   <span class="eyebrow rv" style="--d:0s"><span class="dot" aria-hidden="true"></span>مزیت‌های اصلی <span class="en">BUILT AROUND CONTROL</span></span>
+   <h2 class="h-display rv" style="--d:.1s">سادگی در استفاده. <b>نظم در مدیریت.</b></h2>
+   <p class="lead rv">برای تیمی که با API محصول می‌سازد، مسئله فقط اتصال نیست. باید بداند چه کسی، در کدام پروژه و با چه هزینه‌ای از مدل استفاده کرده است.</p>
+   <div class="principles">
+    <article class="principle rv rv-pop" style="--d:0s">
+     <div class="pr-top"><span class="pr-ic"><svg class="ico" aria-hidden="true"><use href="#i-wallet"/></svg></span><span class="n en">01</span></div>
+     <h3>هزینه قابل پیش‌بینی</h3><p>تخمین پیش از درخواست، کسر بعد از مصرف</p>
+     <div class="pr-viz" aria-hidden="true"><div class="vz-bar"><span>تخمین</span><i><b style="--w:88%"></b></i><em class="num">14,200</em></div><div class="vz-bar hi"><span>کسر نهایی</span><i><b style="--w:76%"></b></i><em class="num">12,480</em></div><small>تومان · نمونه</small></div>
+    </article>
+    <article class="principle rv rv-pop" style="--d:.16s">
+     <div class="pr-top"><span class="pr-ic"><svg class="ico" aria-hidden="true"><use href="#i-key"/></svg></span><span class="n en">02</span></div>
+     <h3>دسترسی تفکیک‌شده</h3><p>هر مشتری یا محصول، کلید و بودجه خودش</p>
+     <div class="pr-viz" aria-hidden="true"><div class="vz-key" style="--i:0"><span><i></i>دستیار پشتیبانی</span><code class="en">•••• 2491</code></div><div class="vz-key" style="--i:1"><span><i></i>استودیوی محتوا</span><code class="en">•••• 8364</code></div><div class="vz-key" style="--i:2"><span><i></i>تحلیل بازخورد</span><code class="en">•••• 1706</code></div></div>
+    </article>
+    <article class="principle rv rv-pop" style="--d:.32s">
+     <div class="pr-top"><span class="pr-ic"><svg class="ico" aria-hidden="true"><use href="#i-hash"/></svg></span><span class="n en">03</span></div>
+     <h3>ساختار قابل پیگیری</h3><p>شناسه درخواست و گزارش دقیق مصرف</p>
+     <div class="pr-viz" aria-hidden="true"><div class="vz-trace" style="--i:0"><code class="en">req_7f3a92</code><span class="vz-steps"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></span><span class="vz-ok">تسویه‌شده</span></div><div class="vz-trace" style="--i:1"><code class="en">req_3e1c44</code><span class="vz-steps"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></span><span class="vz-ok">تسویه‌شده</span></div></div>
+    </article>
+   </div>
+  </div>
+ </section>
+
+ <section class="sec" style="padding-top:0" aria-labelledby="cost-h">
+  <div class="wrap split">
+   <article class="cost-card rv" aria-label="نمونه هزینه یک درخواست؛ داده آزمایشی">
+    <span class="gloss" aria-hidden="true"></span>
+    <div class="top"><div><div class="label">هزینه یک درخواست · <span class="en">req_7f3a</span></div><div class="big num">12,480</div><small>تومان · داده آزمایشی</small></div><a class="round-btn" href="/console.html?view=requests&amp;request=req_7f3a92" aria-label="مشاهده جزئیات درخواست نمونه در کنسول"><svg class="ico flip" aria-hidden="true"><use href="#i-arrow-ur"/></svg></a></div>
+    <div class="tiles">
+     <div class="tile"><b class="num">1,892</b><small>توکن ورودی</small></div>
+     <div class="tile"><b class="num">641</b><small>توکن خروجی</small></div>
+     <div class="tile"><b class="en">Sonnet</b><small>مدل</small></div>
+     <div class="tile"><div class="t-top"><b style="font-size:16px;font-weight:600">تسویه‌شده</b></div><small>وضعیت هزینه</small></div>
+    </div>
+    <div class="meta"><span class="chip"><svg class="ico" aria-hidden="true"><use href="#i-refresh"/></svg>تسویه بر اساس مصرف واقعی</span><span class="chip">نمونه رابط کاربری، نه اطلاعات زنده</span></div>
+   </article>
+   <div class="split-copy rv">
+    <span class="eyebrow"><span class="dot" aria-hidden="true"></span>هزینه <span class="en">01 / COST</span></span>
+    <h2 id="cost-h">صورت‌حساب شفاف، تا سطح هر توکن</h2>
+    <p class="lead">نرخ‌های جدا برای توکن ورودی و خروجی، ثبت مصرف واقعی و پیگیری هر تراکنش با شناسه مخصوص.</p>
+    <ul class="checks">
+     <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>تخمین پیش از درخواست، کسر بعد از مصرف</li>
+     <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>نرخ جدا برای توکن ورودی و توکن خروجی</li>
+     <li><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>هر تراکنش با شناسه مخصوص قابل پیگیری است</li>
+    </ul>
+    <div class="actions">
+     <a class="btn btn-dark" href="#early-access">عضویت در فهرست دسترسی <svg class="ico flip" aria-hidden="true"><use href="#i-arrow-ur"/></svg></a>
+     <a class="link-arrow" href="/console.html">مشاهده کنسول تعاملی <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <!-- 04 ACCESS + SECURITY with the guard relief -->
+ <section class="access" aria-labelledby="access-h">
+  <div class="wrap access-grid">
+   <div class="rv">
+    <span class="eyebrow"><span class="dot" aria-hidden="true"></span>دسترسی و امنیت <span class="en">02 / ACCESS · 03 / SECURITY</span></span>
+    <h2 id="access-h">هر پروژه،<br><b>مرزهای خودش.</b></h2>
+    <p class="lead">کلید API مستقل، مدل‌های مجاز و محدودیت بودجه برای جداسازی مصرف پروژه‌ها. مدیریت دسترسی‌ها، ابطال کلید و ثبت رویدادهای حساس به‌عنوان بخشی از معماری سرویس.</p>
+    <ul class="checks">
+     <li style="--i:0"><svg class="ico" aria-hidden="true"><use href="#i-key"/></svg>کلید API مستقل برای هر پروژه</li>
+     <li style="--i:1"><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg>مدل‌های مجاز و محدودیت بودجه جداگانه</li>
+     <li style="--i:2"><svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg>ابطال کلید و ثبت رویدادهای حساس، از ابتدا</li>
+    </ul>
+   </div>
+   <div class="guard-stage rv">
+    <img class="statue" src="/img/relief-guard.webp" width="900" height="1805" alt="نقش‌برجسته سنگی یک ملازم پارسی در صف ملل، تخت جمشید، دوره هخامنشی" loading="lazy">
+    <div class="keys-card">
+     <div class="head"><h3>کلیدهای API</h3><span class="tag-demo">کلیدهای نمایشی</span></div>
+     <table class="ktable">
+      <thead><tr><th scope="col">عنوان کلید</th><th scope="col">شناسه پنهان</th><th scope="col">آخرین استفاده</th><th scope="col">وضعیت</th></tr></thead>
+      <tbody>
+       <tr><td class="en">Production · Support</td><td class="dim num">•••• 2491</td><td class="dim">۲ ساعت پیش</td><td><span class="st"><i></i>فعال</span></td></tr>
+       <tr><td class="en">Content · Production</td><td class="dim num">•••• 8364</td><td class="dim">۸ ساعت پیش</td><td><span class="st"><i></i>فعال</span></td></tr>
+       <tr><td class="en">Analytics · Read-only</td><td class="dim num">•••• 1706</td><td class="dim">دیروز</td><td><span class="st"><i></i>فعال</span></td></tr>
+       <tr><td class="en">Development · Test</td><td class="dim num">•••• 9028</td><td class="dim">۱۲ روز پیش</td><td><span class="st off"><i></i>متوقف</span></td></tr>
+      </tbody>
+     </table>
+     <p class="foot-note">رشته کامل کلید هرگز در این پیش‌نمایش نمایش داده نمی‌شود.</p>
+    </div>
+    <div class="sec-card">
+     <h3>کنترل‌ها و اعلان‌ها <span class="tag-demo" style="margin-inline-start:6px">نمونه</span></h3>
+     <div class="toggle-row"><div><span>هشدار سقف بودجه</span><small>اعلان پیش از رسیدن به حد مجاز</small></div><button class="switch" type="button" role="switch" aria-checked="true" aria-label="هشدار سقف بودجه (نمونه)"></button></div>
+     <div class="toggle-row"><div><span>اعلان ورود جدید</span><small>خبر دادن درباره ورود از دستگاه تازه</small></div><button class="switch" type="button" role="switch" aria-checked="true" aria-label="اعلان ورود جدید (نمونه)"></button></div>
+     <div class="toggle-row"><div><span>محدودسازی مدل‌ها</span><small>اجازه استفاده تنها از مدل‌های تأییدشده</small></div><button class="switch" type="button" role="switch" aria-checked="false" aria-label="محدودسازی مدل‌ها (نمونه)"></button></div>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <!-- 05 SHOWCASE -->
+ <section class="sec showcase" id="dashboard" aria-labelledby="show-h">
+  <div class="wrap">
+   <div class="top-row">
+    <div class="rv"><span class="eyebrow"><span class="dot" aria-hidden="true"></span>نمای نزدیک‌تر به محصول <span class="en">USAGE</span></span><h2 id="show-h">یک نمای واحد،<br><b>تصویری روشن از مصرف.</b></h2><p class="lead" style="color:var(--secondary)">هزینه پروژه‌ها، موجودی کیف پول و محدودیت‌ها را در یک نمای منسجم ببینید.</p></div>
+    <div class="seg rv" role="group" aria-label="نمایش بازه زمانی نمودار"><button type="button" data-period="7" aria-pressed="true">۷ روز اخیر</button><button type="button" data-period="30" aria-pressed="false">۳۰ روز اخیر</button></div>
+   </div>
+   <div class="monitor rv">
+    <div class="bezel">
+     <div class="app">
+      <aside class="app-side" aria-label="منوی نمونه پنل">
+       <h4>پنل مدیریت سازمان</h4>
+       <a class="on"><svg class="ico" aria-hidden="true"><use href="#i-chart"/></svg>گزارش مصرف</a>
+       <a><svg class="ico" aria-hidden="true"><use href="#i-layers"/></svg>پروژه‌های من</a>
+       <a><svg class="ico" aria-hidden="true"><use href="#i-key"/></svg>کلیدهای API</a>
+       <a><svg class="ico" aria-hidden="true"><use href="#i-wallet"/></svg>کیف پول و مالی</a>
+       <a><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg>تنظیمات امنیتی</a>
+      </aside>
+      <div class="app-main">
+       <div class="app-head"><div><h3>گزارش مصرف سازمان</h3><p>نمای خلاصه مصرف و بودجه پروژه‌ها</p></div><span class="tag-demo">نسخه نمایشی · اطلاعات نمونه</span></div>
+       <div class="app-cols">
+        <div class="chart-card">
+         <div class="head"><div><p style="margin:0">درخواست‌های ثبت‌شده</p><div class="req-num"><strong class="num" id="requestCount">18,420</strong><span>درخواست نمونه</span></div></div><span class="pill pill-grey" id="periodNote">۷ روز اخیر</span></div>
+         <div class="barfield grow" id="usageBars" style="height:190px" aria-label="نمودار نمایشی تعداد درخواست‌ها" role="img"></div>
+         <div class="axis en" aria-hidden="true"><span>01</span><span>05</span><span>10</span><span>15</span><span>20</span><span class="hi">25</span><span class="hi">30</span></div>
+        </div>
+        <div class="budget-card">
+         <svg class="arrow-art" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M12 22V3m-8 8 8-8 8 8"/></svg>
+         <span class="bc-label">بودجه ماهانه</span>
+         <div class="big"><span class="num" id="budgetValue">68%</span><small>مصرف شده</small></div>
+         <div class="progress" aria-hidden="true"><span id="budgetBar"></span></div>
+         <div class="progress-foot"><span>مصرف شده</span><span>سقف بودجه: ۲ میلیون تومان</span></div>
+         <p>با رسیدن به سقف بودجه، درخواست تازه پیش از ارسال متوقف می‌شود.</p>
+        </div>
+       </div>
+       <div class="app-stats">
+        <div class="tile"><b class="num">2.84M</b><small>توکن ورودی</small></div>
+        <div class="tile"><b class="num">782K</b><small>توکن خروجی</small></div>
+        <div class="tile"><b class="num">1.8s</b><small>میانگین زمان پاسخ</small></div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="stand" aria-hidden="true"></div><div class="base" aria-hidden="true"></div>
+   </div>
+   <div class="show-foot"><strong>طراحی محصول بر پایه خوانایی اطلاعات، نه تراکم کارت‌ها.</strong><span>تمام اعداد و نمودارها نمایشی هستند و به سرویس زنده متصل نیستند.</span></div>
+  </div>
+ </section>
+
+ <!-- 06 HOW IT WORKS: Keel alerts panel -->
+ <section class="sec" id="how" style="padding-top:20px" aria-labelledby="how-h">
+  <div class="wrap how-grid">
+   <div class="alerts-stage rv">
+    <img class="relief" src="/img/relief-servants.webp" width="1100" height="1472" alt="نقش‌برجسته دو خدمتکار با ظرف خوراک و نوشیدنی، تخت جمشید، دوره هخامنشی" loading="lazy">
+    <div class="alerts" role="group" aria-label="جزئیات یک درخواست؛ داده آزمایشی">
+     <div class="head"><div><h3>جزئیات یک درخواست</h3><p>فرآیند مالی · داده آزمایشی</p></div><span class="seg-mini" aria-hidden="true"><span class="on en">req_7f3a…</span></span></div>
+     <div class="arow"><span class="itile"><svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg></span><div><h4>رزرو اعتبار</h4><p>نرخ توکن و سقف هزینه در لحظه ثبت شد.</p></div><span class="pill pill-grey">ثبت شد</span></div>
+     <div class="arow"><span class="itile"><svg class="ico" aria-hidden="true"><use href="#i-send"/></svg></span><div><h4>درخواست به مدل ارسال شد</h4><p>یک شناسه، یک نوبت ارسال.</p></div><span class="pill pill-grey">انجام شد</span></div>
+     <div class="arow focus"><span class="itile"><svg class="ico" aria-hidden="true"><use href="#i-check-sq"/></svg></span><div><h4>تسویه با مصرف نهایی</h4><p>مانده اعتبار به کیف پول برگشت.</p></div><span class="pill pill-p">تسویه شد</span>
+      <div class="sum"><span class="chip" style="background:#fff">هزینه <b class="num">12,480</b> تومان</span><span class="chip" style="background:#fff">توکن <span class="num">1,892 / 641</span></span></div>
+     </div>
+     <div class="dark-foot"><span>صورت‌حساب این درخواست، قابل پیگیری با شناسه</span><strong>شفاف تا سطح توکن <svg class="ico" aria-hidden="true"><use href="#i-check"/></svg></strong></div>
+    </div>
+   </div>
+   <div class="rv">
+    <span class="eyebrow"><span class="dot" aria-hidden="true"></span>تجربه‌ای قابل پیگیری <span class="en">HOW IT WORKS</span></span>
+    <h2 class="h-display" id="how-h" style="font-size:clamp(32px,3.6vw,52px)">از اولین درخواست<br><b>تا آخرین تومان.</b></h2>
+    <p class="lead" style="color:var(--secondary)">منطق مالی محصول برای جلوگیری از هزینه‌های مبهم طراحی شده است: پیش از ارسال رزرو، پس از پاسخ تسویه و برای هر مرحله یک سابقه مشخص.</p>
+    <div class="op-list">
+     <div class="op"><span class="n en">01</span><div><h3>رزرو سقف هزینه</h3><p>قبل از درخواست، حداکثر هزینه بر اساس مدل و نرخ آن کنار گذاشته می‌شود.</p></div></div>
+     <div class="op"><span class="n en">02</span><div><h3>ارسال یک‌باره درخواست</h3><p>شناسه درخواست و کلید یکتاسازی، پیگیری و جلوگیری از هزینه تکراری را ممکن می‌کند.</p></div></div>
+     <div class="op"><span class="n en">03</span><div><h3>تسویه بر اساس مصرف واقعی</h3><p>فقط مقدار واقعی مصرف کسر می‌شود و مازاد رزرو آزاد می‌ماند.</p></div></div>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <!-- 07 DEVELOPERS: dark panel -->
+ <section class="dev dark" id="developers" aria-labelledby="dev-h">
+  <img class="statue" src="/img/capital-persepolis.webp" width="1300" height="1602" alt="" aria-hidden="true" loading="lazy">
+  <div class="wrap">
+   <div class="dev-grid">
+    <div class="rv">
+     <span class="eyebrow"><span class="dot" aria-hidden="true"></span>مخصوص توسعه‌دهندگان <span class="en">DEVELOPERS</span></span>
+     <h2 id="dev-h">ساختاری آشنا.<br><b>کنترلی دقیق‌تر.</b></h2>
+     <p class="lead">مسیرهای نسخه‌دار، شناسه درخواست و خطاهای مشخص، برای اینکه اتصال محصول به مدل قابل مدیریت و قابل بررسی باشد.</p>
+     <div class="dev-facts"><span>REST API</span><span>Versioned endpoints</span><span>Request IDs</span></div>
+    </div>
+   </div>
+   <div class="code-card rv" dir="ltr">
+    <div class="code-top">
+     <h3 dir="rtl">نمونه درخواست</h3>
+     <div class="code-tabs" role="tablist" aria-label="انتخاب زبان نمونه کد"><button role="tab" aria-selected="true" data-lang="curl" type="button">cURL</button><button role="tab" aria-selected="false" data-lang="node" type="button">Node.js</button><button role="tab" aria-selected="false" data-lang="python" type="button">Python</button></div>
+     <button class="copy-btn" id="copyBtn" type="button"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg><span>کپی کد</span></button>
+    </div>
+    <div class="code-body" role="tabpanel"><pre><code id="codeOutput"></code></pre></div>
+    <div class="code-foot"><span dir="rtl">فقط نمونه · این API فعال نیست</span><span>POST /v1/messages</span></div>
+   </div>
+  </div>
+ </section>
+
+ <!-- 08 PRODUCTS: Keel pricing layout, no prices (none announced) -->
+ <section class="sec center" id="products" aria-labelledby="prod-h">
+  <div class="wrap">
+   <div class="plans-track" id="plansTrack">
+   <div class="plans-pin">
+   <div class="plans-head">
+   <span class="eyebrow rv"><span class="dot" aria-hidden="true"></span>معماری محصولات <span class="en">ROADMAP</span></span>
+   <h2 class="h-display rv" id="prod-h" style="--d:.1s">یک زیرساخت. <b>سه مسیر برای توسعه.</b></h2>
+   <p class="lead rv" style="--d:.2s">تمرکز فعلی بر پلتفرم API است. فضای کار تحت وب و برنامه دسکتاپ، برنامه‌های مرحله بعد محسوب می‌شوند.</p>
+   </div>
+   <div class="plans-stage">
+   <div class="plans" style="text-align:start">
+    <article class="plan rv rv-pop" style="--d:0s">
+     <div class="ph"><span>فاز ۰۲ · برنامه توسعه</span></div>
+     <h3>فضای کار وب</h3>
+     <p>گفت‌وگوهای پروژه‌ای، مدیریت تاریخچه و مشاهده هزینه هر نوبت در مرورگر.</p>
+     <ul><li>گفت‌وگوهای پروژه‌ای</li><li>مدیریت تاریخچه</li><li>مشاهده هزینه هر نوبت در مرورگر</li></ul>
+     <div class="foot"><span class="state">پس از عرضه پلتفرم API</span></div>
+    </article>
+    <article class="plan hl core rv rv-pop" style="--d:.14s">
+     <div class="ph"><span>فاز ۰۱ · اولویت فعلی</span><span class="pill pill-dark"><span class="dot" aria-hidden="true" style="width:6px;height:6px"></span>هسته اصلی محصول</span></div>
+     <h3>پلتفرم <span class="en">Claude API</span></h3>
+     <p>درگاه API برای پروژه‌ها با مدیریت کلید، محدودیت مدل، کیف پول، گزارش مصرف و صورت‌حساب.</p>
+     <ul><li>مدیریت کلید</li><li>محدودیت مدل</li><li>کیف پول</li><li>گزارش مصرف و صورت‌حساب</li></ul>
+     <div class="foot"><a class="btn btn-primary" href="#early-access">عضویت در فهرست دسترسی <svg class="ico flip" aria-hidden="true"><use href="#i-arrow-ur"/></svg></a></div>
+    </article>
+    <article class="plan rv rv-pop" style="--d:.28s">
+     <div class="ph"><span>فاز ۰۲ · برنامه توسعه</span></div>
+     <h3>اپلیکیشن دسکتاپ</h3>
+     <p>فضای کاری هماهنگ برای ویندوز و مک با ورود امن و پیش‌نویس آفلاین.</p>
+     <ul><li>ویندوز و مک</li><li>ورود امن</li><li>پیش‌نویس آفلاین</li></ul>
+     <div class="foot"><span class="state">در برنامه توسعه آینده</span></div>
+    </article>
+   </div>
+   <div class="plans-steps" role="group" aria-label="مرور سه مسیر توسعه"><button type="button" data-step="0"><i aria-hidden="true"><b></b></i><span>فضای کار وب</span></button><button type="button" data-step="1"><i aria-hidden="true"><b></b></i><span>پلتفرم <span class="en">Claude API</span></span></button><button type="button" data-step="2"><i aria-hidden="true"><b></b></i><span>اپلیکیشن دسکتاپ</span></button></div>
+   </div>
+   </div>
+   </div>
+   <p class="plans-note rv">قیمت‌های نهایی و روش‌های پرداخت هنوز اعلام نشده‌اند و پیش از عرضه اطلاع‌رسانی می‌شوند.</p>
+  </div>
+ </section>
+
+ <!-- 09 FAQ -->
+ <section class="sec faq" id="faq" style="padding-top:0" aria-labelledby="faq-h">
+  <div class="wrap faq-grid">
+   <div class="rv">
+    <span class="eyebrow"><span class="dot" aria-hidden="true"></span>شفافیت از ابتدا <span class="en">FAQ</span></span>
+    <h2 id="faq-h">سؤال‌هایی که<br><b>باید پاسخ داشته باشند.</b></h2>
+    <p class="lead" style="color:var(--secondary)">پیش از تصمیم‌گیری، وضعیت واقعی سرویس و محدوده امکانات آن را بدانید.</p>
+   </div>
+   <div class="qa rv">
+    <details name="faq"><summary>آیا کلاود ایران سرویس رسمی Anthropic است؟<span class="plus" aria-hidden="true"><svg class="ico"><use href="#i-plus"/></svg></span></summary><p>خیر. کلاود ایران سرویس مستقلی است و وابسته به Anthropic یا نماینده رسمی آن نیست. عرضه سرویس تنها پس از قطعی‌شدن تأمین مورد تأیید و قرارداد آغاز می‌شود.</p></details>
+    <details name="faq"><summary>آیا می‌توانم همین حالا از API استفاده کنم؟<span class="plus" aria-hidden="true"><svg class="ico"><use href="#i-plus"/></svg></span></summary><p>فعلاً خیر. محصول در مرحله پیش‌عرضه است. در حال حاضر امکان عضویت در فهرست دسترسی زودهنگام از همین صفحه وجود دارد؛ این عضویت به معنی پذیرش قطعی در پایلوت نیست.</p></details>
+    <details name="faq"><summary>هزینه مصرف چگونه محاسبه خواهد شد؟<span class="plus" aria-hidden="true"><svg class="ico"><use href="#i-plus"/></svg></span></summary><p>طبق برنامه محصول، هزینه توکن‌های ورودی و خروجی جداگانه محاسبه می‌شود. سقف هزینه درخواست قبل از ارسال رزرو شده و بعد از دریافت پاسخ فقط مصرف واقعی از کیف پول کسر می‌شود.</p></details>
+    <details name="faq"><summary>قیمت‌ها و روش‌های پرداخت مشخص شده‌اند؟<span class="plus" aria-hidden="true"><svg class="ico"><use href="#i-plus"/></svg></span></summary><p>خیر. قیمت‌های نهایی و روش‌های پرداخت هنوز اعلام نشده‌اند و پیش از عرضه اطلاع‌رسانی می‌شوند. از پرداخت یا خرید زودهنگام در این صفحه صحبت نمی‌کنیم.</p></details>
+    <details name="faq"><summary>فضای کار وب و اپ دسکتاپ چه زمانی عرضه می‌شوند؟<span class="plus" aria-hidden="true"><svg class="ico"><use href="#i-plus"/></svg></span></summary><p>هنوز زمان قطعی ندارند. این دو محصول در فاز بعدی و پس از راه‌اندازی موفق پلتفرم API در برنامه توسعه قرار گرفته‌اند.</p></details>
+   </div>
+  </div>
+ </section>
+
+ <!-- 10 EARLY ACCESS: sign-up form (POST /api/waitlist) -->
+ <section class="join" id="early-access" aria-labelledby="join-h">
+  <div class="wrap join-grid">
+   <div class="join-copy rv">
+    <span class="eyebrow"><span class="dot" aria-hidden="true"></span>دسترسی زودهنگام <span class="en">EARLY ACCESS</span></span>
+    <h2 id="join-h">پایلوت،<br><b>با ظرفیتی محدود.</b></h2>
+    <p class="lead">عضویت در فهرست دسترسی زودهنگام هزینه و تعهدی ندارد و به معنی پذیرش قطعی نیست. پایلوت فقط پس از قطعی‌شدن تأمین مورد تأیید و قرارداد آغاز می‌شود.</p>
+    <h3 class="sr-only" id="ns-h">بعد از عضویت</h3>
+    <div class="op-list" aria-labelledby="ns-h">
+     <div class="op"><span class="n en">01</span><div><h3>درخواستتان ثبت می‌شود</h3><p>اطلاعات فرم فقط برای هماهنگی پایلوت نگه داشته می‌شود؛ فعلاً کار دیگری از شما لازم نیست.</p></div></div>
+     <div class="op"><span class="n en">02</span><div><h3>خبر پایلوت با ایمیل</h3><p>هر خبری دربارهٔ پذیرش مرحله‌ای پایلوت را به ایمیلتان می‌فرستیم؛ جز این، ایمیلی از ما نمی‌گیرید.</p></div></div>
+     <div class="op"><span class="n en">03</span><div><h3>قیمت و پرداخت، پیش از عرضه</h3><p>قیمت‌ها و روش‌های پرداخت پیش از عرضه اعلام می‌شوند و تا آن زمان پرداختی از شما خواسته نمی‌شود.</p></div></div>
+    </div>
+   </div>
+   <div class="form-card rv">
+    <div class="fc-head"><h3>فرم عضویت</h3><span class="tag-demo"><span class="dot" aria-hidden="true" style="width:6px;height:6px;box-shadow:none"></span>رایگان · بدون تعهد</span></div>
+    <form id="join-form" novalidate>
+     <div class="form-grid">
+      <div class="field">
+       <label for="f-name">نام و نام خانوادگی</label>
+       <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="80" placeholder="مثلاً سارا احمدی" aria-describedby="e-name">
+       <span class="err" id="e-name" data-required="نام خود را بنویسید." data-invalid="نام باید دست‌کم ۲ حرف باشد."></span>
+      </div>
+      <div class="field">
+       <label for="f-email">ایمیل</label>
+       <input id="f-email" name="email" type="email" dir="ltr" autocomplete="email" required placeholder="name@example.com" aria-describedby="e-email">
+       <span class="err" id="e-email" data-required="ایمیل را وارد کنید." data-invalid="این ایمیل درست به نظر نمی‌رسد؛ نمونهٔ درست: name@example.com"></span>
+      </div>
+      <div class="field">
+       <label for="f-mobile">شمارهٔ موبایل <span class="opt-tag">(اختیاری)</span></label>
+       <input id="f-mobile" name="mobile" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="مثلاً ۰۹۱۲۰۰۰۰۰۰۰" aria-describedby="e-mobile h-mobile">
+       <span class="hint" id="h-mobile">فقط اگر می‌خواهید برای هماهنگی پایلوت تلفنی هم با شما در تماس باشیم.</span>
+       <span class="err" id="e-mobile" data-invalid="شمارهٔ موبایل را ۱۱ رقمی و با ۰۹ وارد کنید، یا این خانه را خالی بگذارید."></span>
+      </div>
+      <div class="field">
+       <label for="f-role">نقش شما</label>
+       <div class="select"><select id="f-role" name="role" required aria-describedby="e-role">
+        <option value="">انتخاب کنید</option>
+        <option value="developer">توسعه‌دهنده یا فریلنسر</option>
+        <option value="founder">مدیر فنی یا سرپرست تیم (CTO / Tech Lead)</option>
+        <option value="product">مدیر محصول</option>
+        <option value="it">مدیر فناوری اطلاعات</option>
+        <option value="finance">مدیر مالی یا حسابداری</option>
+        <option value="other">سایر</option>
+       </select></div>
+       <span class="err" id="e-role" data-required="نقش خود را انتخاب کنید."></span>
+      </div>
+      <div class="field full">
+       <label for="f-use">می‌خواهید از API برای چه کاری استفاده کنید؟</label>
+       <textarea id="f-use" name="usecase" required maxlength="500" placeholder="مثلاً پاسخ‌گویی خودکار به تیکت‌های پشتیبانی، یا خلاصه‌سازی گزارش‌های داخلی" aria-describedby="e-use h-use"></textarea>
+       <span class="hint" id="h-use">یکی دو جمله کافی است. اگر از طرف تیم یا واحد مالی می‌نویسید، نیاز تیمتان را بنویسید؛ حداکثر ۵۰۰ نویسه.</span>
+       <span class="err" id="e-use" data-required="در یکی دو جمله بنویسید از API برای چه کاری استفاده می‌کنید." data-invalid="متن طولانی است؛ حداکثر ۵۰۰ نویسه."></span>
+      </div>
+      <div class="hp" aria-hidden="true"><label>وب‌سایت<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <details class="privacy">
+       <summary>حریم خصوصی این فرم</summary>
+       <p>نام، ایمیل، موبایل (اگر بنویسید)، نقش و کاربرد مورد نظرتان فقط برای هماهنگی پایلوت و خبرهای راه‌اندازی نگه داشته می‌شود و به کسی فروخته یا داده نمی‌شود. هر زمان بخواهید، با پاسخ به ایمیل ما اطلاعاتتان حذف می‌شود.</p>
+      </details>
+      <div class="consent">
+       <input id="f-consent" name="consent" type="checkbox" required aria-describedby="e-consent">
+       <label for="f-consent">می‌پذیرم که کلاود ایران برای هماهنگی پایلوت و خبرهای راه‌اندازی با من تماس بگیرد. اطلاعاتم فقط برای همین کار استفاده می‌شود.</label>
+       <span class="err" id="e-consent" data-required="برای عضویت، این گزینه را تأیید کنید."></span>
+      </div>
+      <p class="form-alert" role="alert" data-form-alert data-network="ارسال انجام نشد. اتصال اینترنت را بررسی کنید و دوباره روی «عضویت در فهرست دسترسی زودهنگام» بزنید؛ اطلاعاتی که وارد کرده‌اید پاک نمی‌شود." data-server="مشکلی در سمت ما پیش آمد و عضویت ثبت نشد. چند دقیقه بعد دوباره امتحان کنید." data-rate="تعداد تلاش‌ها زیاد بود. حدود ۱۰ دقیقهٔ دیگر دوباره امتحان کنید؛ اطلاعاتی که وارد کرده‌اید پاک نمی‌شود."></p>
+      <div class="form-foot">
+       <button class="btn btn-dark" type="submit" data-label="عضویت در فهرست دسترسی زودهنگام" data-busy="در حال ثبت عضویت…"><span class="spinner" aria-hidden="true"></span><span data-label>عضویت در فهرست دسترسی زودهنگام</span><svg class="ico flip" aria-hidden="true"><use href="#i-arrow-ur"/></svg></button>
+       <span class="form-note">ظرفیت پایلوت محدود است و پذیرش مرحله‌ای انجام می‌شود.</span>
+      </div>
+     </div>
+    </form>
+    <div class="form-success" data-success role="status">
+     <span class="ok" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span>
+     <h3 data-title-new>عضویت شما در فهرست دسترسی زودهنگام ثبت شد.</h3>
+     <h3 data-title-dup hidden>این ایمیل از قبل در فهرست دسترسی زودهنگام است.</h3>
+     <p>فعلاً کار دیگری لازم نیست. هر خبری دربارهٔ پذیرش مرحله‌ای پایلوت را به <bdi dir="ltr" data-sent-email></bdi> می‌فرستیم؛ عضویت به معنی پذیرش قطعی نیست.</p>
+     <p data-dup hidden>لازم نیست دوباره عضو شوید. اطلاعاتی که این بار فرستادید جایگزین اطلاعات قبلی نشد.</p>
+    </div>
+   </div>
+  </div>
+ </section>
+</main>
+</div>
+
+<!-- 10 FOOTER: navigation first; the sign-up form sits right above, so the footer's next step is the console -->
+<footer class="footer dark">
+ <div class="wrap">
+  <div class="f-top">
+   <div class="f-brand">
+    <a class="brand" href="#top"><svg class="ico" aria-hidden="true"><use href="#i-brand"/></svg><span>کلاود ایران</span></a>
+    <p class="f-about">زیرساختی در حال توسعه برای مدیریت دسترسی به Claude API با کنترل هزینه، کلیدهای اختصاصی و گزارش مصرف قابل پیگیری.</p>
+    <a class="f-status" href="#early-access"><span class="dot" aria-hidden="true"></span>پیش‌عرضه · ثبت‌نام پایلوت باز است</a>
+   </div>
+   <nav class="f-col" aria-label="محصول"><h3>محصول</h3><a href="#features">مزیت‌ها</a><a href="#dashboard">داشبورد</a><a href="#how">روش کار</a><a href="#products">مسیر توسعه</a></nav>
+   <nav class="f-col" aria-label="اطلاعات"><h3>اطلاعات</h3><a href="#developers">توسعه‌دهندگان</a><a href="#faq">سؤالات متداول</a><a href="#early-access">دسترسی زودهنگام</a><a href="/console.html">کنسول تعاملی</a></nav>
+   <a class="f-console" href="/console.html">
+    <img class="f-relief" src="/img/relief-guard.webp" width="900" height="1805" alt="" aria-hidden="true" loading="lazy">
+    <span class="f-console-top"><span class="eyebrow"><span class="dot" aria-hidden="true"></span>کنسول تعاملی <span class="en">LIVE DEMO</span></span><span class="go" aria-hidden="true"><svg class="ico flip"><use href="#i-arrow-ur"/></svg></span></span>
+    <b>پیش از شروع پایلوت، کنسول را امتحان کنید.</b>
+    <small>پروژه بسازید، کلید آزمایشی بگیرید و هزینهٔ هر درخواست را تا سطح توکن دنبال کنید؛ همه با دادهٔ نمونه.</small>
+    <svg class="f-spark" viewBox="0 0 200 42" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="lgf" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#D97757" stop-opacity=".4"/><stop offset="1" stop-color="#D97757" stop-opacity="0"/></linearGradient></defs><path d="M0 34C18 32 30 26 46 28S76 36 96 27 128 14 148 18 178 12 198 5V42H0Z" fill="url(#lgf)"/><path d="M0 34C18 32 30 26 46 28S76 36 96 27 128 14 148 18 178 12 198 5" fill="none" stroke="#D97757" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>
+   </a>
+  </div>
+  <div class="f-bottom"><span>© ۲۰۲۶ کلاود ایران. همهٔ حقوق محفوظ است.</span><span class="f-legal">Claude و Anthropic علائم تجاری Anthropic هستند. کلاود ایران وابسته به Anthropic نیست.</span><a class="to-top" href="#top" aria-label="بازگشت به بالای صفحه"><svg class="ico" aria-hidden="true"><use href="#i-up"/></svg></a></div>
+ </div>
+</footer>
+
+<div class="sticky-cta" id="stickyCta"><a class="btn btn-dark" href="#early-access" tabindex="-1">درخواست دسترسی <svg class="ico flip" aria-hidden="true"><use href="#i-arrow-ur"/></svg></a></div>
+</body>
+</html>

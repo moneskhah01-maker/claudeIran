@@ -1,0 +1,40 @@
+ClaudeIran — Keel redesign · Photo credits
+==========================================
+All photographs come from Wikimedia Commons. The licence was checked on each file page (machine-readable
+LicenseShortName via the Commons API) before download, on 2026-11-23. Files were fetched one at a time,
+with 429 / Retry-After honoured. Each file was verified as a real image (Pillow verify).
+Processing by Studio Mouneskhah: background removal, greyscale, tone curve and a grain dissolve. No people's faces are shown;
+only ancient sculpture.
+
+1) site/assets/img/capital-persepolis.webp
+   Source: File:Achaemenid capital Persepolis.jpg
+   Author: Daderot (rework of a Daderot photograph)
+   Licence: CC0 1.0 (public domain dedication)
+   Page: https://commons.wikimedia.org/wiki/File:Achaemenid_capital_Persepolis.jpg
+   Used in: hero; developers section (flipped detail crop)
+
+2) site/assets/img/relief-guard.webp
+   Source: File:Relief- figure in a procession MET DP-12499-017.jpg
+   The Metropolitan Museum of Art, Open Access (donated to Commons by The Met)
+   Licence: CC0 1.0
+   Page: https://commons.wikimedia.org/wiki/File:Relief-_figure_in_a_procession_MET_DP-12499-017.jpg
+   Used in: access/security section; footer
+
+3) site/assets/img/relief-servants.webp
+   Source: File:Relief- two servants bearing food and drink MET DP226593.jpg
+   The Metropolitan Museum of Art, Open Access (donated to Commons by The Met)
+   Licence: CC0 1.0
+   Page: https://commons.wikimedia.org/wiki/File:Relief-_two_servants_bearing_food_and_drink_MET_DP226593.jpg
+   Used in: "how it works" section
+
+Checked but not used
+- File:Hand holding (Unsplash).jpg (CC0, Samson Vowles). The hand cut-out was not clean enough for Keel's dithered-hand look,
+  so the hands were dropped rather than faked.
+- File:Homa-Kapitell ... Mohammad Nemat Zadeh.jpg (CC0). Commons rate-limited the download (429), so it was not retried.
+
+Fonts (self-hosted in site/assets/fonts, SIL Open Font License 1.1)
+- Vazirmatn (variable), Saber Rastikerdar — https://github.com/rastikerdar/vazirmatn
+- Manrope (variable, Latin subset), Mikhail Sharanda — via @fontsource-variable/manrope
+
+Reference (visual language only, no assets reused): Keel — Fintech SaaS Dashboard UX/UI Case Study
+https://www.behance.net/gallery/256937035/Keel-Fintech-SaaS-Dashboard-UX-UI-Case-Study

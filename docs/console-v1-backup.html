@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#E9E9EB">
+<title>کنسول کلاود ایران | ClaudeIran Console — UI Concept</title>
+<link rel="preload" href="/fonts/Vazirmatn-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Manrope-wght.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ClaudeIran Console — Keel dashboard language. Only palette change: Primary -> Terracotta #D97757 */
+@font-face{font-family:"Manrope";src:url("/fonts/Manrope-wght.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+2000-206F,U+2190-21FF,U+2212,U+2215}
+@font-face{font-family:"Vazirmatn";src:url("/fonts/Vazirmatn-wght.woff2") format("woff2");font-weight:100 900;font-display:swap}
+:root{
+ --primary:#D97757; --primary-deep:#C15F3C; --secondary:#6B6F78; --ink:#181C25; --white:#FFFFFF;
+ --canvas:#E9E9EB; --screen:#EEEEF0; --card:#F5F5F7; --card-2:#FAFAFB; --line:#E2E2E6; --line-2:#D9D9DE;
+ --tail:#8A8D95; --text-2:#4F535D; --on-dark-2:#A9ADB6; --dark-line:#2B303B; --dark-2:#222733;
+ --p-16:rgba(217,119,87,.16); --p-30:rgba(217,119,87,.30); --p-45:rgba(217,119,87,.45);
+ /* Keel's semantic "down" badge (not the brand colour) */
+ --down:#B4232A; --down-bg:#FBE3E4;
+ --fs-xs:12px; --fs-sm:14px; --fs-base:15px; --fs-md:18px; --fs-lg:28px; --fs-xl:clamp(44px,5.6vw,80px);
+ --r-xl:28px; --r-lg:22px; --r-md:16px; --r-sm:12px; --r-pill:999px;
+ --shadow:0 40px 90px -30px rgba(24,28,37,.22),0 12px 30px -16px rgba(24,28,37,.10);
+ --shadow-soft:0 18px 50px -26px rgba(24,28,37,.18);
+ --font:"Manrope","Vazirmatn",system-ui,"Segoe UI",Tahoma,sans-serif; --ease:cubic-bezier(.22,.61,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-width:320px;background:var(--canvas);color:var(--ink);font-family:var(--font);font-size:var(--fs-base);line-height:1.8;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+svg{display:block}
+:focus-visible{outline:2.5px solid var(--ink);outline-offset:2px;border-radius:8px}
+.dark :focus-visible{outline-color:#fff}
+.ico{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.flip{transform:scaleX(-1)}
+[dir=ltr] .flip{transform:none}
+.num,.en,code{direction:ltr;unicode-bidi:isolate}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.skip{position:absolute;inset-inline-start:12px;top:-60px;z-index:300;background:var(--ink);color:#fff;padding:10px 14px;border-radius:10px}
+.skip:focus{top:10px}
+
+/* ===== shell ===== */
+.app{max-width:1400px;margin:0 auto;padding:16px}
+.screen{background:var(--screen);border-radius:30px;padding:20px 24px 28px;min-height:calc(100vh - 32px)}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:var(--fs-md);white-space:nowrap}
+.brand svg{width:28px;height:28px}
+.managers{display:flex;align-items:center;gap:10px;margin-inline-start:18px}
+.avatars{display:flex;direction:ltr}
+.avatars span{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-xs);font-weight:700;background:#D3D4D9;color:var(--ink);border:2px solid var(--screen);margin-left:-8px}
+.avatars span:first-child{margin-left:0}
+.avatars span:nth-child(2){background:#BFC1C7}
+.avatars span:nth-child(3){background:#A9ADB6}
+.avatars span:last-child{background:var(--ink);color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:13px;border:1px solid transparent;font-size:var(--fs-sm);font-weight:650;white-space:nowrap;background:var(--white);transition:background .2s,transform .2s}
+.btn .ico{width:16px;height:16px}
+.btn:hover{background:var(--card)}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{background:#2A303D}
+.btn-line{background:transparent;border-color:var(--line-2)}
+.btn-line:hover{background:var(--white)}
+.btn-primary{background:var(--primary);color:var(--ink)}
+.btn-primary:hover{background:var(--primary);box-shadow:inset 0 -2px 0 var(--primary-deep)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.top-end{margin-inline-start:auto;display:flex;align-items:center;gap:8px}
+.demo-pill{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px;border-radius:var(--r-pill);background:rgba(255,255,255,.7);border:1px solid var(--line-2);font-size:var(--fs-xs);font-weight:600;white-space:nowrap}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--primary);flex:none;display:inline-block}
+.icon-btn{width:44px;height:44px;border-radius:13px;background:var(--white);border:0;display:grid;place-items:center;position:relative}
+.icon-btn.bell::after{content:"";position:absolute;top:10px;inset-inline-end:11px;width:8px;height:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 2px #fff}
+.me{width:44px;height:44px;border-radius:13px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:var(--fs-xs);font-weight:700}
+.tabs{display:flex;gap:6px;margin-top:16px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:13px;background:var(--white);border:0;font-size:var(--fs-sm);font-weight:600;color:var(--text-2);white-space:nowrap}
+.tab .ico{width:16px;height:16px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff}
+.tab .count{font-size:var(--fs-xs);background:var(--p-16);color:var(--ink);border-radius:var(--r-pill);padding:0 7px;line-height:20px}
+.tab[aria-selected="true"] .count{background:var(--primary);color:var(--ink)}
+
+/* ===== page head ===== */
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin:30px 0 18px;flex-wrap:wrap}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:var(--fs-xs);font-weight:700;color:var(--text-2);letter-spacing:.12em}
+.head h1{margin:6px 0 0;font-size:var(--fs-lg);font-weight:500;line-height:1.35}
+.head p{margin:2px 0 0;font-size:var(--fs-sm);color:var(--text-2)}
+.head-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ===== cards / tiles ===== */
+.card{background:var(--card-2);border-radius:var(--r-lg);padding:20px;min-width:0}
+.card-w{background:var(--white)}
+.card h2{margin:0;font-size:var(--fs-md);font-weight:600;line-height:1.5}
+.card .sub{margin:2px 0 0;font-size:var(--fs-xs);color:var(--secondary)}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.grid-main{display:grid;grid-template-columns:1.55fr 1fr;gap:12px}
+.stack{display:grid;gap:12px;align-content:start}
+.figure{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding:6px 4px 14px}
+.figure .label{font-size:var(--fs-sm);font-weight:500}
+.figure .big{font-family:"Manrope",sans-serif;font-size:var(--fs-xl);font-weight:400;letter-spacing:-.05em;line-height:1;margin-top:10px}
+.figure .big .tail{color:var(--tail)}
+.figure .unit{font-size:var(--fs-xs);color:var(--secondary);margin-top:8px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.tiles.t3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tile{background:var(--card-2);border-radius:var(--r-md);padding:14px 15px 12px;min-width:0}
+.tile .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tile b{font-family:"Manrope",sans-serif;font-size:var(--fs-lg);font-weight:450;letter-spacing:-.03em;line-height:1.2}
+.tile small{display:block;font-size:var(--fs-xs);color:var(--secondary);margin-top:4px;line-height:1.6}
+.bd{display:inline-flex;align-items:center;gap:3px;height:22px;padding:0 8px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:700;white-space:nowrap;direction:ltr}
+.bd.up{background:var(--p-16);color:var(--ink)}
+.bd.down{background:var(--down-bg);color:var(--down)}
+.bd.flat{background:#E4E4E8;color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:650;white-space:nowrap;background:#E4E4E8}
+.pill.p{background:var(--primary);color:var(--ink)}
+.pill.soft{background:var(--p-16)}
+.pill.w{background:var(--white);border:1px solid var(--line)}
+.pill.dk{background:var(--ink);color:#fff}
+
+/* bar field */
+.barfield{height:170px;display:flex;align-items:flex-end;gap:2px;direction:ltr;margin-top:14px;position:relative}
+.barfield i{flex:1;min-width:1px;background:#C3C5CB;border-radius:1px;height:var(--h)}
+.barfield i.hi{background:var(--primary)}
+.marker{position:absolute;bottom:calc(var(--y) + 10px);left:var(--x);transform:translateX(-50%);background:var(--white);box-shadow:0 8px 20px -8px rgba(24,28,37,.3);border-radius:10px;padding:4px 9px;font-size:var(--fs-xs);line-height:1.4;text-align:center;white-space:nowrap;direction:rtl}
+.marker b{display:block;font-family:"Manrope",sans-serif;font-weight:600;direction:ltr}
+.marker.hl{background:var(--primary)}
+.axis{display:flex;justify-content:space-between;direction:ltr;margin-top:10px;gap:4px}
+.axis span{font-size:var(--fs-xs);font-weight:600;min-width:28px;height:24px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--r-pill);background:#DADBE0}
+.axis span.hi{background:var(--primary)}
+/* stepped bars + gauge */
+.steps{display:flex;align-items:flex-end;height:110px;margin-top:14px;direction:ltr}
+.steps i{flex:1;display:block;background:linear-gradient(180deg,var(--white),rgba(255,255,255,0));border-top:3px solid var(--white)}
+.steps i.hi{background:linear-gradient(180deg,var(--p-45),rgba(217,119,87,0));border-top-color:var(--primary);position:relative}
+.steps i.lo{border-top-color:#C9CAD0;background:linear-gradient(180deg,#E6E6EA,rgba(230,230,234,0))}
+.steps i.hi .pill{position:absolute;top:-15px;left:50%;transform:translateX(-50%);height:24px}
+.legend{display:flex;justify-content:space-between;gap:8px;margin-top:10px;font-size:var(--fs-xs);color:var(--secondary)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:7px;height:7px;border-radius:50%;background:#C9CAD0;display:inline-block}
+.legend i.p{background:var(--primary)}
+.mini .big{font-family:"Manrope",sans-serif;font-size:36px;font-weight:400;letter-spacing:-.03em;line-height:1.1;margin-top:8px}
+.gauge{background:var(--ink);color:#fff}
+.gauge .sub,.gauge .legend{color:var(--on-dark-2)}
+.gauge .legend i{background:#4A505D}
+.gauge svg{width:100%;max-width:220px;margin:12px auto 0}
+/* terracotta gradient alert card (Keel "34 days") */
+.cap{border-radius:var(--r-lg);padding:20px;background:linear-gradient(180deg,var(--card-2) 0%,var(--card-2) 24%,#F3D9CF 76%,#EDC4B5 100%);display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:330px}
+.cap .art{position:absolute;top:18px;inset-inline-end:18px;width:72px;height:72px;color:rgba(24,28,37,.10)}
+.cap .big{font-family:"Manrope",sans-serif;font-size:72px;font-weight:300;line-height:1;margin-top:auto;letter-spacing:-.05em}
+.cap .big small{font-size:var(--fs-md);font-weight:500;letter-spacing:0;margin-inline-start:8px}
+.progress{height:8px;background:rgba(255,255,255,.75);border-radius:var(--r-pill);overflow:hidden;margin:16px 0 8px;direction:ltr}
+.progress span{display:block;height:100%;background:var(--ink);border-radius:inherit;transition:width .4s var(--ease)}
+.pfoot{display:flex;justify-content:space-between;gap:8px;font-size:var(--fs-xs)}
+.cap p{margin:12px 0 0;font-size:var(--fs-sm);line-height:1.85}
+/* alerts panel */
+.alerts{background:var(--white);border-radius:var(--r-lg);padding:18px 18px 12px}
+.arow{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:14px 4px;border-bottom:1px solid var(--line)}
+.arow:last-child{border-bottom:0}
+.itile{width:44px;height:44px;border-radius:13px;background:var(--card);display:grid;place-items:center}
+.itile .ico{width:20px;height:20px}
+.arow h3{margin:0;font-size:var(--fs-sm);font-weight:600;line-height:1.55}
+.arow p{margin:2px 0 0;font-size:var(--fs-xs);color:var(--secondary);line-height:1.6}
+.arow .when{font-size:var(--fs-xs);color:var(--secondary);align-self:start;padding-top:2px;white-space:nowrap}
+.arow.focus{background:var(--card);border-radius:18px;border-bottom:0;margin:6px 0;padding:14px 12px}
+.arow.focus .itile{background:var(--white)}
+.arow .acts{grid-column:2 / -1;display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.unread{width:8px;height:8px;border-radius:50%;background:var(--primary);display:inline-block;margin-inline-start:8px;vertical-align:middle}
+.dark-foot{margin-top:12px;background:var(--ink);color:#fff;border-radius:18px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.dark-foot span{font-size:var(--fs-xs);color:var(--on-dark-2)}
+.dark-foot strong{display:inline-flex;align-items:center;gap:8px;font-size:var(--fs-sm)}
+.dark-foot .ico{color:var(--primary);stroke-width:2.4}
+.note-card{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.note-card .l{display:flex;gap:14px;align-items:center}
+.note-card h2{font-size:var(--fs-sm)}
+.note-card p{margin:2px 0 0;font-size:var(--fs-xs);color:var(--secondary)}
+
+/* ===== Keel table ===== */
+.tbl-card{background:var(--white);border-radius:var(--r-lg);padding:18px 20px 14px;margin-top:12px}
+.tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
+.tools .l{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search{display:flex;align-items:center;gap:8px;height:44px;padding:0 14px;border-radius:var(--r-pill);background:var(--card);min-width:240px}
+.search input{border:0;background:transparent;outline:0;font-size:var(--fs-sm);width:100%}
+.search:focus-within{box-shadow:0 0 0 2.5px var(--ink)}
+.fpills{display:flex;gap:4px;background:var(--card);border-radius:var(--r-pill);padding:4px}
+.fpills button{border:0;background:transparent;min-height:36px;padding:0 13px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:650;color:var(--text-2)}
+.fpills button[aria-pressed="true"]{background:var(--white);color:var(--ink);box-shadow:0 1px 3px rgba(24,28,37,.1)}
+.twrap{overflow-x:auto}
+.kt{width:100%;border-collapse:collapse;font-size:var(--fs-sm)}
+.kt th{font-size:var(--fs-xs);font-weight:700;letter-spacing:.06em;color:var(--secondary);text-align:start;padding:12px 8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.kt th.n,.kt td.n{text-align:end}
+.kt th button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:5px;min-height:28px;border-radius:6px}
+.kt th button:focus-visible{outline:2.5px solid var(--ink);outline-offset:2px}
+.kt th .ar{display:inline-grid;line-height:.55;font-size:10px;color:#B9BBC2}
+.kt th[aria-sort="ascending"] .ar .u,.kt th[aria-sort="descending"] .ar .d{color:var(--ink)}
+.kt td{padding:14px 8px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:middle}
+.kt tbody tr{transition:background .15s}
+.kt tbody tr:hover{background:var(--card-2)}
+.kt tbody tr:last-child td{border-bottom:0}
+.kt .pc{font-weight:600}
+.kt .dim{color:var(--secondary)}
+.kt .id{font-family:"Manrope",sans-serif;color:var(--secondary);direction:ltr;unicode-bidi:isolate}
+[dir=rtl] .kt div.id{text-align:right}
+.st{display:inline-flex;align-items:center;gap:7px;font-weight:600}
+.st i{width:7px;height:7px;border-radius:50%;background:var(--primary);display:inline-block}
+.st.off i{background:#B9BBC2}
+.st.bad{color:var(--down)} .st.bad i{background:var(--down)}
+.rowbtn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border-radius:10px;background:var(--card);font-size:var(--fs-xs);font-weight:650}
+.rowbtn:hover{background:#ECECEF}
+.rowbtn:focus-visible{outline:2.5px solid var(--ink);outline-offset:2px}
+.rowbtn[disabled]{opacity:.45;cursor:not-allowed}
+.amt.plus{color:var(--ink);font-weight:650}
+.tfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px;padding-top:10px;border-top:1px solid var(--line)}
+.fnote{font-size:var(--fs-xs);color:var(--secondary);margin:0;line-height:1.7}
+.pager{display:flex;gap:4px;align-items:center;direction:ltr}
+.pager button{min-width:36px;height:36px;border-radius:var(--r-pill);border:0;background:var(--card);font-size:var(--fs-xs);font-weight:700;font-family:"Manrope",sans-serif}
+.pager button[aria-current="page"]{background:var(--ink);color:#fff}
+.pager button:disabled{opacity:.4;cursor:not-allowed}
+.pcount{font-size:var(--fs-xs);color:var(--secondary)}
+/* states */
+.state{padding:40px 16px;text-align:center}
+.state .itile{margin:0 auto 12px}
+.state h3{margin:0;font-size:var(--fs-sm);font-weight:650}
+.state p{margin:4px 0 14px;font-size:var(--fs-xs);color:var(--secondary)}
+.state.err .itile{background:var(--down-bg);color:var(--down)}
+.sk{display:block;height:14px;border-radius:7px;background:linear-gradient(90deg,#EDEDF0 0%,#F7F7F9 40%,#EDEDF0 80%);background-size:300% 100%;animation:sh 1.3s linear infinite}
+@keyframes sh{to{background-position:-150% 0}}
+
+/* ===== modal ===== */
+.modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal .scrim{position:absolute;inset:0;background:rgba(24,28,37,.42);backdrop-filter:blur(3px);border:0}
+.dialog{position:relative;width:min(560px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--white);border-radius:var(--r-xl);box-shadow:var(--shadow);padding:22px}
+.dialog .x{position:absolute;top:14px;inset-inline-end:14px;width:44px;height:44px;border-radius:13px;border:0;background:var(--card);display:grid;place-items:center}
+.dialog h2{margin:0;font-size:var(--fs-md);font-weight:650;padding-inline-end:52px}
+.dialog .sub{margin:2px 0 0;font-size:var(--fs-xs);color:var(--secondary)}
+.field{display:grid;gap:6px;margin-top:16px}
+.field label{font-size:var(--fs-xs);font-weight:650}
+.field input,.field select{height:48px;border-radius:13px;border:1px solid var(--line-2);background:var(--card-2);padding:0 14px;font-size:var(--fs-sm);width:100%}
+.field input:focus,.field select:focus{outline:2.5px solid var(--ink);outline-offset:1px}
+.field .hint{font-size:var(--fs-xs);color:var(--secondary)}
+.f-actions{display:flex;gap:8px;justify-content:flex-start;margin-top:22px;flex-wrap:wrap}
+.keybox{margin-top:16px;background:var(--card);border-radius:16px;padding:14px;display:flex;gap:10px;align-items:center}
+.keybox code{flex:1;font:600 14px/1.5 ui-monospace,"Cascadia Code",Consolas,monospace;word-break:break-all}
+.warn{margin-top:12px;border-radius:16px;padding:14px 16px;background:linear-gradient(180deg,#FBEEE9,#F6DCD2);font-size:var(--fs-sm);line-height:1.8;display:flex;gap:10px}
+.warn .ico{margin-top:4px}
+
+/* toast */
+.toast{position:fixed;z-index:250;bottom:20px;inset-inline-start:50%;transform:translate(50%,140%);background:var(--ink);color:#fff;border-radius:14px;padding:12px 18px;font-size:var(--fs-sm);box-shadow:var(--shadow);transition:transform .3s var(--ease),visibility .3s;max-width:calc(100% - 32px);visibility:hidden}
+[dir=ltr] .toast{transform:translate(-50%,140%)}
+.toast.on{transform:translate(50%,0);visibility:visible}
+[dir=ltr] .toast.on{transform:translate(-50%,0)}
+.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:var(--fs-xs);color:var(--text-2);padding:16px 8px 4px}
+
+/* settings */
+.set-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.set-row:last-child{border-bottom:0}
+.set-row strong{font-size:var(--fs-sm);font-weight:600}
+.set-row p{margin:2px 0 0;font-size:var(--fs-xs);color:var(--secondary)}
+.switch{width:46px;height:28px;border-radius:var(--r-pill);border:0;background:#C9CAD0;position:relative;flex:none;transition:background .2s}
+.switch::before{content:"";position:absolute;inset:-8px -2px}
+.switch::after{content:"";position:absolute;top:4px;inset-inline-start:4px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .25s var(--ease)}
+.switch[aria-checked="true"]{background:var(--primary)}
+[dir=rtl] .switch[aria-checked="true"]::after{transform:translateX(-18px)}
+[dir=ltr] .switch[aria-checked="true"]::after{transform:translateX(18px)}
+input[type=range]{width:100%;accent-color:var(--ink);height:44px}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (max-width:1100px){
+ .grid-main{grid-template-columns:1fr}
+ .managers .btn span{display:none}
+}
+@media (max-width:760px){
+ :root{--fs-base:14px;--fs-lg:24px}
+ .app{padding:8px}
+ .screen{border-radius:22px;padding:14px 12px 18px}
+ .managers{margin-inline-start:auto}
+ .managers .btn{display:none}
+ .top-end{width:100%;margin:0;justify-content:space-between}
+ .demo-pill{flex:1;justify-content:center}
+ .tiles{grid-template-columns:1fr 1fr}
+ .tiles.t3{grid-template-columns:1fr 1fr 1fr}
+ .tiles.t3 .tile{padding:12px 10px}
+ .tiles.t3 .tile b{font-size:20px}
+ .head{margin:22px 0 14px;align-items:flex-start}
+ .head-actions,.head-actions .btn{width:100%}
+ .card{padding:16px}
+ .figure .big{font-size:56px}
+ .barfield{height:120px;gap:1px}
+ .marker{display:none}
+ .axis span{min-width:0;padding:0 6px}
+ .split2{grid-template-columns:1fr!important}
+ .search{min-width:0;width:100%}
+ .tools .l{width:100%}
+ .fpills{overflow-x:auto;max-width:100%}
+ .tbl-card{padding:14px 12px 12px}
+ /* table -> cards */
+ .kt thead{display:none}
+ .kt,.kt tbody{display:block}
+ .kt tr{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:12px 4px;border-bottom:1px solid var(--line)}
+ .kt tbody tr:last-child{border-bottom:0}
+ .kt td{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border:0;white-space:normal;grid-column:1 / -1;font-size:var(--fs-sm)}
+ .kt td::before{content:attr(data-l);font-size:var(--fs-xs);color:var(--secondary);font-weight:600}
+ .kt td.n{text-align:start}
+ .kt td:first-child{grid-column:1;font-weight:650;display:block}
+ .kt td:first-child::before{display:none}
+ .kt td.lead2{grid-column:2;grid-row:1;justify-content:flex-end}
+ .kt td.lead2::before{display:none}
+ .kt td.act::before{display:none}
+ .kt td.act{justify-content:flex-start;margin-top:4px}
+ .cap{min-height:280px}
+ .cap .big{font-size:60px}
+ .dialog{padding:18px;border-radius:24px}
+ .modal{padding:10px;align-items:flex-end}
+ .arow{grid-template-columns:40px 1fr;gap:12px}
+ .itile{width:40px;height:40px}
+ .arow .when,.arow>.pill{grid-column:2;justify-self:start}
+ .arow .acts{grid-column:2}
+}
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+ <symbol id="i-brand" viewBox="0 0 32 32"><path d="m16 3.5 10.5 12.5L16 28.5 5.5 16 16 3.5Z" stroke-width="2.6"/><path d="M11 16h10" stroke-width="2.6" stroke-linecap="round"/></symbol>
+ <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+ <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16M8 16v-4m4 4V8m4 8v-6"/></symbol>
+ <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3.5 8.5 4.5-8.5 4.5L3.5 8 12 3.5ZM3.5 12.5 12 17l8.5-4.5M3.5 16.5 12 21l8.5-4.5"/></symbol>
+ <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8.5-8.5M16 6.5l2.5 2.5M14 8.5l2 2"/></symbol>
+ <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+ <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="14" rx="3"/><path d="M3 9.5h18M16 14.5h2"/></symbol>
+ <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 19.5 6v5.5c0 4.8-3.3 8-7.5 9.5-4.2-1.5-7.5-4.7-7.5-9.5V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></symbol>
+ <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 6.5-2.5 7.5-2.5 8.5h17C20.5 16.5 18 15.5 18 9ZM10 20.5a2.2 2.2 0 0 0 4 0"/></symbol>
+ <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+ <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></symbol>
+ <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m-4.5-4.5L12 15l4.5-4.5M4.5 19.5h15"/></symbol>
+ <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+ <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></symbol>
+ <symbol id="i-check-sq" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/></symbol>
+ <symbol id="i-arrow-ur" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+ <symbol id="i-down" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8m-3.5-3.5L12 16l3.5-3.5"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 9.5V13l2.5 1.5M9.5 3h5"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+ <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 21 19.5H3L12 4Z"/><path d="M12 10v4.5M12 17.2h.01"/></symbol>
+ <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+ <symbol id="i-empty" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M4 13h4.5l1.5 2h4l1.5-2H20"/></symbol>
+ <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
+</svg>
+<a class="skip" href="#view">پرش به محتوا</a>
+<div class="app">
+ <div class="screen">
+  <header class="top">
+   <a class="brand" href="/" aria-label="ClaudeIran — بازگشت به وب‌سایت"><svg class="ico" aria-hidden="true"><use href="#i-brand"/></svg><span class="en">claudeiran</span></a>
+   <div class="managers">
+    <div class="avatars" aria-label="مدیران نمونه"><span>م‌ر</span><span>س‌ک</span><span>ن‌ا</span><span class="en">+2</span></div>
+    <button class="btn" type="button" id="addManager"><svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg><span id="addManagerLbl">افزودن مدیر</span></button>
+   </div>
+   <div class="top-end">
+    <span class="demo-pill"><span class="dot" aria-hidden="true"></span><span id="demoTop">پیش‌نمایش محصول · داده نمونه</span></span>
+    <button class="icon-btn en" type="button" id="langToggle" aria-label="Change language" style="font-weight:700;font-size:var(--fs-xs)">EN</button>
+    <button class="icon-btn bell" type="button" id="bellBtn" aria-label="اعلان‌ها"><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg></button>
+    <span class="me en" aria-label="Demo account">CI</span>
+   </div>
+  </header>
+  <nav class="tabs" role="tablist" aria-label="بخش‌های کنسول" id="tabs"></nav>
+  <main id="view" tabindex="-1" aria-live="polite"></main>
+  <div class="foot"><span id="footNote">کنسول تعاملی کلاود ایران · کانسپت رابط کاربری · همه داده‌ها نمونه‌اند و هیچ درخواست یا پرداختی انجام نمی‌شود.</span><a href="/" id="backLink">بازگشت به وب‌سایت ↗</a></div>
+ </div>
+</div>
+<div class="modal" id="modal" aria-hidden="true"><button class="scrim" type="button" id="scrim" aria-label="بستن" tabindex="-1"></button><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgTitle"><button class="x" type="button" id="dlgClose" aria-label="بستن"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></button><div id="dlgBody"></div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(()=>{'use strict';
+const Q=new URLSearchParams(location.search);
+const STATIC=Q.has('static');
+const state={lang:Q.get('lang')==='en'?'en':'fa',view:'overview',period:7,query:'',filter:'all',page:1,perPage:5,sort:{k:null,dir:1},keysRevoked:new Set(),keysExtra:[],projectsExtra:[],settings:{email:true,budget:true,limits:false,security:true},budget:68,demo:Q.get('demo')||'',loading:false};
+const fa=()=>state.lang==='fa', t=(p,e)=>fa()?p:e;
+const ic=(n,c='')=>`<svg class="ico ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toNum=s=>Number(String(s).replace(/[^\d.\-−+]/g,'').replace('−','-'))||0;
+
+/* ---- demo data (from the previous console) ---- */
+const projectData=[{fa:'دستیار پشتیبانی',en:'Support assistant',model:'Sonnet',key:2,budget:'850,000',spent:'428,400',status:'active',id:'proj_support',req:5312},{fa:'استودیوی محتوا',en:'Content studio',model:'Haiku',key:1,budget:'420,000',spent:'182,000',status:'active',id:'proj_content',req:4020},{fa:'تحلیل بازخورد',en:'Feedback analytics',model:'Sonnet',key:1,budget:'680,000',spent:'248,000',status:'active',id:'proj_analytics',req:3089},{fa:'دستیار داخلی',en:'Internal assistant',model:'Sonnet',key:1,budget:'250,000',spent:'61,200',status:'paused',id:'proj_internal',req:2730},{fa:'نمونه اولیه',en:'Prototype',model:'Haiku',key:0,budget:'160,000',spent:'44,900',status:'paused',id:'proj_proto',req:1891},{fa:'تحلیل اسناد',en:'Document analysis',model:'Sonnet',key:1,budget:'350,000',spent:'123,900',status:'active',id:'proj_docs',req:1402}];
+const keyData=[{id:'key_2491',name:'Production · Support',project:0,tail:'•••• 2491',created:'2026-11-07',lastFa:'۲ ساعت پیش',lastEn:'2h ago',status:'active'},{id:'key_8364',name:'Content · Production',project:1,tail:'•••• 8364',created:'2026-11-12',lastFa:'۸ ساعت پیش',lastEn:'8h ago',status:'active'},{id:'key_1706',name:'Analytics · Read-only',project:2,tail:'•••• 1706',created:'2026-11-14',lastFa:'دیروز',lastEn:'Yesterday',status:'active'},{id:'key_9028',name:'Development · Test',project:4,tail:'•••• 9028',created:'2026-10-29',lastFa:'۱۲ روز پیش',lastEn:'12d ago',status:'paused'}];
+const requestData=[{id:'req_7f3a92',project:0,model:'Sonnet',tin:1892,tout:641,cost:'12,480',time:'۱۴:۲۵',enTime:'14:25',status:'settled'},{id:'req_3e1c44',project:1,model:'Haiku',tin:3010,tout:408,cost:'8,920',time:'۱۳:۴۸',enTime:'13:48',status:'settled'},{id:'req_a9d823',project:2,model:'Sonnet',tin:2410,tout:810,cost:'16,760',time:'۱۲:۰۲',enTime:'12:02',status:'settled'},{id:'req_1b44ea',project:0,model:'Sonnet',tin:421,tout:320,cost:'4,380',time:'۱۰:۳۸',enTime:'10:38',status:'settled'},{id:'req_6d297f',project:5,model:'Sonnet',tin:4201,tout:990,cost:'28,140',time:'۰۹:۱۵',enTime:'09:15',status:'settled'},{id:'req_700ee2',project:3,model:'Sonnet',tin:0,tout:0,cost:'0',time:'دیروز',enTime:'Yesterday',status:'failed'}];
+const transactions=[{id:'tx_3091',nameFa:'افزایش اعتبار کیف پول',nameEn:'Wallet top-up',amount:'+2,000,000',date:'2026-11-20',status:'settled'},{id:'tx_8710',nameFa:'تسویه درخواست API',nameEn:'API request settlement',amount:'−12,480',date:'2026-11-23',status:'settled',req:'req_7f3a92'},{id:'tx_8711',nameFa:'تسویه درخواست API',nameEn:'API request settlement',amount:'−8,920',date:'2026-11-23',status:'settled',req:'req_3e1c44'},{id:'tx_1329',nameFa:'آزادسازی مانده رزرو',nameEn:'Reserved balance released',amount:'+1,100',date:'2026-11-22',status:'settled'},{id:'tx_1812',nameFa:'تسویه درخواست API',nameEn:'API request settlement',amount:'−28,140',date:'2026-11-22',status:'settled',req:'req_6d297f'},{id:'tx_0021',nameFa:'افزایش اعتبار کیف پول',nameEn:'Wallet top-up',amount:'+5,000,000',date:'2026-11-12',status:'settled'}];
+const NAV=[['overview','grid','نمای کلی','Overview'],['usage','chart','گزارش مصرف','Usage'],['projects','layers','پروژه‌ها','Projects'],['keys','key','کلیدهای API','API keys'],['requests','list','درخواست‌ها','Requests'],['billing','wallet','کیف پول و مالی','Billing & wallet'],['security','shield','امنیت','Security']];
+const projects=()=>[...state.projectsExtra,...projectData];
+const pname=p=>fa()?p.fa:p.en;
+const money=n=>`<span class="money"><span class="num">${n}</span> <span class="dim" style="font-size:var(--fs-xs)">${t('تومان','IRT')}</span></span>`;
+const st=v=>v==='active'?`<span class="st"><i></i>${t('فعال','Active')}</span>`:v==='paused'?`<span class="st off"><i></i>${t('متوقف','Paused')}</span>`:v==='failed'?`<span class="st bad"><i></i>${t('ناموفق','Failed')}</span>`:`<span class="st"><i></i>${t('تسویه‌شده','Settled')}</span>`;
+const sample=()=>`<span class="pill w">${t('نمونه','Sample')}</span>`;
+
+/* ---- building blocks ---- */
+function head(eb,title,sub,actions=''){return `<div class="head"><div><span class="eyebrow"><span class="dot" aria-hidden="true"></span>${eb}</span><h1>${title}</h1><p>${sub}</p></div><div class="head-actions">${actions}</div></div>`}
+function tile(v,label,bd){return `<div class="tile"><div class="row"><b class="num">${v}</b>${bd||''}</div><small>${label}</small></div>`}
+const up=x=>`<span class="bd up">↑ ${x}</span>`, down=x=>`<span class="bd down">↓ ${x}</span>`, good_down=x=>`<span class="bd up">↓ ${x}</span>`;
+function field(anchors,n,hiFrom,seed){let s=seed||1;const r=()=>(s=(s*9301+49297)%233280)/233280;let h='';for(let i=0;i<n;i++){const p=i/(n-1)*(anchors.length-1),k=Math.floor(p),f=p-k,a=anchors[k],b=anchors[Math.min(k+1,anchors.length-1)];let v=a+(b-a)*(f*f*(3-2*f));v=Math.max(8,Math.min(100,v*(.8+r()*.32)));h+=`<i style="--h:${v.toFixed(1)}%"${i>=n*hiFrom?' class="hi"':''}></i>`}return h}
+function markers(list){return list.map(m=>`<span class="marker${m.hl?' hl':''}" style="--x:${m.x}%;--y:${m.y}%"><b>${m.v}</b>${m.l}</span>`).join('')}
+const days=()=>fa()?['د','س','چ','پ','ج','ش','ی']:['M','T','W','T','F','S','S'];
+function gauge(){return `<article class="card gauge mini"><div class="card-head"><div><h2>${t('توزیع بودجه','Budget allocation')}</h2><p class="sub">${t('ماه جاری · نمونه','This month · sample')}</p></div></div><div class="big num">${state.budget}%</div><p class="sub">${t('بودجهٔ مصرف‌شده','Budget used')}</p><svg viewBox="0 0 200 112" aria-hidden="true"><path d="M14 104a86 86 0 0 1 172 0" fill="none" stroke="#3A404C" stroke-width="8" stroke-linecap="round"/><path d="M14 104a86 86 0 0 1 172 0" fill="none" stroke="#D97757" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="${state.budget} 100"/><path d="M14 104a86 86 0 0 1 172 0" fill="none" stroke="#8A8D95" stroke-width="8" pathLength="100" stroke-dasharray="0 ${state.budget+.6} 14.4 100" opacity=".6"/></svg><div class="legend"><span><i class="p"></i>${t('مصرف‌شده','Used')}</span><span><i style="background:#8A8D95"></i>${t('رزرو','Reserved')}</span><span><i></i>${t('آزاد','Free')}</span></div></article>`}
+function stepped(){return `<article class="card mini"><h2>${t('بودجه ماهانه چقدر مصرف شده است؟','How much of the monthly budget is used?')}</h2><div class="big num">${state.budget}%</div><p class="sub">${t('مصرف‌شده · نمونه','Used · sample')}</p><div class="steps"><i style="height:40%"></i><i style="height:30%"></i><i class="hi" style="height:86%"><span class="pill p num">${state.budget}%</span></i><i class="lo" style="height:20%"></i></div><div class="legend"><span><i class="p"></i>${t('مصرف','Used')}</span><span>${t('رزرو','Reserved')}</span><span><i></i>${t('آزاد','Free')}</span></div></article>`}
+function capCard(){return `<article class="cap"><svg class="art" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M12 22V3m-8 8 8-8 8 8"/></svg><span style="font-size:var(--fs-sm);font-weight:650">${t('بودجه ماهانه','Monthly budget')}</span><div class="big"><span class="num">${state.budget}%</span><small>${t('مصرف شده','used')}</small></div><div class="progress" aria-hidden="true"><span style="width:${state.budget}%"></span></div><div class="pfoot"><span>${t('مصرف‌شده','Used')}</span><span>${t('سقف بودجه: ۲ میلیون تومان','Budget cap: 2M IRT')}</span></div><p>${t('با رسیدن به سقف بودجه، درخواست تازه پیش از ارسال متوقف می‌شود.','New requests pause before submission when the budget cap is reached.')}</p></article>`}
+
+/* ---- Keel table ---- */
+function table(cfg){
+ const {cols,rows,note,empty}=cfg;
+ let data=rows.slice();
+ if(state.sort.k){const c=cols.find(c=>c.k===state.sort.k);if(c&&c.sort)data.sort((a,b)=>{const x=c.sort(a),y=c.sort(b);return (x>y?1:x<y?-1:0)*state.sort.dir})}
+ const pages=Math.max(1,Math.ceil(data.length/state.perPage));state.page=Math.min(Math.max(1,state.page),pages);
+ const part=cfg.all?data:data.slice((state.page-1)*state.perPage,state.page*state.perPage);
+ const th=cols.map(c=>{const s=state.sort.k===c.k?(state.sort.dir>0?'ascending':'descending'):'none';return `<th scope="col" class="${c.num?'n':''}" ${c.sort?`aria-sort="${s}"`:''}>${c.sort?`<button type="button" data-sort="${c.k}">${c.label}<span class="ar" aria-hidden="true"><span class="u">▲</span><span class="d">▼</span></span></button>`:c.label}</th>`}).join('');
+ let body;
+ if(state.demo==='loading'||state.loading){body=Array.from({length:4},()=>`<tr>${cols.map(()=>`<td><span class="sk" style="width:${50+Math.random()*40|0}%"></span></td>`).join('')}</tr>`).join('')}
+ else if(state.demo==='error'){body=`<tr><td colspan="${cols.length}"><div class="state err"><span class="itile">${ic('alert')}</span><h3>${t('بارگذاری داده‌ها ناموفق بود','Could not load data')}</h3><p>${t('اتصال نمایشی قطع شد. دوباره تلاش کنید.','The demo connection dropped. Try again.')}</p><button class="btn btn-dark" type="button" data-retry>${t('تلاش دوباره','Retry')}</button></div></td></tr>`}
+ else if(!part.length){body=`<tr><td colspan="${cols.length}"><div class="state"><span class="itile">${ic('empty')}</span><h3>${empty||t('نتیجه‌ای یافت نشد','No results')}</h3><p>${t('عبارت جست‌وجو یا فیلتر وضعیت را تغییر دهید.','Change the search or status filter.')}</p><button class="btn btn-line" type="button" data-clear>${t('پاک کردن فیلترها','Clear filters')}</button></div></td></tr>`}
+ else body=part.map(r=>`<tr>${cols.map(c=>`<td class="${(c.num?'n ':'')+(c.cls||'')}" data-l="${esc(c.label)}">${c.cell(r)}</td>`).join('')}</tr>`).join('');
+ const from=data.length?(state.page-1)*state.perPage+1:0,to=Math.min(data.length,state.page*state.perPage);
+ const pager=(cfg.all||!data.length||state.demo||state.loading)?'':`<div style="display:flex;gap:12px;align-items:center"><span class="pcount">${t('نمایش','Showing')} <span class="num">${from}–${to}</span> ${t('از','of')} <span class="num">${data.length}</span></span><div class="pager" role="navigation" aria-label="${t('صفحه‌بندی','Pagination')}"><button type="button" data-page="${state.page-1}" ${state.page<=1?'disabled':''} aria-label="${t('قبلی','Previous')}">‹</button>${Array.from({length:pages},(_,i)=>`<button type="button" data-page="${i+1}" ${i+1===state.page?'aria-current="page"':''}>${i+1}</button>`).join('')}<button type="button" data-page="${state.page+1}" ${state.page>=pages?'disabled':''} aria-label="${t('بعدی','Next')}">›</button></div></div>`;
+ return `<div class="twrap"><table class="kt"><thead><tr>${th}</tr></thead><tbody>${body}</tbody></table></div><div class="tfoot"><p class="fnote">${note}</p>${pager}</div>`;
+}
+function tools(ph,filters,extra=''){return `<div class="tools"><div class="l"><label class="search">${ic('search')}<span class="sr-only">${ph}</span><input type="search" id="q" value="${esc(state.query)}" placeholder="${ph}"></label><div class="fpills" role="group" aria-label="${t('فیلتر وضعیت','Status filter')}">${filters.map(([v,l])=>`<button type="button" data-filter="${v}" aria-pressed="${state.filter===v}">${l}</button>`).join('')}</div></div>${extra}</div>`}
+const F_ALL=()=>['all',t('همه','All')], F_ACT=()=>['active',t('فعال','Active')], F_PAU=()=>['paused',t('متوقف','Paused')];
+const match=(r,txt)=>(state.filter==='all'||r.status===state.filter)&&txt.toLowerCase().includes(state.query.trim().toLowerCase());
+const csvBtn=`<button class="btn btn-line" type="button" data-csv>${ic('download')}<span>${'CSV'}</span></button>`;
+
+/* ---- views ---- */
+function overview(){
+ const chart=`<article class="card"><div class="card-head"><div><h2>${t('روند مصرف API','API usage')}</h2><p class="sub">${t('۷ روز گذشته · توکن خروجی · نمونه','Last 7 days · output tokens · sample')}</p></div><span class="pill">${t('۷ روز گذشته','Last 7 days')}</span></div><div class="barfield" aria-hidden="true">${field([30,44,40,58,52,66,60,80,72,96],120,.72,7)}${markers([{x:22,y:42,v:'21.4K',l:t('دوشنبه','Mon')},{x:56,y:58,v:'29.8K',l:t('پنجشنبه','Thu')},{x:90,y:74,v:'41.7K',l:t('اوج','Peak'),hl:1}])}</div><div class="axis" aria-hidden="true">${days().map((d,i)=>`<span class="${i>4?'hi':''}">${d}</span>`).join('')}</div></article>`;
+ const alerts=`<article class="alerts" aria-label="${t('هشدارها','Alerts')}"><div class="card-head" style="padding:0 4px 4px"><div><h2 style="font-size:var(--fs-md);margin:0">${t('هشدارها','Alerts')}</h2><p class="sub">${t('چهار مورد گزارش می‌دهند؛ یکی تصمیم می‌خواهد · نمونه','Four report, one asks · sample')}</p></div>${sample()}</div>
+  <div class="arow"><span class="itile">${ic('down')}</span><div><h3>${t('بودجه به ۶۸٪ رسید','Budget reached 68%')}<span class="unread" aria-label="${t('خوانده‌نشده','unread')}"></span></h3><p>${t('سقف ماهانه ۲ میلیون تومان','Monthly cap 2M IRT')}</p></div><span class="when">${t('۲ ساعت','2h')}</span></div>
+  <div class="arow focus"><span class="itile">${ic('check-sq')}</span><div><h3>${t('تأیید لازم است','Approval needed')}</h3><p>${t('کلید آزمایشی تازه برای «تحلیل اسناد»','New demo key for “Document analysis”')}</p></div><span class="when">${t('۵ ساعت','5h')}</span><div class="acts"><button class="btn btn-line" type="button" data-toast="${t('درخواست نمونه رد شد.','Sample request declined.')}">${t('رد','Decline')}</button><button class="btn btn-dark" type="button" data-toast="${t('درخواست نمونه تأیید شد؛ کلید واقعی ساخته نمی‌شود.','Sample approved; no real key is created.')}">${t('تأیید','Accept')}</button></div></div>
+  <div class="arow"><span class="itile">${ic('clock')}</span><div><h3>${t('یک درخواست ناموفق','One failed request')}</h3><p><span class="num">req_700ee2</span> · ${t('دستیار داخلی','Internal assistant')}</p></div><span class="when">${t('دیروز','1d')}</span></div>
+  <div class="arow"><span class="itile">${ic('link')}</span><div><h3>${t('کلید متوقف شد','Key paused')}</h3><p><span class="en">Development · Test</span> · ${t('پروژه «نمونه اولیه»','Prototype project')}</p></div><span class="when">${t('۱۲ روز','12d')}</span></div>
+ </article>`;
+ const recent=`<section class="tbl-card"><div class="card-head"><div><h2 style="margin:0;font-size:var(--fs-md)">${t('پروژه‌های اخیر','Recent projects')}</h2><p class="sub">${t('چهار پروژه با بیشترین مصرف','Top four by spend')}</p></div><button class="btn btn-line" type="button" data-go="projects">${t('مشاهده همه','View all')} ${ic('arrow-ur','flip')}</button></div>${table({all:1,cols:[{k:'n',label:t('پروژه','PROJECT'),cell:p=>`<span class="pc">${pname(p)}</span>`},{k:'m',label:t('مدل','MODEL'),cell:p=>`<span class="id">${p.model}</span>`},{k:'s',label:t('مصرف ماه','SPENT'),num:1,cell:p=>money(p.spent)},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:p=>st(p.status)}],rows:projectData.slice(0,4),note:t('مبالغ به تومان · داده نمایشی، متصل به سرویس زنده نیست.','Amounts in IRT · demo data, not connected to a live service.')})}</section>`;
+ return head(t('OVERVIEW · نمای کلی','OVERVIEW'),t('نمای کلی','Overview'),t('وضعیت فضای کاری، هزینه‌ها و پروژه‌ها در یک نگاه','Your workspace at a glance'),`<button class="btn" type="button" data-go="usage">${ic('clock')}${t('۳۰ روز گذشته','Last 30 days')}</button><button class="btn btn-dark" type="button" data-modal="project">${ic('plus')}${t('پروژه جدید','New project')}</button>`)+
+ `<div class="grid-main"><div class="stack"><div class="figure"><div><div class="label">${t('اعتبار قابل استفاده','Available balance')}</div><div class="big num">8,450<span class="tail">,000</span></div><div class="unit">${t('تومان · داده نمونه','IRT · sample data')}</div></div>${sample()}</div>
+ <div class="tiles">${tile('68%',t('بودجه مصرف‌شده ماهانه','Monthly budget used'),'<span class="bd down">↑ 6%</span>')}${tile('03',t('کلیدهای API فعال','Active API keys'),up('1'))}${tile('18,420',t('درخواست · ۷ روز','Requests · 7 days'),up('12%'))}${tile('1.8s',t('میانگین زمان پاسخ','Avg. response time'),good_down('0.2s'))}</div>${chart}</div>
+ <div class="stack"><div class="tiles" style="grid-template-columns:1fr 1fr">${stepped()}${gauge()}</div>${alerts}</div></div>${recent}`;
+}
+function usage(){
+ const d=state.period===7?{total:'18,420',a:[40,63,52,85,66,72,96,69,77,56]}:{total:'74,810',a:[60,47,67,56,88,79,69,94,73,82]};
+ const cols=[{k:'n',label:t('پروژه','PROJECT'),sort:p=>pname(p),cell:p=>`<span class="pc">${pname(p)}</span>`},{k:'m',label:t('مدل','MODEL'),cell:p=>`<span class="id">${p.model}</span>`},{k:'r',label:t('درخواست','REQUESTS'),num:1,sort:p=>p.req,cell:p=>`<span class="num">${p.req.toLocaleString('en-US')}</span>`},{k:'s',label:t('هزینه ماه','MONTHLY COST'),num:1,sort:p=>toNum(p.spent),cell:p=>money(p.spent)},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:p=>st(p.status)}];
+ return head(t('USAGE · گزارش مصرف','USAGE'),t('گزارش مصرف سازمان','Organization usage report'),t('نمای خلاصه مصرف و بودجه پروژه‌ها','Usage, requests and budgets at a glance'),`<div class="fpills" role="group" aria-label="${t('بازه زمانی','Period')}"><button type="button" data-period="7" aria-pressed="${state.period===7}">${t('۷ روز','7 days')}</button><button type="button" data-period="30" aria-pressed="${state.period===30}">${t('۳۰ روز','30 days')}</button></div>`)+
+ `<div class="grid-main split2" style="grid-template-columns:1fr 1.6fr">${capCard()}<article class="card"><div class="card-head"><div><p class="sub" style="margin:0">${t('درخواست‌های ثبت‌شده','Recorded requests')}</p><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><strong class="num" style="font-family:Manrope;font-size:52px;font-weight:400;letter-spacing:-.04em;line-height:1.05">${d.total}</strong><span class="sub">${t('درخواست نمونه','sample requests')}</span></div></div><span class="pill">${state.period===7?t('۷ روز اخیر','Last 7 days'):t('۳۰ روز اخیر','Last 30 days')}</span></div><div class="barfield" style="height:200px" role="img" aria-label="${t('نمودار نمایشی تعداد درخواست‌ها','Sample request chart')}">${field(d.a,110,.7,state.period===7?3:11)}${markers([{x:36,y:70,v:state.period===7?'2,410':'9,880',l:t('اوج میانه','Mid peak')},{x:84,y:70,v:state.period===7?'2,190':'8,640',l:t('اخیر','Recent'),hl:1}])}</div><div class="axis en" aria-hidden="true">${['01','05','10','15','20','25','30'].map((x,i)=>`<span class="${i>4?'hi':''}">${x}</span>`).join('')}</div></article></div>
+ <div class="tiles t3" style="margin-top:12px">${tile('2.84M',t('توکن ورودی','Input tokens'),up('9%'))}${tile('782K',t('توکن خروجی','Output tokens'),up('4%'))}${tile('1.8s',t('میانگین زمان پاسخ','Avg. response time'),good_down('0.2s'))}</div>
+ <section class="tbl-card"><div class="card-head"><div><h2 style="margin:0;font-size:var(--fs-md)">${t('مصرف به تفکیک پروژه','Usage by project')}</h2><p class="sub">${t('مرتب‌سازی با کلیک روی سرستون','Click a column head to sort')}</p></div>${sample()}</div>${table({all:1,cols,rows:projectData.slice(0,5),note:t('هزینه‌ها پس از تسویه با مصرف واقعی ثبت می‌شوند · داده نمایشی.','Costs are recorded after settlement · demo data.')})}</section>`;
+}
+function projectsView(){
+ const rows=projects().filter(p=>match(p,p.fa+' '+p.en+' '+p.model+' '+p.id));
+ const cols=[{k:'n',label:t('نام پروژه','PROJECT'),sort:p=>pname(p),cell:p=>`<span class="pc">${pname(p)}</span><div class="id" style="font-size:var(--fs-xs)">${p.id}</div>`},{k:'m',label:t('مدل','MODEL'),sort:p=>p.model,cell:p=>`<span class="id">${p.model}</span>`},{k:'k',label:t('کلیدها','KEYS'),num:1,sort:p=>p.key,cell:p=>`<span class="num">${p.key}</span>`},{k:'b',label:t('سقف بودجه','BUDGET CAP'),num:1,sort:p=>toNum(p.budget),cell:p=>money(p.budget)},{k:'s',label:t('مصرف','SPENT'),num:1,sort:p=>toNum(p.spent),cell:p=>money(p.spent)},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:p=>st(p.status)},{k:'a',label:t('جزئیات','DETAILS'),cls:'act',cell:p=>`<button class="rowbtn" type="button" data-toast="${esc(t('پروژه نمایشی: ','Demo project: ')+pname(p))}">${t('مشاهده','View')} ${ic('arrow-ur','flip')}</button>`}];
+ return head(t('PROJECTS · پروژه‌ها','PROJECTS'),t('پروژه‌های من','Projects'),t('مدیریت پروژه‌ها، مدل‌ها و بودجه اختصاصی','Budgets, models and spend for every project'),`<button class="btn btn-dark" type="button" data-modal="project">${ic('plus')}${t('پروژه جدید','New project')}</button>`)+
+ `<section class="tbl-card">${tools(t('جست‌وجوی پروژه','Search projects'),[F_ALL(),F_ACT(),F_PAU()],csvBtn)}${table({cols,rows,note:t('سقف بودجه هر پروژه پیش از ارسال درخواست بررسی می‌شود · داده نمایشی.','Each project’s cap is checked before a request is sent · demo data.'),empty:t('پروژه‌ای پیدا نشد','No projects found')})}</section>`;
+}
+function keysView(){
+ const all=[...state.keysExtra,...keyData].map(k=>({...k,status:state.keysRevoked.has(k.id)?'paused':k.status}));
+ const rows=all.filter(k=>match(k,k.id+' '+k.name+' '+pname(projects().find(p=>p.id===k.pid)||projectData[k.project])));
+ const cols=[{k:'n',label:t('عنوان کلید','KEY NAME'),sort:k=>k.name,cell:k=>`<span class="pc en">${esc(k.name)}</span>`},{k:'t',label:t('شناسه پنهان','MASKED KEY'),cell:k=>`<span class="id">${k.tail}</span>`},{k:'p',label:t('پروژه','PROJECT'),cell:k=>pname(projectData[k.project]||projectData[0])},{k:'c',label:t('تاریخ ساخت','CREATED'),num:1,sort:k=>k.created,cell:k=>`<span class="num dim">${k.created}</span>`},{k:'l',label:t('آخرین استفاده','LAST USED'),cell:k=>`<span class="dim">${t(k.lastFa,k.lastEn)}</span>`},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:k=>st(k.status)},{k:'a',label:t('عملیات','ACTION'),cls:'act',cell:k=>`<button class="rowbtn" type="button" data-revoke="${k.id}" ${k.status==='paused'?'disabled':''}>${t('غیرفعال‌سازی','Revoke')}</button>`}];
+ return head(t('API KEYS · کلیدها','API KEYS'),t('کلیدهای API','API keys'),t('کنترل دسترسی، تفکیک کلیدها و وضعیت استفاده','Isolate and control keys across projects'),`<button class="btn btn-dark" type="button" data-modal="key">${ic('plus')}${t('ساخت کلید آزمایشی','Create demo key')}</button>`)+
+ `<article class="card card-w note-card"><div class="l"><span class="itile">${ic('lock')}</span><div><h2>${t('نکته امنیتی','Security notice')}</h2><p>${t('رشته کامل کلید هرگز در این پیش‌نمایش نمایش داده نمی‌شود؛ فقط یک‌بار هنگام ساخت.','The full secret is never shown again — only once, at creation.')}</p></div></div><span class="pill soft">${t('کلیدهای نمایشی','Demo credentials')}</span></article>
+ <section class="tbl-card">${tools(t('جست‌وجو بر اساس کلید یا پروژه','Search keys or projects'),[F_ALL(),F_ACT(),F_PAU()],csvBtn)}${table({cols,rows,note:t('غیرفعال‌سازی در این پیش‌نمایش فقط وضعیت ردیف را تغییر می‌دهد.','Revoking here only changes the row state in this preview.'),empty:t('کلیدی پیدا نشد','No keys found')})}</section>`;
+}
+function requestsView(){
+ const rows=requestData.filter(r=>match(r,r.id+' '+pname(projectData[r.project])+' '+r.model));
+ const cols=[{k:'i',label:t('شناسه درخواست','REQUEST ID'),sort:r=>r.id,cell:r=>`<span class="id" style="color:var(--ink);font-weight:600">${r.id}</span>`},{k:'p',label:t('پروژه','PROJECT'),cell:r=>pname(projectData[r.project])},{k:'m',label:t('مدل','MODEL'),cell:r=>`<span class="id">${r.model}</span>`},{k:'tk',label:t('توکن ورودی / خروجی','TOKENS IN / OUT'),num:1,sort:r=>r.tin,cell:r=>`<span class="num">${r.tin?r.tin.toLocaleString('en-US')+' / '+r.tout:'—'}</span>`},{k:'c',label:t('هزینه','AMOUNT'),num:1,sort:r=>toNum(r.cost),cell:r=>money(r.cost)},{k:'tm',label:t('زمان','TIME'),cell:r=>`<span class="dim">${fa()?r.time:r.enTime}</span>`},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:r=>st(r.status)},{k:'a',label:t('جزئیات','DETAILS'),cls:'act',cell:r=>`<button class="rowbtn" type="button" data-req="${r.id}">${t('مشاهده','View')} ${ic('arrow-ur','flip')}</button>`}];
+ return head(t('REQUESTS · درخواست‌ها','REQUESTS'),t('درخواست‌ها','Requests'),t('ردیابی درخواست، توکن و مراحل تسویه','Trace each request, its tokens and settlement'),`<button class="btn btn-dark" type="button" data-req="req_7f3a92">${ic('list')}${t('نمونه جزئیات درخواست','Sample request detail')}</button>`)+
+ `<section class="tbl-card">${tools(t('شناسه درخواست یا پروژه','Request ID or project'),[F_ALL(),['settled',t('تسویه‌شده','Settled')],['failed',t('ناموفق','Failed')]],csvBtn)}${table({cols,rows,note:t('هر درخواست یک شناسه و یک نوبت ارسال دارد · داده آزمایشی.','One ID, one submission per request · test data.'),empty:t('درخواستی پیدا نشد','No requests found')})}</section>`;
+}
+function billing(){
+ const rows=transactions.filter(x=>match(x,x.id+' '+x.nameFa+' '+x.nameEn+' '+(x.req||'')));
+ const cols=[{k:'i',label:t('شناسه تراکنش','TRANSACTION'),sort:x=>x.id,cell:x=>`<span class="id">${x.id}</span>`},{k:'d',label:t('شرح','DESCRIPTION'),cell:x=>`<span class="pc">${t(x.nameFa,x.nameEn)}</span>`},{k:'dt',label:t('تاریخ','DATE'),num:1,sort:x=>x.date,cell:x=>`<span class="num dim">${x.date}</span>`},{k:'a',label:t('مبلغ','AMOUNT'),num:1,sort:x=>toNum(x.amount),cell:x=>`<span class="money"><span class="num amt ${x.amount.startsWith('+')?'plus':''}">${x.amount}</span> <span class="dim" style="font-size:var(--fs-xs)">${t('تومان','IRT')}</span></span>`},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:x=>st(x.status)},{k:'r',label:t('جزئیات','DETAILS'),cls:'act',cell:x=>x.req?`<button class="rowbtn" type="button" data-req="${x.req}">${t('پیگیری درخواست','View request')} ${ic('arrow-ur','flip')}</button>`:'<span class="dim">—</span>'}];
+ return head(t('BILLING · مالی','BILLING'),t('کیف پول و امور مالی','Billing & wallet'),t('موجودی، رزرو اعتبار و ریزتراکنش‌های شفاف','Balance, reservations and transparent transactions'),`<button class="btn btn-line" type="button" data-csv>${ic('download')}${t('دریافت گردش حساب','Download statement')}</button><button class="btn btn-dark" type="button" data-toast="${t('پرداخت در این پیش‌نمایش غیرفعال است.','Payments are disabled in this preview.')}">${ic('plus')}${t('افزایش اعتبار','Top up')}</button>`)+
+ `<div class="grid-main"><article class="card card-w" style="position:relative;overflow:hidden;isolation:isolate"><div style="position:absolute;z-index:-1;inset:auto -20% -50% auto;width:90%;height:120%;background:radial-gradient(closest-side,var(--p-45),rgba(217,119,87,0))"></div><div class="figure" style="padding:0"><div><div class="label">${t('موجودی قابل استفاده','Available balance')}</div><div class="big num">8,450<span class="tail">,000</span></div><div class="unit">${t('تومان · نمونه','IRT · sample')}</div></div>${sample()}</div><div class="tiles t3" style="margin-top:18px">${tile('182K',t('رزرو موقت · در انتظار تسویه','Reserved · pending'),'')}${tile('1.36M',t('هزینه ماه جاری','This month’s spend'),good_down('8%'))}${tile('+1.1K',t('آزادشده از رزرو','Released from reserve'),'')}</div></article>${capCard()}</div>
+ <section class="tbl-card">${tools(t('جست‌وجو در تراکنش‌ها','Search transactions'),[F_ALL()],'')}${table({cols,rows,note:t('هر کسر با شناسه درخواست قابل پیگیری است · مبالغ نمونه.','Every charge links to a request ID · sample amounts.'),empty:t('تراکنشی پیدا نشد','No transactions found')})}</section>`;
+}
+function security(){
+ const S=[['email','اعلان‌های ایمیلی','Email notifications','دریافت وضعیت مصرف و هشدارهای حساب','Usage and account alerts'],['budget','هشدار سقف بودجه','Budget threshold alerts','اعلان پیش از رسیدن به حد مجاز','Warn before the limit'],['limits','محدودسازی مدل‌ها','Model allowlist','اجازه استفاده تنها از مدل‌های تأییدشده','Only approved models'],['security','اعلان ورود جدید','New sign-in alerts','خبر دادن درباره ورود از دستگاه تازه','Unfamiliar sign-ins']];
+ return head(t('SECURITY · امنیت','SECURITY'),t('تنظیمات امنیتی','Security settings'),t('گزینه‌های نمایشی کنترل بودجه و دسترسی','Demo controls for cost and access'),`<span class="pill w">${t('تغییرات فقط در مرورگر','Local preview only')}</span>`)+
+ `<div class="grid-main split2" style="grid-template-columns:1fr 1fr"><article class="card card-w"><div class="card-head"><div><h2>${t('کنترل‌ها و اعلان‌ها','Controls & alerts')}</h2><p class="sub">${t('نمونه','Sample')}</p></div></div>${S.map(([k,p,e,pd,ed])=>`<div class="set-row"><div><strong id="lbl-${k}">${t(p,e)}</strong><p>${t(pd,ed)}</p></div><button type="button" class="switch" role="switch" aria-checked="${!!state.settings[k]}" aria-labelledby="lbl-${k}" data-toggle="${k}"></button></div>`).join('')}</article>
+ <div class="stack">${capCard()}<article class="card card-w"><h2>${t('مصرف از بودجه','Budget utilization')}</h2><p class="sub">${t('نسبت نمونه را تغییر دهید تا کارت‌ها به‌روز شوند.','Move the sample value to update the cards.')}</p><label class="sr-only" for="budgetRange">${t('درصد بودجه','Budget percentage')}</label><input type="range" id="budgetRange" min="0" max="100" value="${state.budget}"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-dark" type="button" data-toast="${t('تغییرات فقط در این پیش‌نمایش اعمال شدند.','Applied to this preview only.')}">${t('ثبت تغییرات نمایشی','Save demo changes')}</button></div></article></div></div>`;
+}
+const R={overview,usage,projects:projectsView,keys:keysView,requests:requestsView,billing,security};
+
+/* ---- modals ---- */
+let lastFocus=null;
+function openModal(html){lastFocus=document.activeElement;document.getElementById('dlgBody').innerHTML=html;const m=document.getElementById('modal');m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';const f=m.querySelector('.dialog input,.dialog select');(f||document.getElementById('dlgClose')).focus()}
+function closeModal(){const m=document.getElementById('modal');if(!m.classList.contains('open'))return;m.classList.remove('open');m.setAttribute('aria-hidden','true');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+function reqModal(id){const r=requestData.find(x=>x.id===id)||requestData[0];const ok=r.status==='settled';
+ openModal(`<h2 id="dlgTitle">${t('جزئیات یک درخواست','Request details')}</h2><p class="sub">${t('فرآیند مالی · داده آزمایشی','Financial timeline · test data')} · <span class="num">${r.id}</span></p><div class="alerts" style="padding:8px 0 0">
+ <div class="arow"><span class="itile">${ic('lock')}</span><div><h3>${t('رزرو اعتبار','Credit reserved')}</h3><p>${t('نرخ توکن و سقف هزینه در لحظه ثبت شد.','Token rates and max charge locked at submission.')}</p></div><span class="pill">${t('ثبت شد','Recorded')}</span></div>
+ <div class="arow"><span class="itile">${ic('send')}</span><div><h3>${t('درخواست به مدل ارسال شد','Sent to the model')}</h3><p>${t('یک شناسه، یک نوبت ارسال.','One ID, one submission.')}</p></div><span class="pill">${t('انجام شد','Done')}</span></div>
+ <div class="arow focus"><span class="itile">${ic(ok?'check-sq':'alert')}</span><div><h3>${ok?t('تسویه با مصرف نهایی','Settled on final usage'):t('عدم تکمیل درخواست','Request not completed')}</h3><p>${ok?t('مانده اعتبار به کیف پول برگشت.','Unused credit returned to the wallet.'):t('درخواست ناموفق در سوابق ثبت شد.','The failed request was recorded.')}</p></div><span class="pill ${ok?'p':''}">${ok?t('تسویه شد','Settled'):t('ناموفق','Failed')}</span>
+ <div class="acts"><span class="pill w">${t('هزینه','Cost')} <b class="num">${r.cost}</b> ${t('تومان','IRT')}</span><span class="pill w">${t('توکن','Tokens')} <span class="num">${r.tin?r.tin.toLocaleString('en-US')+' / '+r.tout:'—'}</span></span><span class="pill w en">${r.model}</span></div></div></div>
+ <div class="dark-foot"><span>${t('صورت‌حساب این درخواست، قابل پیگیری با شناسه','This bill is traceable by its ID')}</span><strong>${t('شفاف تا سطح توکن','Transparent to the token')} ${ic('check')}</strong></div>`)}
+function projectModal(){openModal(`<h2 id="dlgTitle">${t('پروژه جدید','New project')}</h2><p class="sub">${t('فقط در این پیش‌نمایش ساخته می‌شود · نمونه','Created in this preview only · sample')}</p><form id="projForm"><div class="field"><label for="pName">${t('نام پروژه','Project name')}</label><input id="pName" required maxlength="40" placeholder="${t('مثلاً دستیار فروش','e.g. Sales assistant')}"></div><div class="field"><label for="pModel">${t('مدل مجاز','Allowed model')}</label><select id="pModel"><option>Sonnet</option><option>Haiku</option></select></div><div class="field"><label for="pBudget">${t('سقف بودجه ماهانه (تومان)','Monthly cap (IRT)')}</label><input id="pBudget" inputmode="numeric" value="300,000"><span class="hint">${t('درخواست‌ها با رسیدن به سقف پیش از ارسال متوقف می‌شوند.','Requests pause before sending at the cap.')}</span></div><div class="f-actions"><button class="btn btn-dark" type="submit">${t('ساخت پروژه','Create project')}</button><button class="btn btn-line" type="button" data-close>${t('انصراف','Cancel')}</button></div></form>`)}
+function keyModal(){openModal(`<h2 id="dlgTitle">${t('ساخت کلید آزمایشی','Create demo key')}</h2><p class="sub">${t('کلید واقعی ساخته نمی‌شود · نمونه','No real key is created · sample')}</p><form id="keyForm"><div class="field"><label for="kName">${t('عنوان کلید','Key name')}</label><input id="kName" required maxlength="40" value="Staging · Docs" dir="ltr"></div><div class="field"><label for="kProj">${t('پروژه','Project')}</label><select id="kProj">${projectData.map((p,i)=>`<option value="${i}">${pname(p)}</option>`).join('')}</select></div><div class="f-actions"><button class="btn btn-dark" type="submit">${t('ساخت کلید','Create key')}</button><button class="btn btn-line" type="button" data-close>${t('انصراف','Cancel')}</button></div></form>`)}
+function keyShown(name,secret){document.getElementById('dlgBody').innerHTML=`<h2 id="dlgTitle">${t('کلید ساخته شد','Key created')}</h2><p class="sub"><span class="en">${esc(name)}</span> · ${t('نمونه','sample')}</p><div class="keybox"><code id="secret">${secret}</code><button class="btn" type="button" id="copySecret">${ic('copy')}<span>${t('کپی','Copy')}</span></button></div><div class="warn">${ic('alert')}<div><strong>${t('این کلید فقط همین یک‌بار نمایش داده می‌شود.','This key is shown only once.')}</strong><br>${t('آن را در جای امن نگه دارید. این رشته نمایشی است و به هیچ API متصل نیست.','Store it safely. This string is a demo and works with no API.')}</div></div><div class="f-actions"><button class="btn btn-dark" type="button" data-close>${t('ذخیره کردم','I’ve saved it')}</button></div>`;document.getElementById('copySecret').focus()}
+
+/* ---- render ---- */
+function render(){
+ document.getElementById('tabs').innerHTML=NAV.map(([id,i,p,e])=>`<button class="tab" role="tab" type="button" data-go="${id}" aria-selected="${id===state.view}" ${id===state.view?'':'tabindex="-1"'}>${ic(i)}<span>${t(p,e)}</span>${id==='requests'?`<span class="count num">${requestData.length}</span>`:''}</button>`).join('');
+ document.getElementById('view').innerHTML=R[state.view]();
+}
+function go(v,push=true){if(!R[v])v='overview';state.view=v;state.query='';state.filter='all';state.page=1;state.sort={k:null,dir:1};
+ if(!STATIC&&!state.demo){state.loading=true;render();setTimeout(()=>{state.loading=false;render()},320)}else render();
+ if(push)history.replaceState(null,'',`console.html?view=${v}&lang=${state.lang}`);}
+function setLang(l){state.lang=l;const h=document.documentElement;h.lang=l;h.dir=l==='fa'?'rtl':'ltr';
+ const s=(id,p,e)=>{document.getElementById(id).textContent=t(p,e)};s('demoTop','پیش‌نمایش محصول · داده نمونه','Product preview · sample data');s('addManagerLbl','افزودن مدیر','Add manager');s('footNote','کنسول تعاملی کلاود ایران · کانسپت رابط کاربری · همه داده‌ها نمونه‌اند و هیچ درخواست یا پرداختی انجام نمی‌شود.','ClaudeIran interactive console · UI concept · all data is sample; no request or payment is made.');s('backLink','بازگشت به وب‌سایت ↗','Back to website ↗');
+ document.getElementById('langToggle').textContent=fa()?'EN':'فا';document.getElementById('bellBtn').setAttribute('aria-label',t('اعلان‌ها','Notifications'));render()}
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),3000)}
+function exportCSV(){let c,r;const v=state.view;if(v==='projects'){c=['Project','Model','Keys','Budget','Spent','Status'];r=projects().map(p=>[p.en,p.model,p.key,p.budget,p.spent,p.status])}else if(v==='keys'){c=['Name','Masked key','Project','Created','Status'];r=[...state.keysExtra,...keyData].map(k=>[k.name,k.tail,projectData[k.project].en,k.created,state.keysRevoked.has(k.id)?'paused':k.status])}else if(v==='requests'){c=['ID','Project','Model','Tokens in','Tokens out','Cost','Status'];r=requestData.map(x=>[x.id,projectData[x.project].en,x.model,x.tin,x.tout,x.cost,x.status])}else{c=['Transaction','Description','Amount','Date','Status'];r=transactions.map(x=>[x.id,x.nameEn,x.amount,x.date,x.status])}
+ const csv=[c,...r].map(row=>row.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(',')).join('\r\n');const url=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=`claudeiran-${v}-demo.csv`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500)}
+
+document.addEventListener('click',e=>{const T=s=>e.target.closest(s);let el;
+ if(el=T('[data-go]')){go(el.dataset.go);document.getElementById('view').focus({preventScroll:true});return}
+ if(el=T('[data-period]')){state.period=+el.dataset.period;render();return}
+ if(el=T('[data-filter]')){state.filter=el.dataset.filter;state.page=1;render();return}
+ if(el=T('[data-sort]')){const k=el.dataset.sort;state.sort=state.sort.k===k?{k,dir:-state.sort.dir}:{k,dir:1};render();const b=document.querySelector(`[data-sort="${k}"]`);b&&b.focus();return}
+ if(el=T('[data-page]')){if(el.disabled)return;state.page=+el.dataset.page;render();return}
+ if(T('[data-clear]')){state.query='';state.filter='all';state.page=1;render();return}
+ if(T('[data-retry]')){state.demo='';render();toast(t('داده‌های نمونه دوباره بارگذاری شد.','Sample data reloaded.'));return}
+ if(el=T('[data-req]')){reqModal(el.dataset.req);return}
+ if(el=T('[data-modal]')){el.dataset.modal==='key'?keyModal():projectModal();return}
+ if(el=T('[data-revoke]')){state.keysRevoked.add(el.dataset.revoke);render();toast(t('کلید نمایشی غیرفعال شد.','Demo key revoked.'));return}
+ if(el=T('[data-toggle]')){const k=el.dataset.toggle;state.settings[k]=!state.settings[k];el.setAttribute('aria-checked',String(state.settings[k]));return}
+ if(el=T('[data-toast]')){toast(el.dataset.toast);return}
+ if(T('[data-csv]')){exportCSV();return}
+ if(T('[data-close]')||T('#dlgClose')||T('#scrim')){closeModal();return}
+ if(T('#copySecret')){const s=document.getElementById('secret').textContent;(navigator.clipboard?navigator.clipboard.writeText(s):Promise.reject()).then(()=>toast(t('کلید نمونه کپی شد.','Sample key copied.')),()=>toast(t('متن را دستی انتخاب کنید.','Select the text to copy.')));return}
+ if(T('#bellBtn')){go('overview');toast(t('هشدارها در نمای کلی هستند.','Alerts are on the overview.'));return}
+ if(T('#addManager')){toast(t('افزودن مدیر در این پیش‌نمایش غیرفعال است.','Adding managers is disabled in this preview.'));return}
+ if(T('#langToggle')){setLang(fa()?'en':'fa');history.replaceState(null,'',`console.html?view=${state.view}&lang=${state.lang}`);return}
+});
+document.addEventListener('submit',e=>{e.preventDefault();
+ if(e.target.id==='projForm'){const n=document.getElementById('pName').value.trim()||t('پروژه نمونه','Sample project');state.projectsExtra.unshift({fa:n,en:n,model:document.getElementById('pModel').value,key:0,budget:document.getElementById('pBudget').value||'0',spent:'0',status:'active',id:'proj_demo_'+(state.projectsExtra.length+1),req:0});closeModal();go('projects');toast(t('پروژه نمونه اضافه شد؛ چیزی ذخیره نشد.','Sample project added; nothing was saved.'))}
+ if(e.target.id==='keyForm'){const name=document.getElementById('kName').value.trim()||'Demo key',pi=+document.getElementById('kProj').value;const hex=Array.from(crypto.getRandomValues(new Uint8Array(12)),b=>b.toString(16).padStart(2,'0')).join('');const secret='ci-demo-'+hex;state.keysExtra.unshift({id:'key_demo_'+hex.slice(-4),name,project:pi,tail:'•••• '+hex.slice(-4),created:'2026-11-23',lastFa:'هرگز',lastEn:'Never',status:'active'});keyShown(name,secret);if(state.view==='keys')render()}
+});
+document.addEventListener('input',e=>{if(e.target.id==='q'){const pos=e.target.selectionStart;state.query=e.target.value;state.page=1;render();const i=document.getElementById('q');i.focus();i.setSelectionRange(pos,pos)}if(e.target.id==='budgetRange'){state.budget=+e.target.value;render();document.getElementById('budgetRange').focus()}});
+document.addEventListener('keydown',e=>{const m=document.getElementById('modal');if(!m.classList.contains('open')){
+  if(e.target.classList&&e.target.classList.contains('tab')&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){const tabs=[...document.querySelectorAll('.tab')];let i=tabs.indexOf(e.target);i=(i+((e.key==='ArrowLeft')===fa()?1:-1)+tabs.length)%tabs.length;go(tabs[i].dataset.go);document.querySelectorAll('.tab')[i].focus()}return}
+ if(e.key==='Escape')closeModal();
+ if(e.key==='Tab'){const f=[...m.querySelectorAll('.dialog button,.dialog input,.dialog select')].filter(x=>!x.disabled);if(!f.length)return;const a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}});
+
+/* ---- boot (URL params for previews: view, lang, request, modal=key|project|keyshown, q, filter, demo=loading|error, static) ---- */
+const v0=Q.get('view')||location.hash.slice(1);state.view=R[v0]?v0:'overview';
+if(Q.get('q'))state.query=Q.get('q');if(Q.get('filter'))state.filter=Q.get('filter');
+setLang(state.lang);
+if(Q.get('request'))reqModal(Q.get('request'));
+if(Q.get('modal')==='key')keyModal();if(Q.get('modal')==='project')projectModal();
+if(Q.get('modal')==='keyshown'){keyModal();keyShown('Staging · Docs','ci-demo-3f9a1c7be20d4a85e61f09c2')}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>محور | دسترسی کنترل‌شده به مدل‌های Claude از راه API</title>
+<meta name="description" content="کلید جدا برای هر پروژه، بودجه و سقف خروجی، هزینهٔ تخمینی پیش از ارسال و تسویهٔ دقیق مصرف. عضویت در فهرست دسترسی زودهنگام پایلوت باز است.">
+<meta name="theme-color" content="#0A1626">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:title" content="محور: دسترسی کنترل‌شده به مدل‌های Claude از راه API">
+<meta property="og:description" content="کلید مجازی جدا برای هر پروژه، کیف پول پیش‌پرداخت و صورت‌حسابی که هر توکن را نشان می‌دهد. ظرفیت پایلوت محدود است.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/vazirmatn-arabic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Estedad-Black.ttf" as="font" type="font/ttf" crossorigin>
+<script>
+  // Hide the hero only while the intro timeline is being prepared; never longer than 2.5s, never under reduced motion.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('js-intro');
+    setTimeout(function () { document.documentElement.classList.remove('js-intro'); }, 2500);
+  }
+</script>
+<script type="module" src="/src/main.js"></script>
+<noscript><style>@media (max-width:1100px){.nav{position:static;opacity:1;visibility:visible;transform:none;flex-wrap:wrap;flex-direction:row;padding:0;background:none;border:0}.nav a{border:0;padding:6px 8px;font-size:14px}.nav-toggle{display:none}.header-in{height:auto;flex-wrap:wrap;padding-block:8px}.site-header{position:static;height:auto}.hero{padding-top:32px}}</style></noscript>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
+<a class="skip" href="#main">رفتن به محتوای اصلی</a>
+
+<!-- ================= HEADER ================= -->
+<header class="site-header" data-header>
+  <div class="wrap header-in">
+    <a class="brand" href="#top" aria-label="محور، صفحهٔ اصلی">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="11" fill="none" stroke="#C9A063" stroke-width="2"/><path d="M16 3v26" stroke="#C9A063" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="3.4" fill="#4DB6A6"/></svg>
+      <span>محور</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="بخش‌های صفحه">
+      <a href="#products">محصولات</a>
+      <a href="#control">کلید و بودجه</a>
+      <a href="#billing">صورت‌حساب</a>
+      <a href="#developers">توسعه‌دهندگان</a>
+      <a href="#security">امنیت</a>
+      <a href="#faq">پرسش‌ها</a>
+    </nav>
+    <a class="btn btn-brass btn-sm header-cta" href="#cta">عضویت در فهرست دسترسی زودهنگام</a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav" aria-label="باز کردن منو" data-label-open="باز کردن منو" data-label-close="بستن منو"><i data-icon="hamburger-menu-linear"></i></button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ================= HERO ================= -->
+<section class="section hero ink" id="top" aria-labelledby="hero-title">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="pilot-status" data-intro="status"><span class="dot-static" aria-hidden="true"></span>پایلوت محدود · عضویت در فهرست دسترسی زودهنگام باز است</p>
+      <h1 class="display" id="hero-title" data-hero-title>دسترسی کنترل‌شده به Claude برای تیم و پروژهٔ شما</h1>
+      <p class="lead" data-intro="lead">محور دسترسی به مدل‌های Claude را فقط از راه API فراهم می‌کند و عرضه را تنها پس از قطعی‌شدن تأمین مورد تأیید و قرارداد آغاز می‌کند. برای هر پروژه کلید جدا، بودجهٔ مشخص و صورت‌حسابی دقیق به تومان خواهید داشت.</p>
+      <div class="hero-ctas" data-intro="ctas">
+        <a class="btn btn-brass" href="#cta">عضویت در فهرست دسترسی زودهنگام</a>
+        <a class="btn btn-ghost" href="#developers">دیدن جزئیات فنی API</a>
+      </div>
+      <ul class="proofs" data-intro="proofs">
+        <li><i data-icon="check-circle-linear"></i>کلید جدا برای هر پروژه، با بودجه و سقف خروجی</li>
+        <li><i data-icon="check-circle-linear"></i>هزینهٔ تخمینی پیش از ارسال، هزینهٔ دقیق بعد از آن</li>
+        <li><i data-icon="check-circle-linear"></i>قطع استریم؛ نه ارسال دوباره، نه کسر دوباره</li>
+      </ul>
+    </div>
+
+    <div class="hero-demo" data-tilt>
+      <div class="console is-done" data-console data-in-tokens="94" data-out-final="312" role="group" aria-label="نمونهٔ نمایشی: یک پیام به Claude Sonnet 5.5 فرستاده می‌شود و پاسخ فارسی به‌صورت استریم نوشته می‌شود؛ دفتر کناری مراحل رزرو سقف هزینه، استریم و تسویهٔ مصرف واقعی را همراه با تعداد توکن‌های ورودی و خروجی نشان می‌دهد.">
+        <div class="console-bar">
+          <span class="console-title"><i data-icon="code-square-linear"></i><span class="ltr">POST /v1/messages</span> · استریم</span>
+          <span class="model-chip">Claude Sonnet 5.5</span>
+          <button type="button" class="replay" data-replay data-label-replay="پخش دوباره" data-label-pause="توقف نمایش"><i data-icon="restart-linear"></i><span>پخش دوباره</span></button>
+        </div>
+        <div class="console-body">
+          <div class="msg msg-user"><div class="who sr-only">شما</div>ربات پشتیبانی ما با API کار می‌کند و هزینه‌اش این ماه بالا رفته. سه راه بگو که هزینه کم شود ولی جواب‌ها بدتر نشوند.</div>
+          <div class="msg msg-ai">
+            <div class="who"><i data-icon="bolt-linear"></i><span class="ltr">Claude Sonnet 5.5</span></div>
+            <p class="stream-p"><span class="stream-text" data-stream>سه پیشنهاد عملی:
+۱. پرسش‌های ساده و تکراری را به مدل سبک‌تر بسپارید و مدل قوی‌تر را برای موارد پیچیده نگه دارید.
+۲. برای طول پاسخ سقف بگذارید تا جواب‌ها بی‌دلیل بلند نشوند.
+۳. به‌جای کل تاریخچهٔ گفت‌وگو، فقط چند پیام آخر و اطلاعات لازم را بفرستید.
+با این سه تغییر، توکن‌های ورودی و خروجی هر گفت‌وگو کم می‌شود و در بیشتر موارد کیفیت پاسخ‌ها هم حفظ می‌شود.</span><i class="caret" aria-hidden="true"></i></p>
+          </div>
+          <p class="demo-caption">نمونهٔ نمایشی؛ اعداد واقعی نیستند.</p>
+        </div>
+        <div class="ledger" role="group" aria-label="دفتر این درخواست">
+          <p class="ledger-title">دفتر این درخواست</p>
+          <div class="l-steps">
+            <div class="l-step is-on is-ok" data-step="reserve" data-live-text="رزرو شد"><span class="dot" aria-hidden="true">✓</span><span><b>رزرو سقف هزینه</b><small>نسخهٔ نرخ: قفل شد</small></span></div>
+            <div class="l-step is-on is-ok" data-step="stream" data-live-text="یک بار ارسال شد · در حال استریم"><span class="dot" aria-hidden="true">✓</span><span><b>یک بار ارسال شد</b><small>در حال استریم</small></span></div>
+            <div class="l-step is-on is-ok" data-step="settle" data-live-text="تسویه شد"><span class="dot" aria-hidden="true">✓</span><span><b>تسویه شد</b><small>فقط مصرف واقعی کسر شد</small></span></div>
+          </div>
+          <div class="meters">
+            <div class="meter-row"><span>شناسهٔ درخواست</span><output class="ltr">req_7f3a…</output></div>
+            <div class="meter-row"><span>توکن ورودی</span><output data-tin>۹۴</output></div>
+            <div class="meter-row"><span>توکن خروجی</span><output data-tout>۳۱۲</output></div>
+          </div>
+          <div class="wallet">
+            <div class="wallet-label"><span>کیف پول</span></div>
+            <div class="wallet-bar" aria-hidden="true"><i class="held"></i><i class="spent" style="width:9%"></i></div>
+            <div class="wallet-legend"><span><i class="sw-held"></i>مبلغ رزروشده</span><span><i class="sw-avail"></i>موجودی در دسترس</span></div>
+            <p class="wallet-note" data-wallet-note data-held="رزرو شد" data-settled="فقط مصرف واقعی کسر شد و باقی‌ماندهٔ رزرو به موجودی در دسترس برگشت.">فقط مصرف واقعی کسر شد و باقی‌ماندهٔ رزرو به موجودی در دسترس برگشت.</p>
+          </div>
+          <p class="sr-only" role="status" aria-live="polite" data-live data-prefix="وضعیت درخواست: "></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTRAST ================= -->
+<section class="section paper" id="contrast" aria-labelledby="contrast-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="contrast-h">سه راه رایج و ریسکی که با خود دارند</h2>
+      <p>این روش‌ها در شروع ساده‌اند؛ هزینه‌شان معمولاً وقتی معلوم می‌شود که محصول به آن‌ها وابسته شده است.</p>
+    </div>
+    <div class="sheet">
+      <div class="sheet-head" aria-hidden="true"><span>روش رایج و ریسکش</span><span>در محور</span></div>
+      <div class="sheet-row">
+        <div class="sheet-cell is-risk"><i data-icon="close-circle-linear"></i><div><h3>حساب اشتراکی یا «فعال‌شده»</h3><p><b>ریسک:</b> مالکیت و شرایط استفادهٔ حساب روشن نیست و دسترسی ممکن است بی‌خبر قطع شود.</p></div></div>
+        <div class="sheet-cell is-ours"><i data-icon="check-circle-linear"></i><div><p><b class="sr-only">در محور: </b>دسترسی فقط از راه API و با تأمین مورد تأیید و قرارداد؛ حسابی خرید و فروش نمی‌شود.</p></div></div>
+      </div>
+      <div class="sheet-row">
+        <div class="sheet-cell is-risk"><i data-icon="close-circle-linear"></i><div><h3>یک کلید برای کل تیم</h3><p><b>ریسک:</b> معلوم نیست چه کسی چقدر مصرف کرده و با لو رفتن کلید، همهٔ سرویس‌ها با هم متوقف می‌شوند.</p></div></div>
+        <div class="sheet-cell is-ours"><i data-icon="check-circle-linear"></i><div><p><b class="sr-only">در محور: </b>کلید جدا برای هر پروژه، با نقش، بودجه و مدل‌های مجاز؛ کلید لورفته را همان لحظه باطل می‌کنید.</p></div></div>
+      </div>
+      <div class="sheet-row">
+        <div class="sheet-cell is-risk"><i data-icon="close-circle-linear"></i><div><h3>بستهٔ «۱ میلیون توکن» یا طرح «نامحدود»</h3><p><b>ریسک:</b> سهم ورودی و خروجی معلوم نیست و وقتی استریم قطع شود، روشن نیست چه چیزی حساب شده است.</p></div></div>
+        <div class="sheet-cell is-ours"><i data-icon="check-circle-linear"></i><div><p><b class="sr-only">در محور: </b>نرخ نسخه‌دار برای ورودی و خروجی، هزینهٔ تخمینی پیش از ارسال و کسر فقط مصرف واقعی.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRODUCTS ================= -->
+<section class="section ink" id="products" aria-labelledby="products-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="products-h">یک هسته، سه راه استفاده</h2>
+      <p>همه‌چیز روی یک هستهٔ مشترک ساخته می‌شود: حساب، کیف پول، دفتر کل و پشتیبانی. فاز اول پلتفرم API است و فضای کار وب و اپ دسکتاپ بعد از آن به همین حساب اضافه می‌شوند.</p>
+    </div>
+    <div class="products-grid">
+      <article class="product product-main">
+        <i data-icon="code-square-linear" class="product-icon"></i>
+        <span class="status status-live">فاز اول · پایلوت محدود</span>
+        <h3>پلتفرم API</h3>
+        <p>Claude را با کلید، بودجه و صورت‌حساب خودتان به محصولتان وصل کنید.</p>
+        <ul>
+          <li><i data-icon="check-circle-linear"></i><span><span class="ltr">Messages API</span> متنی، با پاسخ استریم یا یکجا</span></li>
+          <li><i data-icon="check-circle-linear"></i><span>کلید جدا برای هر پروژه، با محدودیت مدل، IP، بودجه و سقف خروجی</span></li>
+          <li><i data-icon="check-circle-linear"></i><span>نقش‌های تیمی، داشبورد مصرف تا سطح توکن و گزارش ممیزی</span></li>
+          <li><i data-icon="check-circle-linear"></i><span>کیف پول پیش‌پرداخت، فاکتور و رسید، تیکت پشتیبانی و صفحهٔ وضعیت</span></li>
+        </ul>
+        <div class="endpoint-strip" aria-hidden="true">
+          <div><code><span class="verb post">POST</span>/v1/messages</code><span>استریم</span></div>
+          <div><code><span class="verb">GET</span>/v1/usage</code><span>مصرف</span></div>
+          <div><code><span class="verb">GET</span>/v1/wallet</code><span>کیف پول</span></div>
+        </div>
+      </article>
+      <article class="product">
+        <i data-icon="chat-round-dots-linear" class="product-icon"></i>
+        <span class="status status-next">فاز دوم · بعد از پلتفرم API</span>
+        <h3>فضای کار وب</h3>
+        <p>گفت‌وگو با مدل‌ها در مرورگر، با هزینهٔ هر نوبت جلوی چشمتان.</p>
+        <ul>
+          <li><i data-icon="check-circle-linear"></i><span>گفت‌وگوها و پروژه‌ها، با فایل‌های محدود</span></li>
+          <li><i data-icon="check-circle-linear"></i><span>ویرایش یا تولید دوباره در شاخهٔ تازه، بدون ازدست‌رفتن نسخهٔ قبلی</span></li>
+          <li><i data-icon="check-circle-linear"></i><span>هزینهٔ تخمینی پیش از ارسال و هزینهٔ واقعی بعد از هر نوبت</span></li>
+          <li><i data-icon="check-circle-linear"></i><span>جستجو، خروجی گرفتن و حذف گفت‌وگو</span></li>
+        </ul>
+      </article>
+      <article class="product">
+        <i data-icon="laptop-linear" class="product-icon"></i>
+        <span class="status status-next">فاز دوم · بعد از پلتفرم API</span>
+        <h3>اپ دسکتاپ</h3>
+        <p>همان فضای کار روی <span class="ltr">Windows</span> و <span class="ltr">macOS</span>، با ورود امن و پیش‌نویس آفلاین.</p>
+        <ul>
+          <li><i data-icon="check-circle-linear"></i><span>ورود از مرورگر سیستم با <span class="ltr">PKCE</span></span></li>
+          <li><i data-icon="check-circle-linear"></i><span>نگه‌داری توکن ورود در انبار امن سیستم‌عامل (<span class="ltr">Keychain</span>)</span></li>
+          <li><i data-icon="check-circle-linear"></i><span>پیش‌نویس آفلاین و همگام‌سازی بر پایهٔ نسخه</span></li>
+          <li><i data-icon="check-circle-linear"></i><span>به‌روزرسانی فقط با بستهٔ امضاشده</span></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTROL ================= -->
+<section class="section paper" id="control" aria-labelledby="control-h">
+  <div class="wrap split">
+    <div>
+      <div class="sec-head">
+        <h2 id="control-h">هر کلید، مرز مشخص خودش را دارد</h2>
+        <p>برای هر پروژه کلید جدا بسازید، مدل‌های مجاز و سقف هزینه‌اش را تعیین کنید و هر وقت لازم شد باطلش کنید. کلید کامل فقط یک بار، همان لحظهٔ ساخت، نمایش داده می‌شود.</p>
+      </div>
+      <ul class="points">
+        <li><span class="pi"><i data-icon="layers-linear"></i></span><div><h3>مدل‌های مجاز</h3><p>درخواست به مدلی که خاموش است، پیش از ارسال رد می‌شود.</p></div></li>
+        <li><span class="pi"><i data-icon="wallet-money-linear"></i></span><div><h3>بودجهٔ ماهانه</h3><p>با رسیدن مصرف به این سقف، درخواست‌های تازه پیش از ارسال به مدل رد می‌شوند.</p></div></li>
+        <li><span class="pi"><i data-icon="tuning-linear"></i></span><div><h3>سقف خروجی</h3><p>پاسخ‌ها از این طول بلندتر نمی‌شوند و سقف هزینهٔ هر درخواست هم با همین عدد حساب می‌شود.</p></div></li>
+        <li><span class="pi"><i data-icon="users-group-rounded-linear"></i></span><div><h3>نقش‌ها</h3><p>مالک، مدیر، توسعه‌دهنده، مالی و مشاهده‌گر؛ نقش مالی به پرداخت، فاکتور و صورت‌حساب دسترسی دارد، بدون دسترسی به کلیدها.</p></div></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="keypanel" data-keypanel
+        data-msg-model-on="دسترسی {model} برای این کلید روشن شد."
+        data-msg-model-off="دسترسی {model} برای این کلید خاموش شد؛ درخواست به این مدل پیش از ارسال رد می‌شود."
+        data-msg-budget="بودجهٔ ماهانه روی {value} تنظیم شد."
+        data-msg-cap="سقف خروجی روی {value} توکن تنظیم شد."
+        data-msg-role="نقش سارا به «{value}» تغییر کرد."
+        data-msg-revoke="کلید باطل شد. درخواست‌های بعدی با این کلید با خطای 401 رد می‌شوند."
+        data-msg-rotate="کلید جایگزین ساخته شد. آن را همین حالا کپی کنید؛ دوباره نمایش داده نمی‌شود."
+        data-msg-copied="کلید کپی شد."
+        role="group" aria-label="نمونهٔ تعاملی تنظیمات کلید، به حساب واقعی وصل نیست: نام کلید، روشن و خاموش‌کردن دسترسی به سه مدل، بودجهٔ ماهانه، سقف خروجی، نقش عضو، و دکمه‌های جایگزینی و ابطال کلید.">
+        <div class="kp-head"><h3>تنظیمات کلید</h3><span class="kp-project">پروژه: ربات پشتیبانی</span></div>
+        <div class="kp-key">
+          <div class="kp-keyname"><span class="kp-label">نام کلید</span><code class="kname">support-bot-prod</code><span class="hint">نامی بگذارید که بعداً بدانید این کلید کجا استفاده می‌شود.</span></div>
+          <div class="kp-keyval"><span class="kp-label">کلید</span><code data-key-code>mhv_••••••••3f9a</code><span class="hint">کلید کامل فقط هنگام ساخت نمایش داده می‌شود.</span></div>
+          <span class="kp-state" data-key-state data-active="فعال" data-revoked="باطل‌شده">فعال</span>
+          <div class="kp-actions">
+            <button type="button" class="kbtn" data-act="rotate" data-label="جایگزینی کلید"><i data-icon="refresh-linear"></i><span>جایگزینی کلید</span></button>
+            <button type="button" class="kbtn danger" data-act="revoke"><i data-icon="close-circle-linear"></i><span>ابطال کلید</span></button>
+          </div>
+        </div>
+        <div class="kp-body">
+          <div class="kp-row">
+            <div class="kp-label" id="models-l">مدل‌های مجاز<span class="hint">درخواست به مدلی که اینجا خاموش است، پیش از ارسال رد می‌شود.</span></div>
+            <div class="toggles" role="group" aria-labelledby="models-l">
+              <label class="tgl"><input type="checkbox" aria-label="دسترسی این کلید به Claude Haiku 5.5" data-model="Claude Haiku 5.5" checked><span class="sw"></span><span class="mname">Claude Haiku 5.5</span></label>
+              <label class="tgl"><input type="checkbox" aria-label="دسترسی این کلید به Claude Sonnet 5.5" data-model="Claude Sonnet 5.5" checked><span class="sw"></span><span class="mname">Claude Sonnet 5.5</span></label>
+              <label class="tgl"><input type="checkbox" aria-label="دسترسی این کلید به Claude Opus 5.5" data-model="Claude Opus 5.5"><span class="sw"></span><span class="mname">Claude Opus 5.5</span></label>
+            </div>
+          </div>
+          <div class="kp-row">
+            <div class="kp-label"><label for="budget">بودجهٔ ماهانه</label><span class="hint">با رسیدن مصرف به این سقف، درخواست‌های تازه پیش از ارسال به مدل رد می‌شوند.</span></div>
+            <div class="range-wrap"><output data-budget-out for="budget">۲٬۰۰۰٬۰۰۰ تومان</output><input id="budget" type="range" min="500000" max="10000000" step="500000" value="2000000" data-budget data-unit="تومان"></div>
+          </div>
+          <div class="kp-row">
+            <div class="kp-label"><label for="cap">سقف خروجی هر درخواست</label></div>
+            <div class="select"><select id="cap" data-cap>
+              <option value="512">۵۱۲ توکن</option><option value="1024">۱٬۰۲۴ توکن</option><option value="2048" selected>۲٬۰۴۸ توکن</option><option value="4096">۴٬۰۹۶ توکن</option><option value="8192">۸٬۱۹۲ توکن</option>
+            </select></div>
+          </div>
+          <div class="kp-row">
+            <div class="kp-label"><label for="role">نقش عضو در این پروژه</label><span class="hint">عضو: سارا</span></div>
+            <div class="role-wrap"><div class="select"><select id="role" data-role>
+              <option data-hint="همهٔ تنظیمات، از جمله پرداخت و اعضا.">مالک (Owner)</option><option data-hint="مدیریت پروژه‌ها و کلیدها.">مدیر (Admin)</option><option selected data-hint="ساخت و استفاده از کلید در محدودهٔ پروژه.">توسعه‌دهنده (Developer)</option><option data-hint="پرداخت، فاکتور و صورت‌حساب؛ بدون دسترسی به کلیدها.">مالی (Billing)</option><option data-hint="فقط مشاهده، بدون امکان تغییر.">مشاهده‌گر (Viewer)</option>
+            </select></div><span class="hint role-hint" data-role-hint aria-live="polite">ساخت و استفاده از کلید در محدودهٔ پروژه.</span></div>
+          </div>
+        </div>
+        <p class="kp-note">این یک نمونهٔ نمایشی است و به حساب واقعی وصل نیست.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BILLING ================= -->
+<section class="section ink-raised" id="billing" aria-labelledby="billing-h">
+  <div class="wrap">
+    <div class="billing-stage" data-billing-stage>
+    <div class="sec-head">
+      <h2 id="billing-h">هر درخواست یک بار ارسال، یک بار تسویه</h2>
+      <p>پیش از ارسال، سقف هزینه رزرو می‌شود و بعد از پاسخ فقط مصرف واقعی کسر می‌شود. اگر نتیجه روشن نباشد، حدس نمی‌زنیم؛ با شواهد بررسی می‌کنیم.</p>
+    </div>
+    <div class="lc-panel">
+    <div class="lc-wrap" data-lifecycle>
+    <span class="lc-track" aria-hidden="true"><span class="lc-fill"></span></span>
+    <ol class="lifecycle">
+      <li class="lc-step is-on"><span class="lc-n" aria-hidden="true">۱</span><h3>رزرو</h3><p>سقف هزینهٔ درخواست با نرخ همان لحظه حساب و از موجودی در دسترس کنار گذاشته می‌شود؛ اگر موجودی کافی نباشد، درخواست اصلاً فرستاده نمی‌شود.</p></li>
+      <li class="lc-step is-on"><span class="lc-n" aria-hidden="true">۲</span><h3>یک بار ارسال</h3><p>درخواست فقط یک بار به مدل فرستاده و شناسه‌اش ثبت می‌شود، و پاسخ به‌صورت استریم یا یکجا به شما می‌رسد.</p></li>
+      <li class="lc-step is-on"><span class="lc-n" aria-hidden="true">۳</span><h3>تسویه</h3><p>مصرف واقعی توکن‌ها با همان نسخهٔ نرخ در دفتر کل دوطرفه ثبت و باقی‌ماندهٔ رزرو به موجودی در دسترس برگردانده می‌شود.</p></li>
+      <li class="lc-step is-on is-alt"><span class="lc-n" aria-hidden="true">۴</span><h3>در انتظار تطبیق</h3><p>اگر ارتباط قطع شود و نتیجه نامعلوم بماند، درخواست کورکورانه تکرار نمی‌شود و مبلغ رزرو تا روشن‌شدن نتیجه با شواهد کنار می‌ماند؛ هیچ تخمینی خودکار به هزینهٔ قطعی تبدیل نمی‌شود.</p></li>
+    </ol>
+    </div>
+    </div>
+    </div>
+    <h3 class="rules-title">قاعده‌هایی که در خود سیستم ثابت‌اند</h3>
+    <ul class="guarantees">
+      <li><i data-icon="lock-keyhole-linear"></i><span>نرخ در لحظهٔ پذیرش درخواست قفل می‌شود؛ تغییر تعرفه فقط روی درخواست‌های بعدی اثر دارد.</span></li>
+      <li><i data-icon="shield-check-linear"></i><span>تکرار همان درخواست با همان کلید یکتاسازی، دوباره هزینه کسر نمی‌کند.</span></li>
+      <li><i data-icon="history-linear"></i><span>هیچ سند مالی پاک یا ویرایش نمی‌شود؛ هر اصلاح با سند برگشت ثبت می‌شود.</span></li>
+      <li><i data-icon="bill-list-linear"></i><span>بستهٔ مبهم «۱ میلیون توکن» و طرح «نامحدود» نداریم.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= AUDIENCES ================= -->
+<section class="section paper" id="audiences" aria-labelledby="aud-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="aud-h">برای توسعه‌دهنده، تیم محصول و سازمان</h2></div>
+    <div class="audiences">
+      <article class="aud"><i data-icon="code-square-linear"></i><h3>توسعه‌دهندگان و فریلنسرها</h3>
+        <dl><div><dt>مشکل</dt><dd>هزینهٔ پروژه‌های مشتریان مختلف با هم قاطی می‌شود و معلوم نیست هر کار دقیقاً چقدر خرج داشته است.</dd></div>
+        <div><dt>نتیجه</dt><dd>برای هر مشتری پروژه و کلید جدا می‌سازید و مصرف هر کدام را تا سطح توکن می‌بینید.</dd></div></dl></article>
+      <article class="aud"><i data-icon="bolt-linear"></i><h3>استارتاپ‌ها و تیم‌های محصول</h3>
+        <dl><div><dt>مشکل</dt><dd>یک کلید دست همه است و یک حلقهٔ معیوب در کد می‌تواند بودجهٔ ماه را در یک شب تمام کند.</dd></div>
+        <div><dt>نتیجه</dt><dd>هر سرویس کلید و بودجهٔ خودش را دارد و با رسیدن به سقف، درخواست‌ها پیش از ارسال به مدل متوقف می‌شوند.</dd></div></dl></article>
+      <article class="aud"><i data-icon="bill-list-linear"></i><h3>سازمان‌ها و مدیران فناوری و مالی</h3>
+        <dl><div><dt>مشکل</dt><dd>بدون فاکتور، رسید و ردپای ممیزی، هزینهٔ هوش مصنوعی در گزارش مالی جا نمی‌افتد.</dd></div>
+        <div><dt>نتیجه</dt><dd>نقش مالی جدا، فاکتور و رسید برای هر شارژ و گزارش ممیزی برای هر تغییر کلید و هر رویداد مالی دارید.</dd></div></dl></article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEVELOPERS ================= -->
+<section class="section ink" id="developers" aria-labelledby="dev-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="dev-h">قرارداد روشن، خطاهای قابل‌پیش‌بینی</h2>
+      <p>مسیرها نسخه‌دارند، هر خطا کد ثابت دارد و هر پاسخ با <code class="ltr">request_id</code> قابل پیگیری است. ورودی پشتیبانی‌نشده بی‌صدا نادیده گرفته نمی‌شود.</p>
+    </div>
+    <div class="dev-grid">
+      <div>
+        <div class="code-card" data-tabs>
+          <div class="tabs"><div class="tablist" role="tablist" aria-label="نمونهٔ درخواست">
+            <button class="tab" role="tab" id="tab-curl" aria-controls="panel-curl" aria-selected="true">cURL</button>
+            <button class="tab" role="tab" id="tab-py" aria-controls="panel-py" aria-selected="false" tabindex="-1">Python</button>
+            <button class="tab" role="tab" id="tab-node" aria-controls="panel-node" aria-selected="false" tabindex="-1">Node.js</button>
+            </div>
+            <button class="copy-btn" type="button" data-copy data-label="کپی" data-done="کپی شد" data-manual="انتخاب شد"><i data-icon="copy-linear"></i><span aria-live="polite">کپی</span><span class="sr-only">نمونهٔ کد</span></button>
+          </div>
+          <div role="tabpanel" id="panel-curl" aria-labelledby="tab-curl" tabindex="0"><pre><code><span class="tk-c"># sample base URL and key; take the model id from GET /v1/models</span>
+curl https://api.mehvar.example/v1/messages \
+  -H <span class="tk-s">"Authorization: Bearer $MEHVAR_API_KEY"</span> \
+  -H <span class="tk-s">"Content-Type: application/json"</span> \
+  -H <span class="tk-s">"Idempotency-Key: order-1042-reply"</span> \
+  -d <span class="tk-s">'{
+    "model": "MODEL_ID",
+    "max_tokens": 1024,
+    "stream": true,
+    "messages": [{ "role": "user", "content": "سلام" }]
+  }'</span></code></pre></div>
+          <div role="tabpanel" id="panel-py" aria-labelledby="tab-py" tabindex="0"><pre><code><span class="tk-k">import</span> os, requests
+
+res = requests.post(
+    <span class="tk-s">"https://api.mehvar.example/v1/messages"</span>,
+    headers={
+        <span class="tk-s">"Authorization"</span>: <span class="tk-s">f"Bearer {os.environ['MEHVAR_API_KEY']}"</span>,
+        <span class="tk-s">"Idempotency-Key"</span>: <span class="tk-s">"order-1042-reply"</span>,
+    },
+    json={
+        <span class="tk-s">"model"</span>: <span class="tk-s">"MODEL_ID"</span>,  <span class="tk-c"># from GET /v1/models</span>
+        <span class="tk-s">"max_tokens"</span>: 1024,
+        <span class="tk-s">"messages"</span>: [{<span class="tk-s">"role"</span>: <span class="tk-s">"user"</span>, <span class="tk-s">"content"</span>: <span class="tk-s">"سلام"</span>}],
+    },
+)
+print(res.status_code, res.json())</code></pre></div>
+          <div role="tabpanel" id="panel-node" aria-labelledby="tab-node" tabindex="0"><pre><code><span class="tk-k">const</span> res = <span class="tk-k">await</span> <span class="tk-f">fetch</span>(<span class="tk-s">"https://api.mehvar.example/v1/messages"</span>, {
+  method: <span class="tk-s">"POST"</span>,
+  headers: {
+    Authorization: <span class="tk-s">`Bearer ${process.env.MEHVAR_API_KEY}`</span>,
+    <span class="tk-s">"Content-Type"</span>: <span class="tk-s">"application/json"</span>,
+    <span class="tk-s">"Idempotency-Key"</span>: <span class="tk-s">"order-1042-reply"</span>,
+  },
+  body: JSON.<span class="tk-f">stringify</span>({
+    model: <span class="tk-s">"MODEL_ID"</span>, <span class="tk-c">// from GET /v1/models</span>
+    max_tokens: 1024,
+    messages: [{ role: <span class="tk-s">"user"</span>, content: <span class="tk-s">"سلام"</span> }],
+  }),
+});
+console.<span class="tk-f">log</span>(res.status, <span class="tk-k">await</span> res.<span class="tk-f">json</span>());</code></pre></div>
+          <p class="code-note"><i data-icon="danger-triangle-linear"></i><span>سازگاری با قالب OpenAI فقط برای زیرمجموعه‌ای از قابلیت‌هاست؛ آنچه پشتیبانی نشود با خطای <code class="ltr">422</code> برمی‌گردد و ادعای جایگزینی کامل برای همهٔ SDKها نداریم.</span></p>
+        </div>
+        <ul class="dev-notes">
+          <li><i data-icon="check-circle-linear"></i><span>با هدر <code class="ltr">Idempotency-Key</code>، تکرار همان درخواست دوباره هزینه کسر نمی‌کند.</span></li>
+          <li><i data-icon="check-circle-linear"></i><span>در استریم، خطایی که بعد از شروع پاسخ رخ دهد به‌صورت رویداد <code class="ltr">error</code> می‌آید، نه با تغییر کد HTTP.</span></li>
+        </ul>
+      </div>
+
+      <div class="dev-side">
+        <h3 class="mini-h">مسیرها</h3>
+        <div class="ep-head" aria-hidden="true"><span>متد و مسیر</span><span>کاربرد</span></div>
+        <ul class="endpoints">
+          <li><code>GET /v1/models</code><span>فهرست مدل‌هایی که کلید شما به آن‌ها دسترسی دارد، با قابلیت‌ها و نرخ نسخه‌دار هر کدام.</span></li>
+          <li><code>POST /v1/messages</code><span>ارسال پیام متنی به مدل، با پاسخ استریم (SSE) یا یکجا؛ زیرمجموعه‌ای هم‌شکل با قالب Messages API.</span></li>
+          <li><code>GET /v1/usage</code><span>گزارش مصرف توکن و هزینه برای پروژه‌ها و کلیدهای شما.</span></li>
+          <li><code>GET /v1/wallet</code><span>موجودی ثبت‌شده، مبلغ رزروشده و موجودی در دسترس کیف پول.</span></li>
+          <li><code>POST /v1/chat/completions</code><span class="opt">اختیاری · زیرمجموعه</span><span>زیرمجموعهٔ اختیاری با قالب OpenAI برای مهاجرت ساده‌تر کدهای موجود؛ جایگزین کامل نیست.</span></li>
+        </ul>
+        <div class="errors">
+          <h3>قرارداد خطا</h3>
+          <table class="err-table">
+            <thead class="sr-only"><tr><th>کد</th><th>عنوان و معنی</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">402</th><td><b>موجودی کافی نیست</b><br>موجودی در دسترس کیف پول برای سقف هزینهٔ این درخواست کافی نیست؛ درخواست به مدل فرستاده نمی‌شود و هزینه‌ای ندارد.</td></tr>
+              <tr><th scope="row">409</th><td><b>تعارض کلید یکتاسازی</b><br>همان <code class="ltr">Idempotency-Key</code> با محتوای متفاوت فرستاده شده است؛ درخواست اجرا نمی‌شود و چیزی کسر نمی‌شود.</td></tr>
+              <tr><th scope="row">422</th><td><b>ورودی پشتیبانی‌نشده</b><br>پارامتر یا قابلیتی فرستاده‌اید که این مسیر یا مدل پشتیبانی نمی‌کند؛ به‌جای نادیده‌گرفتن بی‌صدا، صریح رد می‌شود.</td></tr>
+              <tr><th scope="row">429</th><td><b>سقف نرخ درخواست</b><br>به سقف تعداد درخواست یا توکن در این بازهٔ زمانی رسیده‌اید؛ زمان مناسب برای تلاش دوباره در هدر <code class="ltr">Retry-After</code> آمده است.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MODELS ================= -->
+<section class="section paper" id="models" aria-labelledby="models-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="models-h">سه مدل Claude، یک کاتالوگ نسخه‌دار</h2>
+      <p>برای هر کلید تعیین کنید به کدام مدل دسترسی داشته باشد. نرخ ورودی و خروجی هر مدل در کاتالوگ پنل نمایش داده می‌شود.</p>
+    </div>
+    <div class="model-rows">
+      <div class="model-row"><h3>Claude Haiku 5.5</h3><p>کارهای سبک و پرتکرار، مثل دسته‌بندی، استخراج و پاسخ‌های کوتاه، که هزینهٔ هر درخواست در آن‌ها تعیین‌کننده است.</p></div>
+      <div class="model-row"><h3>Claude Sonnet 5.5</h3><p>بیشتر کارهای روزمرهٔ تولید متن، تحلیل و کدنویسی، با توازن میان کیفیت، سرعت و هزینه.</p></div>
+      <div class="model-row"><h3>Claude Opus 5.5</h3><p>پیچیده‌ترین کارهای تحلیلی و چندمرحله‌ای، وقتی دقت بیشتر ارزش هزینهٔ بالاتر را دارد.</p></div>
+    </div>
+    <p class="models-note"><i data-icon="document-text-linear"></i><span>نرخ‌ها نسخه‌دارند: نرخ هر درخواست در لحظهٔ پذیرش قفل می‌شود و تغییر تعرفه پیش از اعمال در پنل اعلام می‌شود. وضعیت هر مدل، از جمله منسوخ‌شدن، در کاتالوگ آمده است.</span></p>
+  </div>
+</section>
+
+<!-- ================= SECURITY ================= -->
+<section class="section ink-raised" id="security" aria-labelledby="sec-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="sec-h">هشت کنترل امنیتی، از کلید تا فایل</h2>
+      <p>کلید اصلی تأمین‌کننده از زیرساخت ما بیرون نمی‌رود و دادهٔ هر سازمان از بقیه جداست. این هشت کنترل در معماری سرویس پیش‌بینی شده‌اند.</p>
+    </div>
+    <ul class="sec-list">
+      <li><i data-icon="server-linear"></i><div><h3>کلید اصلی، همیشه پشت سرور</h3><p>کلید تأمین‌کننده فقط در زیرساخت امن نگه داشته می‌شود و هرگز به کلاینت، مرورگر یا لاگ‌ها نمی‌رسد.</p></div></li>
+      <li><i data-icon="key-linear"></i><div><h3>کلید شما، فقط به‌صورت هش</h3><p>کلیدهای مجازی به‌صورت <span class="ltr">HMAC digest</span> ذخیره می‌شوند؛ برای همین فقط یک بار نمایش داده می‌شوند و قابل بازیابی نیستند.</p></div></li>
+      <li><i data-icon="database-linear"></i><div><h3>جداسازی داده‌های هر سازمان</h3><p>جدایی داده‌ها با <span class="ltr">Row Level Security</span> در خود پایگاه داده اعمال می‌شود و سازمان از روی کلید و در سمت سرور تشخیص داده می‌شود، نه از ادعای کلاینت.</p></div></li>
+      <li><i data-icon="eye-closed-linear"></i><div><h3>پرامپت‌ها در لاگ نمی‌مانند</h3><p>محتوای درخواست و پاسخ به‌طور پیش‌فرض در لاگ‌ها و داده‌های ردگیری ثبت نمی‌شود.</p></div></li>
+      <li><i data-icon="lock-keyhole-linear"></i><div><h3>رمزگذاری ارتباطات، فایل‌ها و اسرار</h3><p>همهٔ ارتباطات عمومی روی <span class="ltr">HTTPS</span> است و فایل‌ها و اسرار رمزگذاری‌شده نگه‌داری می‌شوند.</p></div></li>
+      <li><i data-icon="link-linear"></i><div><h3>لینک فایل، امضاشده و کوتاه‌عمر</h3><p>فایل‌ها فقط با لینک امضاشده و کوتاه‌عمر در دسترس‌اند، نه با آدرس عمومی ثابت.</p></div></li>
+      <li><i data-icon="history-linear"></i><div><h3>ردپای ممیزی تغییرناپذیر</h3><p>ساخت و ابطال کلید، تغییر نقش‌ها و هر رویداد مالی با زمان، انجام‌دهنده و شناسهٔ درخواست ثبت می‌شود.</p></div></li>
+      <li><i data-icon="shield-check-linear"></i><div><h3>حذف داده، با مرز روشن</h3><p>درخواست حذف را اجرا می‌کنیم و می‌گوییم چه چیزی کجا حذف می‌شود؛ حذف آنی از نسخه‌های پشتیبان تغییرناپذیر را وعده نمی‌دهیم.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= WORKSPACE (PHASE 2) ================= -->
+<section class="section paper" id="workspace" aria-labelledby="ws-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="status status-next">فاز دوم · بعد از پلتفرم API</span>
+      <h2 id="ws-h">فضای کار وب و اپ دسکتاپ</h2>
+      <p>این بخش هنوز در دسترس نیست و بعد از پلتفرم API عرضه می‌شود. آنچه اینجا می‌بینید طرح اولیه است.</p>
+    </div>
+    <div class="ws-grid">
+      <div class="app-mock" role="img" aria-label="طرح اولیهٔ فضای کار وب در فاز دوم: فهرست گفت‌وگوها در کنار صفحه، گفت‌وگویی کوتاه دربارهٔ خطای 429، برچسب هزینهٔ این نوبت و نشانگر شاخهٔ ۲ از ۲.">
+        <div class="am-side" aria-hidden="true">
+          <div class="am-new"><i data-icon="pen-new-square-linear"></i>گفت‌وگوی تازه</div>
+          <div class="am-group">جستجو</div>
+          <div class="am-conv is-current">توضیح خطای 429</div>
+          <div class="am-conv">خلاصهٔ جلسهٔ محصول</div>
+          <div class="am-conv">پیش‌نویس ایمیل به مشتری</div>
+          <div class="am-group">پروژه‌ها</div>
+        </div>
+        <div class="am-main" aria-hidden="true">
+          <div class="am-top"><span>طرح اولیهٔ فاز دوم</span><span class="model-chip">Claude Sonnet 5.5</span></div>
+          <div class="am-thread">
+            <div class="am-msg user">خطای <span class="ltr">429 Too Many Requests</span> یعنی چه؟ کوتاه توضیح بده.</div>
+            <div class="am-msg ai">یعنی در زمانی کوتاه بیش از سقف مجاز درخواست فرستاده‌اید. به اندازهٔ <span class="ltr">Retry-After</span> صبر کنید، دوباره امتحان کنید و درخواست‌های همزمان را کم کنید.
+              <div class="am-meta">
+                <span><i data-icon="wallet-money-linear"></i>هزینهٔ این نوبت: ۳۸ توکن ورودی · ۶۴ توکن خروجی</span><span>واقعی پس از پاسخ</span>
+                <span><i data-icon="branching-paths-up-linear"></i>شاخهٔ ۲ از ۲</span>
+                <span>ویرایش</span><span>تولید دوباره</span>
+              </div>
+            </div>
+          </div>
+          <div class="am-input"><span>پیامتان را بنویسید…</span><i data-icon="plain-linear"></i></div>
+        </div>
+      </div>
+      <div class="ws-side">
+        <div class="desk-mock" role="img" aria-label="طرح اولیهٔ اپ دسکتاپ محور برای Windows و macOS در فاز دوم، با وضعیت همگام‌سازی و پیام ذخیرهٔ پیش‌نویس آفلاین.">
+          <div class="desk-bar"><span>محور</span><span class="os"><span>Windows</span><span>macOS</span></span></div>
+          <div class="desk-body">
+            <div class="desk-line"><i data-icon="check-circle-linear"></i>همگام است</div>
+            <div class="desk-line"><i data-icon="cloud-check-linear"></i>آفلاین؛ پیش‌نویس روی همین دستگاه ذخیره شد.</div>
+            <div class="desk-line warn"><i data-icon="danger-triangle-linear"></i><span>این گفت‌وگو روی دستگاه دیگری تغییر کرده است. پیش‌نویس شما محفوظ است.<em>دیدن نسخهٔ تازه</em></span></div>
+            <div class="desk-line"><i data-icon="download-minimalistic-linear"></i><span>به‌روزرسانی امضاشده آمادهٔ نصب است.<em>نصب و اجرای دوباره</em></span></div>
+          </div>
+        </div>
+        <p class="ws-tip">با ویرایش یا تولید دوباره، شاخهٔ تازه ساخته می‌شود و نسخهٔ قبلی سر جایش می‌ماند.</p>
+      </div>
+    </div>
+    <div class="feature-cols">
+      <div>
+        <h3><i data-icon="chat-round-dots-linear"></i>فضای کار وب</h3>
+        <ul>
+          <li>فهرست گفت‌وگوها، با ساخت و بایگانی</li>
+          <li>انتخاب مدل در هر گفت‌وگو</li>
+          <li>پاسخ زنده با امکان توقف؛ ممکن است هزینهٔ بخش تولیدشده حساب شود</li>
+          <li>ویرایش یا تولید دوباره در شاخهٔ تازه، بدون ازدست‌رفتن نسخهٔ قبلی</li>
+          <li>هزینهٔ تخمینی پیش از ارسال و هزینهٔ واقعی پس از هر نوبت</li>
+          <li>پروژه‌ها، فایل‌های محدود و جستجو</li>
+          <li>خروجی گرفتن و حذف گفت‌وگو</li>
+        </ul>
+      </div>
+      <div>
+        <h3><i data-icon="laptop-linear"></i>اپ دسکتاپ</h3>
+        <ul>
+          <li>برای <span class="ltr">Windows</span> و <span class="ltr">macOS</span></li>
+          <li>ورود از مرورگر سیستم با <span class="ltr">PKCE</span></li>
+          <li>نگه‌داری توکن ورود در انبار امن سیستم‌عامل (<span class="ltr">Keychain</span>)</li>
+          <li>پیش‌نویس آفلاین</li>
+          <li>همگام‌سازی بر پایهٔ نسخه؛ در تعارض، پیش‌نویس شما بی‌صدا رونویسی نمی‌شود</li>
+          <li>به‌روزرسانی فقط با بستهٔ امضاشده</li>
+          <li>خروج واقعی و امکان ابطال دسترسی هر دستگاه</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROADMAP ================= -->
+<section class="section ink" id="roadmap" aria-labelledby="rm-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="rm-h">مسیر ساخت، مرحله به مرحله</h2>
+      <p>هر مرحله فقط وقتی شروع می‌شود که مرحلهٔ قبل با شواهد واقعی پذیرفته شده باشد. برای همین تاریخ اعلام نمی‌کنیم.</p>
+    </div>
+    <ol class="roadmap">
+      <li class="rm"><span class="rm-n" aria-hidden="true">۱</span><span class="grp">فاز اول</span><h3>کشف و مجوزها</h3><p>روشن‌کردن تأمین مورد تأیید، قرارداد، پرداخت و قواعد پردازش داده، پیش از هر عرضه.</p></li>
+      <li class="rm"><span class="rm-n" aria-hidden="true">۲</span><span class="grp">فاز اول</span><h3>پایلوت محدود</h3><p>استفادهٔ گروه کوچکی از کاربران از پلتفرم API، برای آزمودن تسویه، بار، بازیابی و پشتیبانی در شرایط واقعی.</p></li>
+      <li class="rm"><span class="rm-n" aria-hidden="true">۳</span><span class="grp">فاز اول</span><h3>عرضهٔ پلتفرم API</h3><p>کاتالوگ مدل‌ها، کلیدها، سهمیه، مصرف، صورت‌حساب، مستندات و پنل مدیریت، برای عرضهٔ عمومی فاز اول.</p></li>
+      <li class="rm"><span class="rm-n" aria-hidden="true">۴</span><span class="grp">فاز دوم</span><h3>فضای کار وب</h3><p>گفت‌وگو، پروژه، فایل‌های محدود و جستجو، روی همان حساب و کیف پول.</p></li>
+      <li class="rm"><span class="rm-n" aria-hidden="true">۵</span><span class="grp">فاز دوم</span><h3>بتای اپ دسکتاپ</h3><p>اپ <span class="ltr">Windows</span> و <span class="ltr">macOS</span> با ورود امن، همگام‌سازی و به‌روزرسانی امضاشده.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="section paper" id="faq" aria-labelledby="faq-h">
+  <div class="wrap faq-grid">
+    <div class="sec-head"><h2 id="faq-h">پرسش‌هایی که حق دارید بپرسید</h2></div>
+    <div class="faq">
+      <details name="faq"><summary>آیا محور سرویس رسمی Anthropic است؟<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>نه. محور سرویسی مستقل است و وابسته به Anthropic، نمایندهٔ مجاز یا شریک آن نیست. Claude و Anthropic نشان‌های تجاری Anthropic هستند و ما این نام‌ها را فقط برای معرفی مدل‌هایی می‌آوریم که از راه API به آن‌ها دسترسی می‌دهیم.</p></div></details>
+      <details name="faq"><summary>دسترسی به Claude از کجا تأمین می‌شود؟<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>فقط از راه API و بر پایهٔ تأمین مورد تأیید و قرارداد؛ عرضه تنها پس از قطعی‌شدن این دو آغاز می‌شود. حساب مصرف‌کننده مثل Pro یا Max، اشتراک مشترک یا فعال‌سازی حساب نمی‌فروشیم و کلید اصلی تأمین‌کننده هرگز به دست کاربر نمی‌رسد؛ شما کلید مجازی پروژهٔ خودتان را می‌گیرید.</p></div></details>
+      <details name="faq"><summary>هزینه چطور حساب می‌شود و اگر استریم قطع شود چه؟<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>پیش از ارسال، سقف هزینهٔ درخواست با نرخ همان لحظه از کیف پول رزرو می‌شود، درخواست یک بار به مدل می‌رود و بعد فقط مصرف واقعی کسر و باقی رزرو آزاد می‌شود. اگر استریم قطع شود و مصرف نهایی معلوم باشد، همان ثبت می‌شود؛ اگر معلوم نباشد، درخواست «در انتظار تطبیق» می‌ماند و نه دوباره فرستاده می‌شود، نه تخمینی به‌عنوان بدهی قطعی از شما کسر می‌شود. نتیجهٔ بررسی با شواهد در پنل ثبت می‌شود و اگر با آن موافق نباشید، می‌توانید اعتراض کنید.</p></div></details>
+      <details name="faq"><summary>اعضای تیم می‌توانند از یک کلید مشترک استفاده کنند؟<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>پیشنهادش نمی‌کنیم و لازم هم نیست. هر پروژه کلید مجازی خودش را دارد و هر عضو با نقش خودش کار می‌کند: مالک، مدیر، توسعه‌دهنده، مالی یا مشاهده‌گر. اگر کلیدی لو برود، همان یکی را باطل یا جایگزین می‌کنید و بقیهٔ پروژه‌ها کارشان را ادامه می‌دهند.</p></div></details>
+      <details name="faq"><summary>با چه روشی پرداخت می‌کنم؟<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>روش‌های پرداخت هنوز نهایی نشده‌اند و پیش از راه‌اندازی اعلام می‌شوند. آنچه از حالا روشن است: کیف پول پیش‌پرداخت، مبالغ با واحد مشخص به تومان یا ریال، فاکتور و رسید برای هر شارژ، و ثبت هر پرداخت فقط یک بار، حتی اگر تأییدیه‌اش چند بار برسد.</p></div></details>
+      <details name="faq"><summary>داده‌های من ذخیره می‌شود یا در لاگ می‌ماند؟<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>در پلتفرم API، محتوای پرامپت و پاسخ به‌طور پیش‌فرض در لاگ‌ها ثبت نمی‌شود؛ برای صورت‌حساب و ممیزی، داده‌هایی مثل تعداد توکن‌ها، مدل و شناسهٔ درخواست نگه داشته می‌شود. درخواست‌ها طبق شروط تأمین‌کننده پردازش می‌شوند و جزئیات نگه‌داری داده در سیاست حریم خصوصی می‌آید.</p></div></details>
+      <details name="faq"><summary>با SDK و کدهای OpenAI سازگار است؟<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>تا حدی. مسیر اختیاری <code class="ltr">POST /v1/chat/completions</code> زیرمجموعه‌ای از قالب OpenAI را پشتیبانی می‌کند تا مهاجرت کدهای ساده آسان‌تر شود، اما جایگزین کامل نیست، چون دو قالب در نقش‌ها، ابزارها و جزئیات استریم یکسان نیستند. ورودی پشتیبانی‌نشده با خطای <code class="ltr">422</code> برمی‌گردد و ادعای سازگاری کامل با همهٔ SDKها یا ابزارهایی مثل Claude Code نداریم.</p></div></details>
+      <details name="faq"><summary>فضای کار وب و اپ دسکتاپ کی می‌آیند؟<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>تاریخی اعلام نکرده‌ایم. هر دو روی همان هستهٔ پلتفرم API ساخته می‌شوند و عرضهٔ عمومی‌شان فقط بعد از راه‌اندازی موفق فاز اول شروع می‌شود. اعضای فهرست دسترسی زودهنگام خبرش را با ایمیل می‌گیرند.</p></div></details>
+      <details name="faq"><summary>پایلوت چیست و چطور پذیرفته می‌شوم؟<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>پایلوت دوره‌ای محدود است که در آن گروه کوچکی از کاربران از پلتفرم API استفاده می‌کنند تا تسویهٔ مالی، پایداری و پشتیبانی پیش از عرضهٔ عمومی در شرایط واقعی آزموده شود. ظرفیت محدود است و پذیرش مرحله‌ای از میان اعضای فهرست دسترسی زودهنگام انجام می‌شود؛ عضویت به معنی پذیرش قطعی نیست.</p></div></details>
+      <details name="faq"><summary>پشتیبانی فارسی دارید؟<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>بله، از راه تیکت داخل پنل و به زبان فارسی. هر درخواست API یک <code class="ltr">request_id</code> دارد؛ با فرستادن آن، پشتیبانی خطا را بدون نیاز به متن پرامپت شما بررسی می‌کند. وضعیت سرویس هم در صفحهٔ وضعیت نمایش داده می‌شود، جدا برای سرویس ما و تأمین‌کننده.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="section cta ink" id="cta" aria-labelledby="cta-h">
+  <div class="wrap cta-grid">
+    <div class="sec-head">
+      <h2 id="cta-h">ظرفیت پایلوت محدود است</h2>
+      <p>با عضویت در فهرست دسترسی زودهنگام، خبر پذیرش مرحله‌ای پایلوت را به ایمیلتان می‌فرستیم. عضویت هزینه‌ای ندارد و برای شما تعهدی ایجاد نمی‌کند.</p>
+      <ul class="cta-points">
+        <li><i data-icon="check-circle-linear"></i>کلید جدا برای هر پروژه، با بودجه و سقف خروجی</li>
+        <li><i data-icon="check-circle-linear"></i>هزینهٔ تخمینی پیش از ارسال، هزینهٔ دقیق بعد از آن</li>
+        <li><i data-icon="check-circle-linear"></i>ظرفیت پایلوت محدود است و پذیرش مرحله‌ای انجام می‌شود.</li>
+      </ul>
+    </div>
+    <div class="form-card">
+      <form id="join-form" novalidate>
+        <div class="form-grid">
+          <div class="field">
+            <label for="f-name">نام و نام خانوادگی</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="80" placeholder="مثلاً سارا احمدی" aria-describedby="e-name">
+            <span class="err" id="e-name" data-required="نام خود را بنویسید." data-invalid="نام باید دست‌کم ۲ حرف باشد."></span>
+          </div>
+          <div class="field">
+            <label for="f-email">ایمیل</label>
+            <input id="f-email" name="email" type="email" dir="ltr" autocomplete="email" required placeholder="name@example.com" aria-describedby="e-email">
+            <span class="err" id="e-email" data-required="ایمیل را وارد کنید." data-invalid="این ایمیل درست به نظر نمی‌رسد؛ نمونهٔ درست: name@example.com"></span>
+          </div>
+          <div class="field">
+            <label for="f-mobile">شمارهٔ موبایل <span class="opt-tag">(اختیاری)</span></label>
+            <input id="f-mobile" name="mobile" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="مثلاً ۰۹۱۲۰۰۰۰۰۰۰" aria-describedby="e-mobile h-mobile">
+            <span class="hint" id="h-mobile">برای هماهنگی سریع‌تر پایلوت.</span>
+            <span class="err" id="e-mobile" data-invalid="شمارهٔ موبایل را ۱۱ رقمی و با ۰۹ وارد کنید، یا این خانه را خالی بگذارید."></span>
+          </div>
+          <div class="field">
+            <label for="f-role">نقش شما</label>
+            <div class="select"><select id="f-role" name="role" required aria-describedby="e-role">
+              <option value="">انتخاب کنید</option>
+              <option value="developer">توسعه‌دهنده یا فریلنسر</option>
+              <option value="founder">مدیر فنی یا سرپرست تیم (CTO / Tech Lead)</option>
+              <option value="product">مدیر محصول</option>
+              <option value="it">مدیر فناوری اطلاعات</option>
+              <option value="finance">مدیر مالی یا حسابداری</option>
+              <option value="other">سایر</option>
+            </select></div>
+            <span class="err" id="e-role" data-required="نقش خود را انتخاب کنید."></span>
+          </div>
+          <div class="field full">
+            <label for="f-use">می‌خواهید از API برای چه کاری استفاده کنید؟</label>
+            <textarea data-lenis-prevent id="f-use" name="usecase" required maxlength="520" placeholder="مثلاً پاسخ‌گویی خودکار به تیکت‌های پشتیبانی، یا خلاصه‌سازی گزارش‌های داخلی" aria-describedby="e-use h-use"></textarea>
+            <span class="hint" id="h-use">یکی دو جمله کافی است؛ حداکثر ۵۰۰ نویسه.</span>
+            <span class="err" id="e-use" data-required="در یکی دو جمله بنویسید از API برای چه کاری استفاده می‌کنید." data-invalid="متن طولانی است؛ حداکثر ۵۰۰ نویسه."></span>
+          </div>
+          <div class="hp" aria-hidden="true"><label>وب‌سایت<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+          <div class="consent">
+            <input id="f-consent" name="consent" type="checkbox" required aria-describedby="e-consent">
+            <label for="f-consent">می‌پذیرم که محور برای هماهنگی پایلوت و خبرهای راه‌اندازی با من تماس بگیرد. اطلاعاتم فقط برای همین کار استفاده می‌شود.</label>
+            <span class="err" id="e-consent" data-required="برای عضویت، این گزینه را تأیید کنید."></span>
+          </div>
+          <details class="privacy">
+            <summary>حریم خصوصی این فرم</summary>
+            <p>نام، ایمیل، موبایل (اگر بنویسید)، نقش و کاربرد مورد نظرتان فقط برای هماهنگی پایلوت و خبرهای راه‌اندازی نگه داشته می‌شود و به کسی فروخته یا داده نمی‌شود. هر زمان بخواهید، با پاسخ به ایمیل ما اطلاعاتتان حذف می‌شود.</p>
+          </details>
+          <p class="form-alert" role="alert" data-form-alert data-network="ارسال انجام نشد. اتصال اینترنت را بررسی کنید و دوباره روی «عضویت در فهرست دسترسی زودهنگام» بزنید؛ اطلاعاتی که وارد کرده‌اید پاک نمی‌شود." data-server="مشکلی در سمت ما پیش آمد و عضویت ثبت نشد. چند دقیقه بعد دوباره امتحان کنید." data-rate="تعداد تلاش‌ها زیاد بود. کمی بعد دوباره امتحان کنید."></p>
+          <div class="form-foot">
+            <button class="btn btn-brass" type="submit" data-label="عضویت در فهرست دسترسی زودهنگام" data-busy="در حال ثبت عضویت…"><span class="spinner" aria-hidden="true"></span><span data-label>عضویت در فهرست دسترسی زودهنگام</span></button>
+            <span class="form-note">ظرفیت پایلوت محدود است و پذیرش مرحله‌ای انجام می‌شود.</span>
+          </div>
+        </div>
+      </form>
+      <div class="form-success" data-success role="status">
+        <i data-icon="check-circle-bold-duotone"></i>
+        <h3>عضویت شما در فهرست دسترسی زودهنگام ثبت شد.</h3>
+        <p>هر خبری دربارهٔ پذیرش پایلوت را به همین ایمیل می‌فرستیم.</p>
+        <p data-dup hidden>این ایمیل از قبل در فهرست دسترسی زودهنگام است؛ لازم نیست دوباره عضو شوید.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top" aria-label="محور، صفحهٔ اصلی">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="11" fill="none" stroke="#C9A063" stroke-width="2"/><path d="M16 3v26" stroke="#C9A063" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="3.4" fill="#4DB6A6"/></svg>
+          <span>محور</span>
+        </a>
+        <p>دسترسی کنترل‌شده به مدل‌های Claude از راه API؛ با کلید جدا، بودجهٔ مشخص و صورت‌حساب شفاف.</p>
+      </div>
+      <nav class="foot-col" aria-label="محصول"><h3>محصول</h3><ul>
+        <li><a href="#products">پلتفرم API</a></li><li><a href="#workspace">فضای کار وب (فاز دوم)</a></li><li><a href="#workspace">اپ دسکتاپ (فاز دوم)</a></li><li><a href="#models">مدل‌ها</a></li></ul></nav>
+      <nav class="foot-col" aria-label="توسعه‌دهندگان"><h3>توسعه‌دهندگان</h3><ul>
+        <li><a href="#developers">مسیرهای API</a></li><li><a href="#developers">قرارداد خطا</a></li></ul></nav>
+      <nav class="foot-col" aria-label="اعتماد و قوانین"><h3>اعتماد و قوانین</h3><ul>
+        <li><a href="#security">امنیت</a></li></ul>
+        <h3 class="foot-h2">ارتباط</h3><ul><li><a href="#faq">پرسش‌های پرتکرار</a></li></ul></nav>
+    </div>
+    <div class="disclaimer">
+      <p>Claude و Anthropic نشان‌های تجاری Anthropic هستند. محور سرویسی مستقل است و وابسته به Anthropic، نمایندهٔ مجاز یا شریک آن نیست.</p>
+      <p>© <span data-year>۱۴۰۵</span> محور. همهٔ حقوق محفوظ است.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= DIALOGS / TOASTS ================= -->
+<dialog class="dlg" data-lenis-prevent id="dlg-revoke" aria-labelledby="dlg-revoke-t">
+  <h3 id="dlg-revoke-t">این کلید باطل شود؟</h3>
+  <p>از همین لحظه هر درخواستی که با این کلید فرستاده شود، با خطای <code class="ltr">401</code> رد می‌شود.</p>
+  <div class="dlg-actions"><button class="kbtn" type="button" data-dlg-cancel>انصراف</button><button class="kbtn danger-solid" type="button" data-dlg-confirm>ابطال کلید</button></div>
+</dialog>
+<dialog class="dlg" data-lenis-prevent id="dlg-rotate" aria-labelledby="dlg-rotate-t">
+  <h3 id="dlg-rotate-t">کلید جایگزین آماده است</h3>
+  <p>این کلید فقط همین یک بار نمایش داده می‌شود. آن را همین حالا در جای امنی مثل متغیرهای محیطی یا مدیر رمز ذخیره کنید.</p>
+  <code class="dlg-key" data-new-key>mhv_••••••••••••c21e</code>
+  <div class="dlg-actions"><button class="kbtn" type="button" data-dlg-copy>کپی کلید</button><button class="kbtn primary" type="button" data-dlg-done>ذخیره کردم</button></div>
+</dialog>
+<div class="toast-region" id="toasts" role="status" aria-live="polite" aria-label="اعلان‌ها"></div>
+<template id="tpl-ok"><i data-icon="check-circle-bold"></i></template>
+<template id="tpl-warn"><i data-icon="danger-triangle-bold"></i></template>
+</body>
+</html>

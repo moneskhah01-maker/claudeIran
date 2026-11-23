@@ -1,0 +1,1013 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#E9E9EB">
+<title>کنسول کلاود ایران | ClaudeIran Console — UI Concept</title>
+<link rel="preload" href="/fonts/Vazirmatn-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Manrope-wght.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ClaudeIran Console — Keel dashboard language. Only palette change: Primary -> Terracotta #D97757 */
+@font-face{font-family:"Manrope";src:url("/fonts/Manrope-wght.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+2000-206F,U+2190-21FF,U+2212,U+2215}
+@font-face{font-family:"Vazirmatn";src:url("/fonts/Vazirmatn-wght.woff2") format("woff2");font-weight:100 900;font-display:swap}
+:root{
+ --primary:#D97757; --primary-deep:#C15F3C; --secondary:#6B6F78; --ink:#181C25; --white:#FFFFFF;
+ --canvas:#E9E9EB; --screen:#EEEEF0; --card:#F5F5F7; --card-2:#FAFAFB; --line:#E2E2E6; --line-2:#D9D9DE;
+ --tail:#8A8D95; --text-2:#4F535D; --on-dark-2:#A9ADB6; --dark-line:#2B303B; --dark-2:#222733;
+ --p-16:rgba(217,119,87,.16); --p-30:rgba(217,119,87,.30); --p-45:rgba(217,119,87,.45);
+ /* Keel's semantic "down" badge (not the brand colour) */
+ --down:#B4232A; --down-bg:#FBE3E4;
+ --fs-xs:12px; --fs-sm:14px; --fs-base:15px; --fs-md:18px; --fs-lg:28px; --fs-xl:clamp(44px,5.6vw,80px);
+ --r-xl:28px; --r-lg:22px; --r-md:16px; --r-sm:12px; --r-pill:999px;
+ --shadow:0 40px 90px -30px rgba(24,28,37,.22),0 12px 30px -16px rgba(24,28,37,.10);
+ --shadow-soft:0 18px 50px -26px rgba(24,28,37,.18);
+ --font:"Manrope","Vazirmatn",system-ui,"Segoe UI",Tahoma,sans-serif; --ease:cubic-bezier(.22,.61,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-width:320px;background:var(--canvas);color:var(--ink);font-family:var(--font);font-size:var(--fs-base);line-height:1.8;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+svg{display:block}
+:focus-visible{outline:2.5px solid var(--ink);outline-offset:2px;border-radius:8px}
+.dark :focus-visible{outline-color:#fff}
+.ico{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.flip{transform:scaleX(-1)}
+[dir=ltr] .flip{transform:none}
+.num,.en,code{direction:ltr;unicode-bidi:isolate}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.skip{position:absolute;inset-inline-start:12px;top:-60px;z-index:300;background:var(--ink);color:#fff;padding:10px 14px;border-radius:10px}
+.skip:focus{top:10px}
+
+/* ===== shell ===== */
+.app{max-width:1400px;margin:0 auto;padding:16px}
+.screen{background:var(--screen);border-radius:30px;padding:20px 24px 28px;min-height:calc(100vh - 32px)}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:var(--fs-md);white-space:nowrap}
+.brand svg{width:28px;height:28px}
+.managers{display:flex;align-items:center;gap:10px;margin-inline-start:18px}
+.avatars{display:flex;direction:ltr}
+.avatars span{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-xs);font-weight:700;background:#D3D4D9;color:var(--ink);border:2px solid var(--screen);margin-left:-8px}
+.avatars span:first-child{margin-left:0}
+.avatars span:nth-child(2){background:#BFC1C7}
+.avatars span:nth-child(3){background:#A9ADB6}
+.avatars span:last-child{background:var(--ink);color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:13px;border:1px solid transparent;font-size:var(--fs-sm);font-weight:650;white-space:nowrap;background:var(--white);transition:background .2s,transform .2s}
+.btn .ico{width:16px;height:16px}
+.btn:hover{background:var(--card)}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{background:#2A303D}
+.btn-line{background:transparent;border-color:var(--line-2)}
+.btn-line:hover{background:var(--white)}
+.btn-primary{background:var(--primary);color:var(--ink)}
+.btn-primary:hover{background:var(--primary);box-shadow:inset 0 -2px 0 var(--primary-deep)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.top-end{margin-inline-start:auto;display:flex;align-items:center;gap:8px}
+.demo-pill{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px;border-radius:var(--r-pill);background:rgba(255,255,255,.7);border:1px solid var(--line-2);font-size:var(--fs-xs);font-weight:600;white-space:nowrap}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--primary);flex:none;display:inline-block}
+.icon-btn{width:44px;height:44px;border-radius:13px;background:var(--white);border:0;display:grid;place-items:center;position:relative}
+.icon-btn.bell.has::after{content:"";position:absolute;top:10px;inset-inline-end:11px;width:8px;height:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 0 2px #fff}
+.me{width:44px;height:44px;border-radius:13px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:var(--fs-xs);font-weight:700}
+.tabs{display:flex;gap:6px;margin-top:16px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:13px;background:var(--white);border:0;font-size:var(--fs-sm);font-weight:600;color:var(--text-2);white-space:nowrap}
+.tab .ico{width:16px;height:16px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff}
+.tab .count{font-size:var(--fs-xs);background:var(--p-16);color:var(--ink);border-radius:var(--r-pill);padding:0 7px;line-height:20px}
+.tab[aria-selected="true"] .count{background:var(--primary);color:var(--ink)}
+
+/* ===== page head ===== */
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin:30px 0 18px;flex-wrap:wrap}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:var(--fs-xs);font-weight:700;color:var(--text-2);letter-spacing:.12em}
+.head h1{margin:6px 0 0;font-size:var(--fs-lg);font-weight:500;line-height:1.35}
+.head p{margin:2px 0 0;font-size:var(--fs-sm);color:var(--text-2)}
+.head-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ===== cards / tiles ===== */
+.card{background:var(--card-2);border-radius:var(--r-lg);padding:20px;min-width:0}
+.card-w{background:var(--white)}
+.card h2{margin:0;font-size:var(--fs-md);font-weight:600;line-height:1.5}
+.card .sub{margin:2px 0 0;font-size:var(--fs-xs);color:var(--secondary)}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.grid-main{display:grid;grid-template-columns:1.55fr 1fr;gap:12px}
+.stack{display:grid;gap:12px;align-content:start}
+.figure{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding:6px 4px 14px}
+.figure .label{font-size:var(--fs-sm);font-weight:500}
+.figure .big{font-family:"Manrope",sans-serif;font-size:var(--fs-xl);font-weight:400;letter-spacing:-.05em;line-height:1;margin-top:10px}
+.figure .big .tail{color:var(--tail)}
+.figure .unit{font-size:var(--fs-xs);color:var(--secondary);margin-top:8px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.tiles.t3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tile{background:var(--card-2);border-radius:var(--r-md);padding:14px 15px 12px;min-width:0}
+.tile .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tile b{font-family:"Manrope",sans-serif;font-size:var(--fs-lg);font-weight:450;letter-spacing:-.03em;line-height:1.2}
+.tile small{display:block;font-size:var(--fs-xs);color:var(--secondary);margin-top:4px;line-height:1.6}
+.bd{display:inline-flex;align-items:center;gap:3px;height:22px;padding:0 8px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:700;white-space:nowrap;direction:ltr}
+.bd.up{background:var(--p-16);color:var(--ink)}
+.bd.down{background:var(--down-bg);color:var(--down)}
+.bd.flat{background:#E4E4E8;color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:650;white-space:nowrap;background:#E4E4E8}
+.pill.p{background:var(--primary);color:var(--ink)}
+.pill.soft{background:var(--p-16)}
+.pill.w{background:var(--white);border:1px solid var(--line)}
+.pill.dk{background:var(--ink);color:#fff}
+
+/* bar field */
+.barfield{height:170px;display:flex;align-items:flex-end;gap:2px;direction:ltr;margin-top:14px;position:relative}
+.barfield i{flex:1;min-width:1px;background:#C3C5CB;border-radius:1px;height:var(--h)}
+.barfield i.hi{background:var(--primary)}
+.marker{position:absolute;bottom:calc(var(--y) + 10px);left:var(--x);transform:translateX(-50%);background:var(--white);box-shadow:0 8px 20px -8px rgba(24,28,37,.3);border-radius:10px;padding:4px 9px;font-size:var(--fs-xs);line-height:1.4;text-align:center;white-space:nowrap;direction:rtl}
+.marker b{display:block;font-family:"Manrope",sans-serif;font-weight:600;direction:ltr}
+.marker.hl{background:var(--primary)}
+.axis{display:flex;justify-content:space-between;direction:ltr;margin-top:10px;gap:4px}
+.axis span{font-size:var(--fs-xs);font-weight:600;min-width:28px;height:24px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--r-pill);background:#DADBE0}
+.axis span.hi{background:var(--primary)}
+/* stepped bars + gauge */
+.steps{display:flex;align-items:flex-end;gap:2px;height:110px;margin-top:14px;direction:ltr}
+.steps button{flex:1;display:block;min-width:0;border:0;padding:0;border-radius:4px 4px 0 0;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,0));border-top:3px solid var(--white);position:relative;cursor:pointer;transition:height .5s var(--spring,ease),filter .2s,border-color .2s}
+.steps button:hover{filter:brightness(1.04) saturate(1.25)}
+.steps button.hi{background:linear-gradient(180deg,var(--p-45),rgba(217,119,87,0));border-top-color:var(--primary)}
+.steps button.lo{border-top:3px dashed #B9BBC2;background:linear-gradient(180deg,rgba(230,230,234,.9),rgba(230,230,234,0))}
+.steps button[aria-pressed="true"]{border-top-color:var(--ink)}
+.steps button .pill{position:absolute;top:-15px;left:50%;transform:translateX(-50%);height:24px}
+.legend{display:flex;justify-content:space-between;gap:8px;margin-top:10px;font-size:var(--fs-xs);color:var(--secondary)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:7px;height:7px;border-radius:50%;background:#C9CAD0;display:inline-block}
+.legend i.p{background:var(--primary)}
+.mini .big{font-family:"Manrope",sans-serif;font-size:36px;font-weight:400;letter-spacing:-.03em;line-height:1.1;margin-top:8px}
+.gauge{background:var(--ink);color:#fff}
+.gauge .sub,.gauge .legend{color:var(--on-dark-2)}
+.gauge .legend i{background:#4A505D}
+.gauge svg{width:100%;max-width:220px;margin:12px auto 0}
+/* terracotta gradient alert card (Keel "34 days") */
+.cap{border-radius:var(--r-lg);padding:20px;background:linear-gradient(180deg,var(--card-2) 0%,var(--card-2) 24%,#F3D9CF 76%,#EDC4B5 100%);display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:330px}
+.cap .art{position:absolute;top:18px;inset-inline-end:18px;width:72px;height:72px;color:rgba(24,28,37,.10)}
+.cap .big{font-family:"Manrope",sans-serif;font-size:72px;font-weight:300;line-height:1;margin-top:auto;letter-spacing:-.05em}
+.cap .big small{font-size:var(--fs-md);font-weight:500;letter-spacing:0;margin-inline-start:8px}
+.progress{height:8px;background:rgba(255,255,255,.75);border-radius:var(--r-pill);overflow:hidden;margin:16px 0 8px;direction:ltr}
+.progress span{display:block;height:100%;background:var(--ink);border-radius:inherit;transition:width .4s var(--ease)}
+.pfoot{display:flex;justify-content:space-between;gap:8px;font-size:var(--fs-xs)}
+.cap p{margin:12px 0 0;font-size:var(--fs-sm);line-height:1.85}
+/* alerts panel */
+.alerts{background:var(--white);border-radius:var(--r-lg);padding:18px 18px 12px}
+.arow{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:14px 4px;border-bottom:1px solid var(--line)}
+.arow:last-child{border-bottom:0}
+.itile{width:44px;height:44px;border-radius:13px;background:var(--card);display:grid;place-items:center}
+.itile .ico{width:20px;height:20px}
+.arow h3{margin:0;font-size:var(--fs-sm);font-weight:600;line-height:1.55}
+.arow p{margin:2px 0 0;font-size:var(--fs-xs);color:var(--secondary);line-height:1.6}
+.arow .when{font-size:var(--fs-xs);color:var(--secondary);align-self:start;padding-top:2px;white-space:nowrap}
+.arow.focus{background:var(--card);border-radius:18px;border-bottom:0;margin:6px 0;padding:14px 12px}
+.arow.focus .itile{background:var(--white)}
+.arow .acts{grid-column:2 / -1;display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.unread{width:8px;height:8px;border-radius:50%;background:var(--primary);display:inline-block;margin-inline-start:8px;vertical-align:middle}
+.dark-foot{margin-top:12px;background:var(--ink);color:#fff;border-radius:18px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.dark-foot span{font-size:var(--fs-xs);color:var(--on-dark-2)}
+.dark-foot strong{display:inline-flex;align-items:center;gap:8px;font-size:var(--fs-sm)}
+.dark-foot .ico{color:var(--primary);stroke-width:2.4}
+.note-card{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.note-card .l{display:flex;gap:14px;align-items:center}
+.note-card h2{font-size:var(--fs-sm)}
+.note-card p{margin:2px 0 0;font-size:var(--fs-xs);color:var(--secondary)}
+
+/* ===== Keel table ===== */
+.tbl-card{background:var(--white);border-radius:var(--r-lg);padding:18px 20px 14px;margin-top:12px}
+.tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
+.tools .l{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search{display:flex;align-items:center;gap:8px;height:44px;padding:0 14px;border-radius:var(--r-pill);background:var(--card);min-width:240px}
+.search input{border:0;background:transparent;outline:0;font-size:var(--fs-sm);width:100%}
+.search:focus-within{box-shadow:0 0 0 2.5px var(--ink)}
+.fpills{display:flex;gap:4px;background:var(--card);border-radius:var(--r-pill);padding:4px}
+.fpills button{border:0;background:transparent;min-height:36px;padding:0 13px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:650;color:var(--text-2)}
+.fpills button[aria-pressed="true"]{background:var(--white);color:var(--ink);box-shadow:0 1px 3px rgba(24,28,37,.1)}
+.twrap{overflow-x:auto}
+.kt{width:100%;border-collapse:collapse;font-size:var(--fs-sm)}
+.kt th{font-size:var(--fs-xs);font-weight:700;letter-spacing:.06em;color:var(--secondary);text-align:start;padding:12px 8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.kt th.n,.kt td.n{text-align:end}
+.kt th button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:5px;min-height:28px;border-radius:6px}
+.kt th button:focus-visible{outline:2.5px solid var(--ink);outline-offset:2px}
+.kt th .ar{display:inline-grid;line-height:.55;font-size:10px;color:#B9BBC2}
+.kt th[aria-sort="ascending"] .ar .u,.kt th[aria-sort="descending"] .ar .d{color:var(--ink)}
+.kt td{padding:14px 8px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:middle}
+.kt tbody tr{transition:background .15s}
+.kt tbody tr:hover{background:var(--card-2)}
+.kt tbody tr:last-child td{border-bottom:0}
+.kt .pc{font-weight:600}
+.kt .dim{color:var(--secondary)}
+.kt .id{font-family:"Manrope",sans-serif;color:var(--secondary);direction:ltr;unicode-bidi:isolate}
+[dir=rtl] .kt div.id{text-align:right}
+.st{display:inline-flex;align-items:center;gap:7px;font-weight:600}
+.st i{width:7px;height:7px;border-radius:50%;background:var(--primary);display:inline-block}
+.st.off i{background:#B9BBC2}
+.st.bad{color:var(--down)} .st.bad i{background:var(--down)}
+.rowbtn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border-radius:10px;background:var(--card);font-size:var(--fs-xs);font-weight:650}
+.rowbtn:hover{background:#ECECEF}
+.rowbtn:focus-visible{outline:2.5px solid var(--ink);outline-offset:2px}
+.rowbtn[disabled]{opacity:.45;cursor:not-allowed}
+.amt.plus{color:var(--ink);font-weight:650}
+.tfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px;padding-top:10px;border-top:1px solid var(--line)}
+.fnote{font-size:var(--fs-xs);color:var(--secondary);margin:0;line-height:1.7}
+.pager{display:flex;gap:4px;align-items:center;direction:ltr}
+.pager button{min-width:36px;height:36px;border-radius:var(--r-pill);border:0;background:var(--card);font-size:var(--fs-xs);font-weight:700;font-family:"Manrope",sans-serif}
+.pager button[aria-current="page"]{background:var(--ink);color:#fff}
+.pager button:disabled{opacity:.4;cursor:not-allowed}
+.pcount{font-size:var(--fs-xs);color:var(--secondary)}
+/* states */
+.state{padding:40px 16px;text-align:center}
+.state .itile{margin:0 auto 12px}
+.state h3{margin:0;font-size:var(--fs-sm);font-weight:650}
+.state p{margin:4px 0 14px;font-size:var(--fs-xs);color:var(--secondary)}
+.state.err .itile{background:var(--down-bg);color:var(--down)}
+.sk{display:block;height:14px;border-radius:7px;background:linear-gradient(90deg,#EDEDF0 0%,#F7F7F9 40%,#EDEDF0 80%);background-size:300% 100%;animation:sh 1.3s linear infinite}
+@keyframes sh{to{background-position:-150% 0}}
+
+/* ===== modal ===== */
+.modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal .scrim{position:absolute;inset:0;background:rgba(24,28,37,.42);backdrop-filter:blur(3px);border:0}
+.dialog{position:relative;width:min(560px,100%);max-height:calc(100vh - 40px);overflow:auto;background:var(--white);border-radius:var(--r-xl);box-shadow:var(--shadow);padding:22px}
+.dialog .x{position:absolute;top:14px;inset-inline-end:14px;width:44px;height:44px;border-radius:13px;border:0;background:var(--card);display:grid;place-items:center}
+.dialog h2{margin:0;font-size:var(--fs-md);font-weight:650;padding-inline-end:52px}
+.dialog .sub{margin:2px 0 0;font-size:var(--fs-xs);color:var(--secondary)}
+.field{display:grid;gap:6px;margin-top:16px}
+.field label{font-size:var(--fs-xs);font-weight:650}
+.field input,.field select{height:48px;border-radius:13px;border:1px solid var(--line-2);background:var(--card-2);padding:0 14px;font-size:var(--fs-sm);width:100%}
+.field input:focus,.field select:focus{outline:2.5px solid var(--ink);outline-offset:1px}
+.field .hint{font-size:var(--fs-xs);color:var(--secondary)}
+.f-actions{display:flex;gap:8px;justify-content:flex-start;margin-top:22px;flex-wrap:wrap}
+.keybox{margin-top:16px;background:var(--card);border-radius:16px;padding:14px;display:flex;gap:10px;align-items:center}
+.keybox code{flex:1;font:600 14px/1.5 ui-monospace,"Cascadia Code",Consolas,monospace;word-break:break-all}
+.warn{margin-top:12px;border-radius:16px;padding:14px 16px;background:linear-gradient(180deg,#FBEEE9,#F6DCD2);font-size:var(--fs-sm);line-height:1.8;display:flex;gap:10px}
+.warn .ico{margin-top:4px}
+
+/* toast */
+.toast{position:fixed;z-index:250;bottom:20px;inset-inline-start:50%;transform:translate(50%,140%);background:var(--ink);color:#fff;border-radius:14px;padding:12px 18px;font-size:var(--fs-sm);box-shadow:var(--shadow);transition:transform .3s var(--ease),visibility .3s;max-width:calc(100% - 32px);visibility:hidden}
+[dir=ltr] .toast{transform:translate(-50%,140%)}
+.toast.on{transform:translate(50%,0);visibility:visible}
+[dir=ltr] .toast.on{transform:translate(-50%,0)}
+.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:var(--fs-xs);color:var(--text-2);padding:16px 8px 4px}
+
+/* settings */
+.set-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.set-row:last-child{border-bottom:0}
+.set-row strong{font-size:var(--fs-sm);font-weight:600}
+.set-row p{margin:2px 0 0;font-size:var(--fs-xs);color:var(--secondary)}
+.switch{width:46px;height:28px;border-radius:var(--r-pill);border:0;background:#C9CAD0;position:relative;flex:none;transition:background .2s}
+.switch::before{content:"";position:absolute;inset:-8px -2px}
+.switch::after{content:"";position:absolute;top:4px;inset-inline-start:4px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .25s var(--ease)}
+.switch[aria-checked="true"]{background:var(--primary)}
+[dir=rtl] .switch[aria-checked="true"]::after{transform:translateX(-18px)}
+[dir=ltr] .switch[aria-checked="true"]::after{transform:translateX(18px)}
+input[type=range]{width:100%;accent-color:var(--ink);height:44px}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (max-width:1100px){
+ .grid-main{grid-template-columns:1fr}
+ .managers .btn span{display:none}
+}
+@media (max-width:760px){
+ :root{--fs-base:14px;--fs-lg:24px}
+ .app{padding:8px}
+ .screen{border-radius:22px;padding:14px 12px 18px}
+ .managers{margin-inline-start:auto}
+ .managers .btn{display:none}
+ .top-end{width:100%;margin:0;justify-content:space-between}
+ .demo-pill{flex:1;justify-content:center}
+ .tiles{grid-template-columns:1fr 1fr}
+ .tiles.t3{grid-template-columns:1fr 1fr 1fr}
+ .tiles.t3 .tile{padding:12px 10px}
+ .tiles.t3 .tile b{font-size:20px}
+ .head{margin:22px 0 14px;align-items:flex-start}
+ .head-actions,.head-actions .btn{width:100%}
+ .card{padding:16px}
+ .figure .big{font-size:56px}
+ .barfield{height:120px;gap:1px}
+ .marker{display:none}
+ .axis span,.axis button{min-width:0;padding:0 6px}
+ .split2{grid-template-columns:1fr!important}
+ .search{min-width:0;width:100%}
+ .tools .l{width:100%}
+ .fpills{overflow-x:auto;max-width:100%}
+ .tbl-card{padding:14px 12px 12px}
+ /* table -> cards */
+ .kt thead{display:none}
+ .kt,.kt tbody{display:block}
+ .kt tr{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:12px 4px;border-bottom:1px solid var(--line)}
+ .kt tbody tr:last-child{border-bottom:0}
+ .kt td{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border:0;white-space:normal;grid-column:1 / -1;font-size:var(--fs-sm)}
+ .kt td::before{content:attr(data-l);font-size:var(--fs-xs);color:var(--secondary);font-weight:600}
+ .kt td.n{text-align:start}
+ .kt td:first-child{grid-column:1;font-weight:650;display:block}
+ .kt td:first-child::before{display:none}
+ .kt td.lead2{grid-column:2;grid-row:1;justify-content:flex-end}
+ .kt td.lead2::before{display:none}
+ .kt td.act::before{display:none}
+ .kt td.act{justify-content:flex-start;margin-top:4px}
+ .cap{min-height:280px}
+ .cap .big{font-size:60px}
+ .dialog{padding:18px;border-radius:24px}
+ .modal{padding:10px;align-items:flex-end}
+ .arow{grid-template-columns:40px 1fr;gap:12px}
+ .itile{width:40px;height:40px}
+ .arow .when,.arow>.pill{grid-column:2;justify-self:start}
+ .arow .acts{grid-column:2}
+}
+
+/* ===== Glass layer (2026-11-23): Apple-style frosted surfaces over an ambient wallpaper. Overrides the Keel base above; the previous look is in docs/console-v1-backup.html ===== */
+:root{
+ --glass:rgba(255,255,255,.5); --glass-hi:rgba(255,255,255,.74); --glass-lo:rgba(255,255,255,.32); --glass-line:rgba(255,255,255,.72);
+ --chrome:rgba(255,255,255,.64); --chrome-dk:rgba(28,30,38,.8); --fill:rgba(118,118,128,.12); --fill-2:rgba(118,118,128,.2);
+ --blur:saturate(180%) blur(24px); --blur-lg:saturate(190%) blur(40px);
+ --line:rgba(24,28,37,.08); --line-2:rgba(24,28,37,.13); --card:rgba(255,255,255,.62); --card-2:rgba(255,255,255,.45);
+ --secondary:#5B5F68; --text-2:#474B55; --spring:cubic-bezier(.34,1.4,.64,1);
+ --lift:0 1px 1px rgba(24,28,37,.03),0 18px 40px -26px rgba(70,44,30,.32),inset 0 1px 0 rgba(255,255,255,.9);
+}
+html.solid{--glass:#F6F4F2;--glass-hi:#FFFFFF;--glass-lo:#EFECE9;--chrome:#FBFAF9;--chrome-dk:#23262F;--blur:none;--blur-lg:none}
+@media (prefers-reduced-transparency:reduce){:root{--glass:#F6F4F2;--glass-hi:#FFFFFF;--glass-lo:#EFECE9;--chrome:#FBFAF9;--chrome-dk:#23262F;--blur:none;--blur-lg:none}}
+body{background:#EEE9E5}
+/* wallpaper: soft colour fields, no filters (cheap to paint) */
+.wall{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:radial-gradient(100% 70% at 100% 0%,#F7E1D5 0%,rgba(247,225,213,0) 60%),radial-gradient(80% 70% at 0% 100%,#DDE3F4 0%,rgba(221,227,244,0) 65%),linear-gradient(165deg,#F3EEEA 0%,#E9E6EE 100%)}
+.wall i{position:absolute;border-radius:50%;animation:drift 28s var(--ease) infinite alternate}
+.wall i:nth-child(1){width:60vmax;height:60vmax;top:-22vmax;right:-18vmax;background:radial-gradient(closest-side,rgba(226,140,108,.55),rgba(226,140,108,0))}
+.wall i:nth-child(2){width:55vmax;height:55vmax;bottom:-24vmax;left:-16vmax;background:radial-gradient(closest-side,rgba(150,170,235,.5),rgba(150,170,235,0));animation-duration:34s}
+.wall i:nth-child(3){width:40vmax;height:40vmax;top:30%;left:35%;background:radial-gradient(closest-side,rgba(244,200,150,.42),rgba(244,200,150,0));animation-duration:40s}
+@keyframes drift{to{transform:translate3d(-5vmax,4vmax,0) scale(1.1)}}
+
+/* window */
+.app{padding:20px;transition:transform .6s var(--ease),opacity .45s var(--ease);transform-origin:50% 0}
+.app.min{transform:translateY(62vh) scale(.1);opacity:0;pointer-events:none}
+.screen{position:relative;background:var(--glass-lo);-webkit-backdrop-filter:var(--blur-lg);backdrop-filter:var(--blur-lg);border:1px solid var(--glass-line);border-radius:32px;padding:10px 24px 26px;box-shadow:0 60px 120px -50px rgba(70,44,30,.42),0 20px 50px -30px rgba(24,28,37,.2),inset 0 1px 0 rgba(255,255,255,.85)}
+.titlebar{position:relative;display:flex;align-items:center;height:34px;direction:ltr;margin:0 -10px 4px}
+.lights{display:flex}
+.lights>*{position:relative;width:22px;height:22px;border:0;padding:0;background:none;display:grid;place-items:center;border-radius:50%;cursor:pointer}
+.lights>*::before{content:"";position:absolute;inset:4.5px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2)}
+.lights .r{--c:#FF5F57}.lights .y{--c:#FEBC2E}.lights .g{--c:#28C840}
+.lights svg{position:relative;width:8px;height:8px;fill:none;stroke:rgba(0,0,0,.6);stroke-width:1.5;stroke-linecap:round;opacity:0;transition:opacity .15s}
+.lights:hover svg,.lights :focus-visible svg{opacity:1}
+.lights :focus-visible{outline-offset:0;border-radius:50%}
+.wtitle{position:absolute;left:50%;transform:translateX(-50%);font-size:12.5px;font-weight:650;color:var(--secondary);pointer-events:none;white-space:nowrap}
+
+/* controls */
+.btn{border-radius:var(--r-pill);background:var(--glass-hi);border-color:var(--glass-line);box-shadow:0 1px 2px rgba(24,28,37,.06),inset 0 1px 0 rgba(255,255,255,.9);transition:background .2s,box-shadow .2s,transform .3s var(--spring)}
+.btn:hover{background:#fff}
+.btn:active{transform:scale(.96)}
+.btn:disabled{transform:none}
+.btn-dark{background:rgba(24,28,37,.9);border-color:rgba(24,28,37,.9);color:#fff;box-shadow:0 10px 24px -12px rgba(24,28,37,.7),inset 0 1px 0 rgba(255,255,255,.16)}
+.btn-dark:hover{background:var(--ink)}
+.btn-line{background:var(--glass-lo);border-color:var(--line-2);box-shadow:none}
+.btn-line:hover{background:var(--glass-hi)}
+.icon-btn,.me{width:44px;height:44px;border-radius:50%;border:1px solid var(--glass-line);background:var(--glass-hi);box-shadow:0 1px 2px rgba(24,28,37,.06),inset 0 1px 0 #fff;transition:background .2s,transform .3s var(--spring),box-shadow .2s}
+.icon-btn:hover{background:#fff}
+.me{background:var(--ink);border-color:var(--ink);color:#fff;cursor:pointer;font-family:inherit}
+.icon-btn:active,.me:active,.avatars:active{transform:scale(.92)}
+.icon-btn.bell.has::after{top:9px;inset-inline-end:10px}
+.icon-btn[aria-expanded="true"],.me[aria-expanded="true"],.avatars[aria-expanded="true"]{box-shadow:0 0 0 3px var(--p-30)}
+.demo-pill{background:var(--glass);border-color:var(--glass-line);cursor:pointer;min-height:44px;min-width:0;transition:background .2s}
+.demo-pill:hover{background:var(--glass-hi)}
+.avatars{border:0;background:none;padding:4px;border-radius:var(--r-pill);cursor:pointer;transition:transform .3s var(--spring),box-shadow .2s}
+.avatars span{border-color:rgba(255,255,255,.95);box-shadow:0 2px 6px -2px rgba(24,28,37,.25);transition:margin .3s var(--spring)}
+.avatars:hover span:not(:first-child){margin-left:-3px}
+
+/* segmented tab bar with a sliding thumb */
+.tabs{position:sticky;top:10px;z-index:60;width:fit-content;max-width:100%;margin:14px auto 0;padding:4px;gap:2px;border-radius:var(--r-pill);background:var(--chrome);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border:1px solid var(--glass-line);box-shadow:0 14px 34px -16px rgba(24,28,37,.28),inset 0 1px 0 rgba(255,255,255,.85)}
+.tabs::before{content:"";position:absolute;top:4px;bottom:4px;left:var(--tx,4px);width:var(--tw,0);border-radius:var(--r-pill);background:#fff;box-shadow:0 3px 10px -2px rgba(24,28,37,.2),0 0 0 .5px rgba(24,28,37,.06);transition:left .45s var(--spring),width .45s var(--spring)}
+.tabs.no-anim::before{transition:none}
+.tab{position:relative;z-index:1;min-height:40px;padding:0 15px;border-radius:var(--r-pill);background:transparent;transition:color .2s}
+.tab[aria-selected="true"]{background:transparent;color:var(--ink)}
+.tab:active .ico{transform:scale(.85)}
+.tab .ico{transition:transform .3s var(--spring)}
+
+/* surfaces */
+.head h1{font-weight:700}
+.eyebrow .dot{box-shadow:0 0 0 4px var(--p-16)}
+.card,.tile,.alerts,.tbl-card{background:var(--glass);border:1px solid var(--glass-line);box-shadow:var(--lift)}
+.card-w,.tile{background:var(--glass-hi)}
+.cap{border:1px solid var(--glass-line);box-shadow:var(--lift);background:linear-gradient(180deg,rgba(255,255,255,.62) 0%,rgba(255,255,255,.5) 26%,rgba(244,206,190,.82) 76%,rgba(236,178,155,.92) 100%)}
+.gauge{background:var(--chrome-dk);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border-color:rgba(255,255,255,.1);box-shadow:0 24px 50px -26px rgba(24,28,37,.6),inset 0 1px 0 rgba(255,255,255,.12)}
+.itile{background:var(--glass-hi);border:1px solid var(--glass-line)}
+.arow.focus{background:var(--glass-hi);border:1px solid var(--glass-line)}
+.arow.focus .itile{background:#fff}
+.dark-foot{background:var(--chrome-dk)}
+.keybox{background:rgba(255,255,255,.6);border:1px solid var(--glass-line)}
+.warn{background:linear-gradient(180deg,rgba(251,238,233,.92),rgba(246,220,210,.92))}
+
+/* everything clickable responds */
+.tap{cursor:pointer;transition:transform .4s var(--spring),box-shadow .3s,background .25s}
+.tap:hover{transform:translateY(-3px);box-shadow:0 1px 1px rgba(24,28,37,.03),0 28px 50px -26px rgba(70,44,30,.42),inset 0 1px 0 #fff}
+.tile.tap:hover{background:rgba(255,255,255,.9)}
+.tap:active{transform:scale(.97);transition-duration:.12s}
+button.tile{display:block;width:100%;font:inherit;color:inherit;text-align:start}
+.tile .row{display:flex}
+button.figure{width:100%;font:inherit;color:inherit;text-align:start;border:0;background:transparent;border-radius:var(--r-lg);padding:6px 8px 14px;cursor:pointer;transition:background .25s,transform .4s var(--spring)}
+button.figure:hover{background:rgba(255,255,255,.4)}
+button.figure:active{transform:scale(.985)}
+.figure .label,.figure .big,.figure .unit{display:block}
+button.pill{border:0;cursor:pointer;font:inherit;font-size:var(--fs-xs);font-weight:650;transition:background .2s,transform .3s var(--spring)}
+button.pill:active{transform:scale(.94)}
+.tap-pill{background:var(--glass-hi);box-shadow:inset 0 0 0 1px var(--glass-line);min-height:32px}
+.tap-pill:hover{background:#fff}
+.tap-pill .ico{width:14px;height:14px}
+.tap-row{cursor:pointer;border-radius:16px;transition:background .2s}
+.tap-row:hover{background:rgba(255,255,255,.6)}
+.set-row.tap-row{padding-inline:10px;margin-inline:-10px}
+.when .ico{display:inline-block;width:13px;height:13px;vertical-align:-2px;opacity:.55}
+.linkbtn{all:unset;cursor:pointer;font-weight:650;color:var(--ink);text-decoration:underline;text-decoration-color:var(--primary);text-decoration-thickness:2px;text-underline-offset:4px;border-radius:4px}
+.linkbtn:focus-visible,.legend button:focus-visible{outline:2.5px solid var(--ink);outline-offset:2px}
+
+/* charts */
+.barfield{cursor:pointer;touch-action:pan-y}
+.barfield i{background:rgba(24,28,37,.15);border-radius:2px 2px 1px 1px;transition:background .2s}
+.barfield i.hi{background:linear-gradient(180deg,#E8957A,var(--primary))}
+.barfield i.sel{background:var(--ink)}
+.barfield i.hov{background:var(--primary-deep)}
+.marker{background:var(--glass-hi);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border:1px solid var(--glass-line);border-radius:12px;transition:opacity .2s,left .45s var(--spring),bottom .45s var(--spring)}
+.marker.hl{background:var(--primary);border-color:rgba(255,255,255,.4)}
+.barfield:hover .marker{opacity:0}
+.tip{position:absolute;top:-6px;left:clamp(48px,var(--x),calc(100% - 48px));z-index:4;transform:translate(-50%,-100%) scale(.92);opacity:0;pointer-events:none;background:var(--chrome-dk);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);color:#fff;border-radius:12px;padding:5px 11px;font-size:var(--fs-xs);line-height:1.4;white-space:nowrap;direction:rtl;box-shadow:0 12px 24px -10px rgba(24,28,37,.5);transition:opacity .15s,transform .25s var(--spring)}
+[dir=ltr] .tip{direction:ltr}
+.tip.on{opacity:1;transform:translate(-50%,-100%)}
+.tip b{font-family:"Manrope",sans-serif;font-weight:700;margin-inline-end:6px}
+.axis button{border:0;font:inherit;font-size:var(--fs-xs);font-weight:650;min-width:32px;height:28px;padding:0 9px;border-radius:var(--r-pill);background:var(--fill);color:var(--ink);cursor:pointer;transition:background .2s,color .2s,transform .3s var(--spring)}
+.axis button:hover{background:var(--fill-2)}
+.axis button.hi{background:var(--primary)}
+.axis button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.axis button:active{transform:scale(.9)}
+.axis span{background:var(--fill)}
+.readout{display:flex;justify-content:space-between;align-items:center;gap:6px 12px;flex-wrap:wrap;margin:12px 0 0;font-size:var(--fs-xs);color:var(--secondary)}
+.readout b{color:var(--ink);font-weight:650}
+.legend button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:0 9px;margin:0 -5px;border-radius:var(--r-pill);transition:background .2s,color .2s}
+.legend button:hover{background:rgba(255,255,255,.1)}
+.legend button[aria-pressed="true"]{background:rgba(255,255,255,.16);color:#fff}
+.gauge .legend button:focus-visible,.gauge :focus-visible{outline-color:#fff}
+.gauge path[data-gsel]{cursor:pointer;transition:stroke-width .35s var(--spring),opacity .3s,stroke .3s}
+
+/* tables, search, filters */
+.kt tbody tr:hover{background:rgba(255,255,255,.55)}
+.kt tbody tr.click{cursor:pointer}
+.kt tbody tr.click:focus-visible{outline-offset:-2px}
+.rowbtn{background:var(--fill);transition:background .2s,transform .3s var(--spring)}
+.rowbtn:hover{background:var(--fill-2)}
+.rowbtn:active{transform:scale(.95)}
+.search,.fpills,.pager button{background:var(--fill)}
+.fpills button{transition:background .2s,color .2s}
+.fpills button[aria-pressed="true"]{background:#fff;box-shadow:0 3px 8px -2px rgba(24,28,37,.18),0 0 0 .5px rgba(24,28,37,.05)}
+
+/* sheets */
+.modal .scrim{background:rgba(40,30,26,.2);-webkit-backdrop-filter:blur(10px) saturate(130%);backdrop-filter:blur(10px) saturate(130%)}
+.dialog{background:var(--chrome);-webkit-backdrop-filter:var(--blur-lg);backdrop-filter:var(--blur-lg);border:1px solid rgba(255,255,255,.75);border-radius:32px;box-shadow:0 70px 140px -40px rgba(24,28,37,.5),0 0 0 .5px rgba(24,28,37,.06),inset 0 1px 0 rgba(255,255,255,.9)}
+.modal.open .scrim{animation:fadeIn .3s var(--ease)}
+.modal.open .dialog{animation:popIn .45s var(--spring)}
+@keyframes fadeIn{from{opacity:0}}
+@keyframes popIn{from{opacity:0;transform:translateY(12px) scale(.95)}}
+.dialog .x{width:36px;height:36px;top:16px;border-radius:50%;background:var(--fill)}
+.field input,.field select{background:rgba(255,255,255,.7);border-color:var(--line-2);border-radius:14px}
+.mbig{font-family:"Manrope",sans-serif;font-size:56px;font-weight:300;letter-spacing:-.04em;line-height:1.1;margin-top:14px}
+.mbig small{font-family:var(--font);font-size:var(--fs-sm);font-weight:500;letter-spacing:0;color:var(--secondary)}
+.spark-wrap{background:rgba(255,255,255,.5);border:1px solid var(--glass-line);border-radius:18px;padding:14px 14px 10px;margin-top:12px}
+.spark{display:block;width:100%;height:auto;overflow:visible}
+.mnote{font-size:var(--fs-sm);color:var(--text-2);margin:12px 0 0}
+.chiprow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.meter{margin-top:14px;background:rgba(255,255,255,.5);border:1px solid var(--glass-line);border-radius:18px;padding:12px 14px}
+.meter .progress{background:var(--fill)}
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 0}
+.dl div{background:rgba(255,255,255,.55);border:1px solid var(--glass-line);border-radius:14px;padding:10px 12px;min-width:0}
+.dl dt{font-size:var(--fs-xs);color:var(--secondary)}
+.dl dd{margin:2px 0 0;font-size:var(--fs-sm);font-weight:600}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;border:0;padding:0;margin:18px 0 0}
+.chip{position:relative;display:flex;align-items:center;justify-content:center;height:58px;border-radius:18px;background:rgba(255,255,255,.62);border:1px solid var(--line-2);font-weight:650;font-size:var(--fs-md);cursor:pointer;transition:background .2s,color .2s,transform .3s var(--spring)}
+.chip:hover{background:#fff}
+.chip:active{transform:scale(.96)}
+.chip input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.chip:has(input:checked){background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip:has(input:focus-visible){outline:2.5px solid var(--ink);outline-offset:2px}
+
+/* toast */
+.toast{display:flex;align-items:center;gap:12px;background:var(--chrome-dk);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-pill);padding:10px 20px;min-height:48px;transition:transform .5s var(--spring),visibility .5s}
+.toast button{flex:none;border:0;border-radius:var(--r-pill);min-height:34px;margin:-4px 0;margin-inline-end:-12px;padding:0 14px;background:rgba(255,255,255,.18);color:#fff;font:inherit;font-weight:650;font-size:var(--fs-xs);cursor:pointer}
+.toast button:hover{background:rgba(255,255,255,.28)}
+.toast :focus-visible{outline-color:#fff}
+
+/* popovers */
+.pop{position:fixed;z-index:220;display:none;width:min(360px,calc(100vw - 24px));overflow:auto;padding:8px;border-radius:24px;background:var(--chrome);-webkit-backdrop-filter:var(--blur-lg);backdrop-filter:var(--blur-lg);border:1px solid rgba(255,255,255,.75);box-shadow:0 40px 80px -30px rgba(24,28,37,.45),0 0 0 .5px rgba(24,28,37,.06),inset 0 1px 0 #fff;transform-origin:50% 0}
+.pop.open{display:block;animation:popIn .4s var(--spring)}
+.pop h3{margin:0;padding:8px 10px 6px;font-size:var(--fs-xs);font-weight:700;color:var(--secondary)}
+.pop hr{border:0;border-top:1px solid var(--line);margin:6px}
+.pop-foot{display:flex;gap:8px;padding:4px 4px 2px}
+.pop-foot .btn{flex:1;min-height:40px}
+.pop-id{display:flex;align-items:center;gap:12px;padding:8px 10px}
+.pop-id b,.mi b{display:block;font-size:var(--fs-sm);font-weight:650;line-height:1.5}
+.pop-id small,.mi small{display:block;font-size:var(--fs-xs);color:var(--secondary);line-height:1.5}
+.mi{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:7px 10px;border:0;border-radius:14px;background:transparent;text-align:start;color:inherit;font:inherit;cursor:pointer;transition:background .15s}
+.mi:hover,.mi:focus-visible{background:rgba(255,255,255,.8)}
+.mi>.ico{width:18px;height:18px;color:var(--text-2)}
+.mi .itile{width:36px;height:36px;border-radius:11px;flex:none}
+.mi .itile .ico{width:17px;height:17px}
+.mi>span:not(.end):not(.itile):not(.av){flex:1;min-width:0}
+.mi .end{margin-inline-start:auto;display:inline-flex;align-items:center;gap:8px;flex:none}
+.mi .end .ico{width:14px;height:14px;opacity:.5}
+.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex:none;background:#D3D4D9;font-size:var(--fs-xs);font-weight:700;border:2px solid #fff}
+kbd{font:600 11px/1 "Manrope",sans-serif;padding:5px 7px;border-radius:7px;background:var(--fill);color:var(--text-2);direction:ltr;white-space:nowrap}
+.switch.sm{width:40px;height:24px;display:inline-block}
+.switch.sm::before{display:none}
+.switch.sm::after{top:3px;inset-inline-start:3px;width:18px;height:18px}
+.switch[data-on="true"]{background:var(--primary)}
+[dir=rtl] .switch.sm[data-on="true"]::after{transform:translateX(-16px)}
+[dir=ltr] .switch.sm[data-on="true"]::after{transform:translateX(16px)}
+
+/* spotlight */
+.spot{position:fixed;inset:0;z-index:240;display:none;align-items:flex-start;justify-content:center;padding:14vh 16px 16px}
+.spot.open{display:flex}
+.spot .scrim{position:absolute;inset:0;border:0;background:rgba(40,30,26,.14);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fadeIn .25s}
+.spot-box{position:relative;width:min(640px,100%);border-radius:26px;overflow:hidden;background:var(--chrome);-webkit-backdrop-filter:var(--blur-lg);backdrop-filter:var(--blur-lg);border:1px solid rgba(255,255,255,.75);box-shadow:0 60px 120px -40px rgba(24,28,37,.55),0 0 0 .5px rgba(24,28,37,.08),inset 0 1px 0 #fff;animation:popIn .4s var(--spring)}
+.spot-in{display:flex;align-items:center;gap:12px;height:62px;padding:0 20px}
+.spot-in:focus-within{box-shadow:inset 0 -2px 0 var(--primary)}
+.spot-in .ico{width:22px;height:22px;color:var(--secondary)}
+.spot-in input{flex:1;min-width:0;height:100%;border:0;background:transparent;outline:0;font-size:20px}
+.spot-list{max-height:min(440px,58vh);overflow:auto;padding:6px 8px 8px;border-top:1px solid var(--line)}
+.spot-g{padding:10px 10px 4px;font-size:11px;font-weight:700;color:var(--secondary)}
+.spot-list .mi[aria-selected="true"]{background:var(--primary);color:var(--ink)}
+.spot-list .mi[aria-selected="true"] small,.spot-list .mi[aria-selected="true"]>.ico{color:rgba(24,28,37,.78)}
+.spot-list .mi[aria-selected="true"] kbd{background:rgba(255,255,255,.35);color:var(--ink)}
+.spot-empty{padding:18px;margin:0;text-align:center;color:var(--secondary);font-size:var(--fs-sm)}
+
+/* dock (shown while the window is minimised) */
+.dock{position:fixed;left:50%;bottom:18px;z-index:150;padding:8px;border-radius:26px;background:var(--chrome);-webkit-backdrop-filter:var(--blur-lg);backdrop-filter:var(--blur-lg);border:1px solid rgba(255,255,255,.75);box-shadow:0 30px 60px -24px rgba(24,28,37,.45),inset 0 1px 0 #fff;transform:translate(-50%,160%);visibility:hidden;transition:transform .55s var(--spring),visibility 0s .55s}
+.dock.on{transform:translate(-50%,0);visibility:visible;transition:transform .55s var(--spring),visibility 0s}
+.dock button{display:flex;align-items:center;gap:12px;min-height:56px;padding-block:0;padding-inline:8px 18px;border:0;border-radius:18px;background:transparent;font:inherit;font-weight:650;font-size:var(--fs-sm);cursor:pointer;white-space:nowrap}
+.dock button:hover{background:rgba(255,255,255,.6)}
+.appic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#fff;background:linear-gradient(160deg,#E8957A,#C15F3C);box-shadow:0 6px 14px -6px rgba(193,95,60,.8),inset 0 1px 0 rgba(255,255,255,.35)}
+.appic .ico{width:22px;height:22px;stroke-width:2.4}
+
+/* view entrance */
+#view.anim>*{animation:rise .32s var(--ease) both}
+#view.anim>*:nth-child(2){animation-delay:.02s}
+#view.anim>*:nth-child(n+3){animation-delay:.04s}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}}
+
+@media (max-width:760px){
+ .app{padding:8px}
+ .screen{border-radius:24px;padding:6px 12px 18px}
+ .titlebar{margin:0 -4px 2px;height:30px}
+ .tabs{width:100%;margin:12px 0 0;top:6px}
+ #langToggle{display:none}
+ .demo-pill{overflow:hidden}
+ .demo-pill span:last-child{overflow:hidden;text-overflow:ellipsis}
+ .dialog{border-radius:30px 30px 24px 24px;padding-top:30px}
+ .dialog::before{content:"";position:absolute;top:9px;left:50%;width:40px;height:5px;margin-left:-20px;border-radius:3px;background:rgba(24,28,37,.18)}
+ .modal.open .dialog{animation:sheetUp .5s var(--spring)}
+ .mbig{font-size:44px}
+ .spot{padding:10px}
+}
+@keyframes sheetUp{from{opacity:0;transform:translateY(40%)}}
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+ <symbol id="i-brand" viewBox="0 0 32 32"><path d="m16 3.5 10.5 12.5L16 28.5 5.5 16 16 3.5Z" stroke-width="2.6"/><path d="M11 16h10" stroke-width="2.6" stroke-linecap="round"/></symbol>
+ <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+ <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16M8 16v-4m4 4V8m4 8v-6"/></symbol>
+ <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3.5 8.5 4.5-8.5 4.5L3.5 8 12 3.5ZM3.5 12.5 12 17l8.5-4.5M3.5 16.5 12 21l8.5-4.5"/></symbol>
+ <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8.5-8.5M16 6.5l2.5 2.5M14 8.5l2 2"/></symbol>
+ <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+ <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="14" rx="3"/><path d="M3 9.5h18M16 14.5h2"/></symbol>
+ <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 19.5 6v5.5c0 4.8-3.3 8-7.5 9.5-4.2-1.5-7.5-4.7-7.5-9.5V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></symbol>
+ <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 6.5-2.5 7.5-2.5 8.5h17C20.5 16.5 18 15.5 18 9ZM10 20.5a2.2 2.2 0 0 0 4 0"/></symbol>
+ <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+ <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></symbol>
+ <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m-4.5-4.5L12 15l4.5-4.5M4.5 19.5h15"/></symbol>
+ <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+ <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></symbol>
+ <symbol id="i-check-sq" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/></symbol>
+ <symbol id="i-arrow-ur" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+ <symbol id="i-down" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8m-3.5-3.5L12 16l3.5-3.5"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 9.5V13l2.5 1.5M9.5 3h5"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+ <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 21 19.5H3L12 4Z"/><path d="M12 10v4.5M12 17.2h.01"/></symbol>
+ <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+ <symbol id="i-empty" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M4 13h4.5l1.5 2h4l1.5-2H20"/></symbol>
+ <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
+</svg>
+<div class="wall" aria-hidden="true"><i></i><i></i><i></i></div>
+<a class="skip" id="skipLink" href="#view">پرش به محتوا</a>
+<div class="app">
+ <div class="screen">
+  <div class="titlebar">
+   <div class="lights"><a class="r" id="lightClose" href="/" aria-label="بستن کنسول و بازگشت به وب‌سایت"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M3 3l4 4M7 3 3 7"/></svg></a><button class="y" type="button" id="minBtn" aria-label="کوچک کردن پنجره"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.5 5h5"/></svg></button><button class="g" type="button" id="fullBtn" aria-label="تمام‌صفحه"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M3 6.8V3h3.8M7 3.2V7H3.2"/></svg></button></div>
+   <span class="wtitle en" aria-hidden="true">ClaudeIran Console</span>
+  </div>
+  <header class="top">
+   <a class="brand" href="/" aria-label="ClaudeIran — بازگشت به وب‌سایت"><svg class="ico" aria-hidden="true"><use href="#i-brand"/></svg><span class="en">claudeiran</span></a>
+   <div class="managers">
+    <button class="avatars" type="button" id="mgrBtn" aria-haspopup="dialog" aria-expanded="false"></button>
+    <button class="btn" type="button" id="addManager"><svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg><span id="addManagerLbl">افزودن مدیر</span></button>
+   </div>
+   <div class="top-end">
+    <button class="demo-pill" type="button" id="demoBtn"><span class="dot" aria-hidden="true"></span><span id="demoTop">پیش‌نمایش محصول · داده نمونه</span></button>
+    <button class="icon-btn" type="button" id="spotBtn" aria-label="جست‌وجوی سریع" aria-keyshortcuts="Control+K Meta+K"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg></button>
+    <button class="icon-btn en" type="button" id="langToggle" aria-label="Change language" style="font-weight:700;font-size:var(--fs-xs)">EN</button>
+    <button class="icon-btn bell" type="button" id="bellBtn" aria-label="اعلان‌ها" aria-haspopup="dialog" aria-expanded="false"><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg></button>
+    <button class="me en" type="button" id="meBtn" aria-label="حساب نمایشی" aria-haspopup="dialog" aria-expanded="false">CI</button>
+   </div>
+  </header>
+  <nav class="tabs" role="tablist" aria-label="بخش‌های کنسول" id="tabs"></nav>
+  <main id="view" tabindex="-1"></main>
+  <div class="foot"><span id="footNote">کنسول تعاملی کلاود ایران · کانسپت رابط کاربری · همه داده‌ها نمونه‌اند و هیچ درخواست یا پرداختی انجام نمی‌شود.</span><a href="/" id="backLink">بازگشت به وب‌سایت ↗</a></div>
+ </div>
+</div>
+<div class="dock" id="dock" aria-hidden="true"><button type="button" id="dockBtn" tabindex="-1"><span class="appic" aria-hidden="true"><svg class="ico"><use href="#i-brand"/></svg></span><span id="dockLbl">کنسول کلاود ایران</span></button></div>
+<div class="pop" id="pop" role="dialog" aria-label="منو"></div>
+<div class="spot" id="spot" aria-hidden="true"><button class="scrim" type="button" id="spotScrim" tabindex="-1" aria-label="بستن"></button><div class="spot-box" id="spotBox" role="dialog" aria-modal="true" aria-label="جست‌وجوی سریع"><div class="spot-in"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg><input id="spotIn" type="text" role="combobox" aria-label="جست‌وجو" aria-expanded="true" aria-controls="spotList" aria-autocomplete="list" autocomplete="off" spellcheck="false"><kbd id="spotKbd">Ctrl K</kbd></div><div class="spot-list" id="spotList" role="listbox"></div></div></div>
+<div class="modal" id="modal" aria-hidden="true"><button class="scrim" type="button" id="scrim" aria-label="بستن" tabindex="-1"></button><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgTitle"><button class="x" type="button" id="dlgClose" aria-label="بستن"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></button><div id="dlgBody"></div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(()=>{'use strict';
+const Q=new URLSearchParams(location.search);
+const STATIC=Q.has('static');
+const MAC=/Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent);
+const state={lang:Q.get('lang')==='en'?'en':'fa',view:'overview',period:7,query:'',filter:'all',page:1,perPage:5,sort:{k:null,dir:1},
+ keyStatus:{},projStatus:{},keysExtra:[],projectsExtra:[],settings:{email:true,budget:true,limits:false,security:true},budget:68,demo:Q.get('demo')||'',loading:false,anim:false,
+ sel:{overview:null,usage:null},week:2,gsel:'used',balance:8450000,read:new Set(['failed','keypaused']),approval:'pending',spotQ:'',spotIdx:0,
+ managers:[{i:'م‌ر',fa:'مریم رحیمی',en:'Maryam Rahimi',r:['مالک','Owner']},{i:'س‌ک',fa:'سینا کاظمی',en:'Sina Kazemi',r:['مالی','Finance']},{i:'ن‌ا',fa:'نگار امینی',en:'Negar Amini',r:['توسعه‌دهنده','Developer']},{i:'آ‌ت',fa:'آرش توکلی',en:'Arash Tavakoli',r:['توسعه‌دهنده','Developer']},{i:'ل‌م',fa:'لیلا مرادی',en:'Leila Moradi',r:['فقط مشاهده','Viewer']}]};
+const fa=()=>state.lang==='fa', t=(p,e)=>fa()?p:e;
+const $=id=>document.getElementById(id);
+const ic=(n,c='')=>`<svg class="ico ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toNum=s=>Number(String(s).replace(/[^\d.\-−+]/g,'').replace('−','-'))||0;
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const kfmt=n=>n>=1e6?(n/1e6).toFixed(2)+'M':n>=1e3?(n/1e3).toFixed(1)+'K':String(Math.round(n));
+const RM=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---- demo data (from the previous console) ---- */
+const projectData=[{fa:'دستیار پشتیبانی',en:'Support assistant',model:'Sonnet',key:2,budget:'850,000',spent:'428,400',status:'active',id:'proj_support',req:5312},{fa:'استودیوی محتوا',en:'Content studio',model:'Haiku',key:1,budget:'420,000',spent:'182,000',status:'active',id:'proj_content',req:4020},{fa:'تحلیل بازخورد',en:'Feedback analytics',model:'Sonnet',key:1,budget:'680,000',spent:'248,000',status:'active',id:'proj_analytics',req:3089},{fa:'دستیار داخلی',en:'Internal assistant',model:'Sonnet',key:1,budget:'250,000',spent:'61,200',status:'paused',id:'proj_internal',req:2730},{fa:'نمونه اولیه',en:'Prototype',model:'Haiku',key:0,budget:'160,000',spent:'44,900',status:'paused',id:'proj_proto',req:1891},{fa:'تحلیل اسناد',en:'Document analysis',model:'Sonnet',key:1,budget:'350,000',spent:'123,900',status:'active',id:'proj_docs',req:1402}];
+const keyData=[{id:'key_2491',name:'Production · Support',project:0,tail:'•••• 2491',created:'2026-11-07',lastFa:'۲ ساعت پیش',lastEn:'2h ago',status:'active'},{id:'key_8364',name:'Content · Production',project:1,tail:'•••• 8364',created:'2026-11-12',lastFa:'۸ ساعت پیش',lastEn:'8h ago',status:'active'},{id:'key_1706',name:'Analytics · Read-only',project:2,tail:'•••• 1706',created:'2026-11-14',lastFa:'دیروز',lastEn:'Yesterday',status:'active'},{id:'key_9028',name:'Development · Test',project:4,tail:'•••• 9028',created:'2026-10-29',lastFa:'۱۲ روز پیش',lastEn:'12d ago',status:'paused'}];
+const requestData=[{id:'req_7f3a92',project:0,model:'Sonnet',tin:1892,tout:641,cost:'12,480',time:'۱۴:۲۵',enTime:'14:25',status:'settled'},{id:'req_3e1c44',project:1,model:'Haiku',tin:3010,tout:408,cost:'8,920',time:'۱۳:۴۸',enTime:'13:48',status:'settled'},{id:'req_a9d823',project:2,model:'Sonnet',tin:2410,tout:810,cost:'16,760',time:'۱۲:۰۲',enTime:'12:02',status:'settled'},{id:'req_1b44ea',project:0,model:'Sonnet',tin:421,tout:320,cost:'4,380',time:'۱۰:۳۸',enTime:'10:38',status:'settled'},{id:'req_6d297f',project:5,model:'Sonnet',tin:4201,tout:990,cost:'28,140',time:'۰۹:۱۵',enTime:'09:15',status:'settled'},{id:'req_700ee2',project:3,model:'Sonnet',tin:0,tout:0,cost:'0',time:'دیروز',enTime:'Yesterday',status:'failed'}];
+const transactions=[{id:'tx_3091',nameFa:'افزایش اعتبار کیف پول',nameEn:'Wallet top-up',amount:'+2,000,000',date:'2026-11-20',status:'settled'},{id:'tx_8710',nameFa:'تسویه درخواست API',nameEn:'API request settlement',amount:'−12,480',date:'2026-11-23',status:'settled',req:'req_7f3a92'},{id:'tx_8711',nameFa:'تسویه درخواست API',nameEn:'API request settlement',amount:'−8,920',date:'2026-11-23',status:'settled',req:'req_3e1c44'},{id:'tx_1329',nameFa:'آزادسازی مانده رزرو',nameEn:'Reserved balance released',amount:'+1,100',date:'2026-11-22',status:'settled'},{id:'tx_1812',nameFa:'تسویه درخواست API',nameEn:'API request settlement',amount:'−28,140',date:'2026-11-22',status:'settled',req:'req_6d297f'},{id:'tx_0021',nameFa:'افزایش اعتبار کیف پول',nameEn:'Wallet top-up',amount:'+5,000,000',date:'2026-11-12',status:'settled'}];
+const NAV=[['overview','grid','نمای کلی','Overview'],['usage','chart','گزارش مصرف','Usage'],['projects','layers','پروژه‌ها','Projects'],['keys','key','کلیدهای API','API keys'],['requests','list','درخواست‌ها','Requests'],['billing','wallet','کیف پول و مالی','Billing & wallet'],['security','shield','امنیت','Security']];
+const ALERTS=[
+ {id:'budget',ic:'down',h:['بودجه به ۶۸٪ رسید','Budget reached 68%'],p:['سقف ماهانه ۲ میلیون تومان','Monthly cap 2M IRT'],w:['۲ ساعت','2h']},
+ {id:'approval',ic:'check-sq',h:['تأیید لازم است','Approval needed'],p:['کلید آزمایشی تازه برای «تحلیل اسناد»','New demo key for “Document analysis”'],w:['۵ ساعت','5h']},
+ {id:'failed',ic:'clock',h:['یک درخواست ناموفق','One failed request'],p:['<span class="num">req_700ee2</span> · دستیار داخلی','<span class="num">req_700ee2</span> · Internal assistant'],w:['دیروز','1d']},
+ {id:'keypaused',ic:'link',h:['کلید متوقف شد','Key paused'],p:['<span class="en">Development · Test</span> · پروژه «نمونه اولیه»','Development · Test · Prototype project'],w:['۱۲ روز','12d']}];
+const ROLES=[['توسعه‌دهنده','Developer'],['مالی','Finance'],['فقط مشاهده','Viewer']];
+const P=p=>({...p,status:state.projStatus[p.id]||p.status});
+const projects=()=>[...state.projectsExtra,...projectData].map(P);
+const findProj=id=>projects().find(p=>p.id===id);
+const allKeys=()=>[...state.keysExtra,...keyData].map(k=>({...k,status:state.keyStatus[k.id]||k.status}));
+const activeKeys=()=>allKeys().filter(k=>k.status==='active').length;
+const keyProj=k=>projectData[k.project]||projectData[0];
+const unread=()=>ALERTS.filter(a=>!state.read.has(a.id)).length;
+const pn=p=>fa()?p.fa:p.en, pname=p=>esc(pn(p));
+const money=n=>`<span class="money"><span class="num">${n}</span> <span class="dim" style="font-size:var(--fs-xs)">${t('تومان','IRT')}</span></span>`;
+const st=v=>v==='active'?`<span class="st"><i></i>${t('فعال','Active')}</span>`:v==='paused'?`<span class="st off"><i></i>${t('متوقف','Paused')}</span>`:v==='failed'?`<span class="st bad"><i></i>${t('ناموفق','Failed')}</span>`:`<span class="st"><i></i>${t('تسویه‌شده','Settled')}</span>`;
+const sample=()=>`<span class="pill w">${t('نمونه','Sample')}</span>`;
+
+/* ---- building blocks ---- */
+function head(eb,title,sub,actions=''){return `<div class="head"><div><span class="eyebrow"><span class="dot" aria-hidden="true"></span>${eb}</span><h1>${title}</h1><p>${sub}</p></div><div class="head-actions">${actions}</div></div>`}
+// a tile with a metric key is a button that opens the metric sheet
+function tile(v,label,bd,mk){const inner=`<span class="row"><b class="num">${v}</b>${bd||''}</span><small>${label}</small>`;return mk?`<button type="button" class="tile tap" data-metric="${mk}">${inner}</button>`:`<div class="tile">${inner}</div>`}
+const up=x=>`<span class="bd up">↑ ${x}</span>`, good_down=x=>`<span class="bd up">↓ ${x}</span>`;
+const days=()=>fa()?['د','س','چ','پ','ج','ش','ی']:['M','T','W','T','F','S','S'];
+const fullDays=()=>fa()?['دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه','یکشنبه']:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+/* ---- interactive bar charts: hover a bar for its day, click a bar or an axis pill to pin a day ---- */
+const chartCache={};
+function series(anchors,n,seed){let s=seed||1;const r=()=>(s=(s*9301+49297)%233280)/233280;const o=[];for(let i=0;i<n;i++){const p=i/(n-1)*(anchors.length-1),k=Math.floor(p),f=p-k,a=anchors[k],b=anchors[Math.min(k+1,anchors.length-1)];const v=a+(b-a)*(f*f*(3-2*f));o.push(Math.max(8,Math.min(100,v*(.8+r()*.32))))}return o}
+const CH={
+ overview:()=>({h:series([30,44,40,58,52,66,60,80,72,96],120,7),D:7,S:480,hi:.72,labels:fullDays(),axis:days().map((d,i)=>[i,d]),unit:t('توکن خروجی','output tokens')}),
+ usage:()=>{const w=state.period===7;return{h:series(w?[40,63,52,85,66,72,96,69,77,56]:[60,47,67,56,88,79,69,94,73,82],110,w?3:11),D:w?7:30,S:w?40:37,hi:.7,labels:w?fullDays():Array.from({length:30},(_,i)=>t('روز ','Day ')+(i+1)),axis:w?days().map((d,i)=>[i,d]):[0,4,9,14,19,24,29].map(i=>[i,String(i+1).padStart(2,'0')]),unit:t('درخواست','requests')}}
+};
+function chart(key,height,label){
+ const c=CH[key](),n=c.h.length,seg=i=>Math.floor(i*c.D/n),sel=state.sel[key];
+ const sums=Array.from({length:c.D},()=>[0,0]);c.h.forEach((v,i)=>{const d=sums[seg(i)];d[0]+=v;d[1]++});
+ const avg=sums.map(([s,k])=>s/k),peak=avg.indexOf(Math.max(...avg)),show=sel==null?peak:sel,hiFrom=Math.floor(c.D*c.hi);
+ chartCache[key]={n,D:c.D,avg,S:c.S,labels:c.labels};
+ const bars=c.h.map((v,i)=>{const cl=[i>=n*c.hi?'hi':'',sel!=null&&seg(i)===sel?'sel':''].filter(Boolean).join(' ');return `<i style="--h:${v.toFixed(1)}%"${cl?` class="${cl}"`:''}></i>`}).join('');
+ const val=`<span class="num">${kfmt(avg[show]*c.S)}</span>`;
+ return `<div class="barfield" data-chart="${key}" style="height:${height}px" role="img" aria-label="${esc(label)}">${bars}<span class="marker hl" style="--x:${((show+.5)/c.D*100).toFixed(2)}%;--y:${Math.min(76,avg[show]).toFixed(1)}%"><b>${kfmt(avg[show]*c.S)}</b>${esc(c.labels[show])}</span><span class="tip" aria-hidden="true"></span></div>
+ <div class="axis${c.D===30?' en':''}" role="group" aria-label="${t('انتخاب روز','Pick a day')}">${c.axis.map(([i,l])=>`<button type="button" data-day="${key}:${i}" aria-pressed="${sel===i}" aria-label="${esc(c.labels[i])}"${i>=hiFrom?' class="hi"':''}>${l}</button>`).join('')}</div>
+ <p class="readout"><span>${sel==null?t('اوج دوره','Period peak'):t('روز انتخاب‌شده','Selected day')}: <b>${esc(c.labels[show])} · ${val} ${c.unit}</b></span>${sel==null?`<span>${t('برای بررسی، روی ستون‌ها بزنید','Tap the bars to explore')}</span>`:`<button type="button" class="linkbtn" data-day="${key}:clear">${t('نمایش اوج','Show peak')}</button>`}</p>`;
+}
+function stepped(){
+ const b=state.budget,w=[Math.round(b*.32),Math.round(b*.26)];w.push(b-w[0]-w[1]);w.push(Math.max(0,Math.min(100-b,Math.round(b*.3))));
+ const mx=Math.max(...w,1),s=state.week,L=fa()?['هفته ۱','هفته ۲','هفته ۳ · جاری','هفته ۴ · پیش‌بینی']:['Week 1','Week 2','Week 3 · now','Week 4 · forecast'];
+ return `<article class="card mini"><h2>${t('بودجه ماهانه چقدر مصرف شده است؟','How much of the monthly budget is used?')}</h2><div class="big num">${b}%</div><p class="sub">${t('مصرف‌شده · نمونه','Used · sample')}</p><div class="steps" role="group" aria-label="${t('مصرف هفتگی','Weekly spend')}">${w.map((v,i)=>`<button type="button" data-week="${i}" class="${i===2?'hi':i===3?'lo':''}" style="height:${Math.max(12,v/mx*86).toFixed(1)}%" aria-pressed="${i===s}" aria-label="${L[i]}: ${v}%">${i===s?`<span class="pill ${i===2?'p':'dk'} num" aria-hidden="true">${v}%</span>`:''}</button>`).join('')}</div><div class="legend"><span><i class="p"></i>${L[s]}</span><span class="num">${w[s]}%</span></div></article>`}
+function gauge(){
+ const u=state.budget,r=+Math.max(0,Math.min(14.4,100-u-.6)).toFixed(1),f=+Math.max(0,100-u-r).toFixed(1),g=state.gsel;
+ const V={used:u,reserved:r,free:f},L={used:[t('مصرف‌شده','Used'),t('بودجهٔ مصرف‌شده','Budget used')],reserved:[t('رزرو','Reserved'),t('رزرو موقت · در انتظار تسویه','Reserved · pending')],free:[t('آزاد','Free'),t('بودجهٔ آزاد','Free budget')]};
+ const sw=k=>g===k?11:8,arc='M14 104a86 86 0 0 1 172 0';
+ return `<article class="card gauge mini"><div class="card-head"><div><h2>${t('توزیع بودجه','Budget allocation')}</h2><p class="sub">${t('ماه جاری · نمونه','This month · sample')}</p></div></div><div class="big num">${V[g]}%</div><p class="sub">${L[g][1]}</p><svg viewBox="0 0 200 116" aria-hidden="true"><path data-gsel="free" d="${arc}" fill="none" stroke="${g==='free'?'#767C89':'#3A404C'}" stroke-width="${sw('free')}" stroke-linecap="round"/><path data-gsel="used" d="${arc}" fill="none" stroke="#D97757" stroke-width="${sw('used')}" stroke-linecap="round" pathLength="100" stroke-dasharray="${u} 100" opacity="${g==='used'||g==='free'?1:.45}"/><path data-gsel="reserved" d="${arc}" fill="none" stroke="#8A8D95" stroke-width="${sw('reserved')}" pathLength="100" stroke-dasharray="0 ${u+.6} ${r} 100" opacity="${g==='reserved'?1:.6}"/></svg><div class="legend">${['used','reserved','free'].map(k=>`<button type="button" data-gsel="${k}" aria-pressed="${g===k}"><i${k==='used'?' class="p"':k==='reserved'?' style="background:#8A8D95"':''}></i>${L[k][0]}</button>`).join('')}</div></article>`}
+function capCard(){const sec=state.view==='security';return `<article class="cap tap" role="button" tabindex="0" data-cap aria-label="${sec?t('بودجه ماهانه؛ رفتن به کنترل درصد','Monthly budget: go to the slider'):t('بودجه ماهانه؛ تنظیم در بخش امنیت','Monthly budget: adjust in Security')}"><svg class="art" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M12 22V3m-8 8 8-8 8 8"/></svg><span style="font-size:var(--fs-sm);font-weight:650">${t('بودجه ماهانه','Monthly budget')}</span><div class="big"><span class="num">${state.budget}%</span><small>${t('مصرف شده','used')}</small></div><div class="progress" aria-hidden="true"><span style="width:${state.budget}%"></span></div><div class="pfoot"><span>${t('مصرف‌شده','Used')}</span><span>${t('سقف بودجه: ۲ میلیون تومان','Budget cap: 2M IRT')}</span></div><p>${t('با رسیدن به سقف بودجه، درخواست تازه پیش از ارسال متوقف می‌شود.','New requests pause before submission when the budget cap is reached.')}</p></article>`}
+function approvalActs(){const a=state.approval;if(a==='pending')return `<button class="btn btn-line" type="button" data-approve="no">${t('رد','Decline')}</button><button class="btn btn-dark" type="button" data-approve="yes">${t('تأیید','Accept')}</button>`;
+ return `<span class="pill ${a==='yes'?'p':''}">${a==='yes'?t('تأیید شد','Accepted'):t('رد شد','Declined')}</span>${a==='yes'?`<button class="btn btn-line" type="button" data-go="keys">${t('مشاهده کلید','View key')}</button>`:''}<button class="btn btn-line" type="button" data-approve="undo">${t('بازگردانی','Undo')}</button>`}
+function alertsCard(){const pend=state.approval==='pending';
+ return `<article class="alerts" id="alerts" aria-label="${t('هشدارها','Alerts')}"><div class="card-head" style="padding:0 4px 4px"><div><h2 style="font-size:var(--fs-md);margin:0">${t('هشدارها','Alerts')}</h2><p class="sub">${pend?t('چهار مورد گزارش می‌دهند؛ یکی تصمیم می‌خواهد · نمونه','Four report, one asks · sample'):t('همه موارد رسیدگی شد · نمونه','All handled · sample')}</p></div>${unread()?`<button class="pill w" type="button" data-readall>${t('خواندن همه','Mark all read')}</button>`:sample()}</div>
+ ${ALERTS.map(a=>{const dot=state.read.has(a.id)?'':`<span class="unread" aria-hidden="true"></span><span class="sr-only">${t('(خوانده‌نشده)','(unread)')}</span>`;
+  if(a.id==='approval')return `<div class="arow focus"><span class="itile">${ic(a.ic)}</span><div><h3>${t(...a.h)}${dot}</h3><p>${t(...a.p)}</p></div><span class="when">${t(...a.w)}</span><div class="acts">${approvalActs()}</div></div>`;
+  return `<div class="arow tap-row" role="button" tabindex="0" data-alert="${a.id}"><span class="itile">${ic(a.ic)}</span><div><h3>${t(...a.h)}${dot}</h3><p>${t(...a.p)}</p></div><span class="when">${t(...a.w)} ${ic('arrow-ur','flip')}</span></div>`}).join('')}</article>`}
+
+/* ---- Keel table (rows with cfg.row open a detail sheet) ---- */
+function table(cfg){
+ const {cols,rows,note,empty,row}=cfg;
+ let data=rows.slice();
+ if(state.sort.k){const c=cols.find(c=>c.k===state.sort.k);if(c&&c.sort)data.sort((a,b)=>{const x=c.sort(a),y=c.sort(b);return (x>y?1:x<y?-1:0)*state.sort.dir})}
+ const pages=Math.max(1,Math.ceil(data.length/state.perPage));state.page=Math.min(Math.max(1,state.page),pages);
+ const part=cfg.all?data:data.slice((state.page-1)*state.perPage,state.page*state.perPage);
+ const th=cols.map(c=>{const s=state.sort.k===c.k?(state.sort.dir>0?'ascending':'descending'):'none';return `<th scope="col" class="${c.num?'n':''}" ${c.sort?`aria-sort="${s}"`:''}>${c.sort?`<button type="button" data-sort="${c.k}">${c.label}<span class="ar" aria-hidden="true"><span class="u">▲</span><span class="d">▼</span></span></button>`:c.label}</th>`}).join('');
+ let body;
+ if(state.demo==='loading'||state.loading){body=Array.from({length:4},()=>`<tr>${cols.map(()=>`<td><span class="sk" style="width:${50+Math.random()*40|0}%"></span></td>`).join('')}</tr>`).join('')}
+ else if(state.demo==='error'){body=`<tr><td colspan="${cols.length}"><div class="state err"><span class="itile">${ic('alert')}</span><h3>${t('بارگذاری داده‌ها ناموفق بود','Could not load data')}</h3><p>${t('اتصال نمایشی قطع شد. دوباره تلاش کنید.','The demo connection dropped. Try again.')}</p><button class="btn btn-dark" type="button" data-retry>${t('تلاش دوباره','Retry')}</button></div></td></tr>`}
+ else if(!part.length){body=`<tr><td colspan="${cols.length}"><div class="state"><span class="itile">${ic('empty')}</span><h3>${empty||t('نتیجه‌ای یافت نشد','No results')}</h3><p>${t('عبارت جست‌وجو یا فیلتر وضعیت را تغییر دهید.','Change the search or status filter.')}</p><button class="btn btn-line" type="button" data-clear>${t('پاک کردن فیلترها','Clear filters')}</button></div></td></tr>`}
+ else body=part.map(r=>`<tr${row?` class="click" tabindex="0" ${row(r)}`:''}>${cols.map(c=>`<td class="${(c.num?'n ':'')+(c.cls||'')}" data-l="${esc(c.label)}">${c.cell(r)}</td>`).join('')}</tr>`).join('');
+ const from=data.length?(state.page-1)*state.perPage+1:0,to=Math.min(data.length,state.page*state.perPage);
+ const pager=(cfg.all||!data.length||state.demo||state.loading)?'':`<div style="display:flex;gap:12px;align-items:center"><span class="pcount">${t('نمایش','Showing')} <span class="num">${from}–${to}</span> ${t('از','of')} <span class="num">${data.length}</span></span><div class="pager" role="navigation" aria-label="${t('صفحه‌بندی','Pagination')}"><button type="button" data-page="${state.page-1}" ${state.page<=1?'disabled':''} aria-label="${t('قبلی','Previous')}">‹</button>${Array.from({length:pages},(_,i)=>`<button type="button" data-page="${i+1}" ${i+1===state.page?'aria-current="page"':''}>${i+1}</button>`).join('')}<button type="button" data-page="${state.page+1}" ${state.page>=pages?'disabled':''} aria-label="${t('بعدی','Next')}">›</button></div></div>`;
+ return `<div class="twrap"><table class="kt"><thead><tr>${th}</tr></thead><tbody>${body}</tbody></table></div><div class="tfoot"><p class="fnote">${note}</p>${pager}</div>`;
+}
+function tools(ph,filters,extra=''){return `<div class="tools"><div class="l"><label class="search">${ic('search')}<span class="sr-only">${ph}</span><input type="search" id="q" value="${esc(state.query)}" placeholder="${ph}"></label><div class="fpills" role="group" aria-label="${t('فیلتر وضعیت','Status filter')}">${filters.map(([v,l])=>`<button type="button" data-filter="${v}" aria-pressed="${state.filter===v}">${l}</button>`).join('')}</div></div>${extra}</div>`}
+const F_ALL=()=>['all',t('همه','All')], F_ACT=()=>['active',t('فعال','Active')], F_PAU=()=>['paused',t('متوقف','Paused')];
+const match=(r,txt)=>(state.filter==='all'||r.status===state.filter)&&txt.toLowerCase().includes(state.query.trim().toLowerCase());
+const csvBtn=`<button class="btn btn-line" type="button" data-csv>${ic('download')}<span>${'CSV'}</span></button>`;
+const viewBtn=a=>`<button class="rowbtn" type="button" ${a}>${t('مشاهده','View')} ${ic('arrow-ur','flip')}</button>`;
+function balance(label,unit,attr){const b=fmt(state.balance),cut=b.length-4;return `<button class="figure" type="button" ${attr}><span><span class="label">${label}</span><span class="big num">${b.slice(0,cut)}<span class="tail">${b.slice(cut)}</span></span><span class="unit">${unit}</span></span>${sample()}</button>`}
+
+/* ---- views ---- */
+function overview(){
+ const chartCard=`<article class="card"><div class="card-head"><div><h2>${t('روند مصرف API','API usage')}</h2><p class="sub">${t('۷ روز گذشته · توکن خروجی · نمونه','Last 7 days · output tokens · sample')}</p></div><button class="pill tap-pill" type="button" data-go="usage">${t('گزارش کامل','Full report')}${ic('arrow-ur','flip')}</button></div>${chart('overview',170,t('نمودار نمونه توکن خروجی در ۷ روز گذشته','Sample chart of output tokens over the last 7 days'))}</article>`;
+ const recent=`<section class="tbl-card"><div class="card-head"><div><h2 style="margin:0;font-size:var(--fs-md)">${t('پروژه‌های اخیر','Recent projects')}</h2><p class="sub">${t('چهار پروژه با بیشترین مصرف · برای جزئیات روی ردیف بزنید','Top four by spend · tap a row for details')}</p></div><button class="btn btn-line" type="button" data-go="projects">${t('مشاهده همه','View all')} ${ic('arrow-ur','flip')}</button></div>${table({all:1,row:p=>`data-proj="${p.id}"`,cols:[{k:'n',label:t('پروژه','PROJECT'),cell:p=>`<span class="pc">${pname(p)}</span>`},{k:'m',label:t('مدل','MODEL'),cell:p=>`<span class="id">${p.model}</span>`},{k:'s',label:t('مصرف ماه','SPENT'),num:1,cell:p=>money(p.spent)},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:p=>st(p.status)}],rows:projectData.slice(0,4).map(P),note:t('مبالغ به تومان · داده نمایشی، متصل به سرویس زنده نیست.','Amounts in IRT · demo data, not connected to a live service.')})}</section>`;
+ return head(t('OVERVIEW · نمای کلی','OVERVIEW'),t('نمای کلی','Overview'),t('وضعیت فضای کاری، هزینه‌ها و پروژه‌ها در یک نگاه','Your workspace at a glance'),`<button class="btn" type="button" data-go="usage" data-period="30">${ic('clock')}${t('۳۰ روز گذشته','Last 30 days')}</button><button class="btn btn-dark" type="button" data-modal="project">${ic('plus')}${t('پروژه جدید','New project')}</button>`)+
+ `<div class="grid-main"><div class="stack">${balance(t('اعتبار قابل استفاده','Available balance'),t('تومان · داده نمونه · رفتن به کیف پول','IRT · sample data · open wallet'),'data-go="billing"')}
+ <div class="tiles">${tile(state.budget+'%',t('بودجه مصرف‌شده ماهانه','Monthly budget used'),'<span class="bd down">↑ 6%</span>','budget')}${tile(String(activeKeys()).padStart(2,'0'),t('کلیدهای API فعال','Active API keys'),up('1'),'keys')}${tile('18,420',t('درخواست · ۷ روز','Requests · 7 days'),up('12%'),'requests')}${tile('1.8s',t('میانگین زمان پاسخ','Avg. response time'),good_down('0.2s'),'latency')}</div>${chartCard}</div>
+ <div class="stack"><div class="tiles" style="grid-template-columns:1fr 1fr">${stepped()}${gauge()}</div>${alertsCard()}</div></div>${recent}`;
+}
+function usage(){
+ const total=state.period===7?'18,420':'74,810';
+ const cols=[{k:'n',label:t('پروژه','PROJECT'),sort:p=>pn(p),cell:p=>`<span class="pc">${pname(p)}</span>`},{k:'m',label:t('مدل','MODEL'),cell:p=>`<span class="id">${p.model}</span>`},{k:'r',label:t('درخواست','REQUESTS'),num:1,sort:p=>p.req,cell:p=>`<span class="num">${p.req.toLocaleString('en-US')}</span>`},{k:'s',label:t('هزینه ماه','MONTHLY COST'),num:1,sort:p=>toNum(p.spent),cell:p=>money(p.spent)},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:p=>st(p.status)}];
+ return head(t('USAGE · گزارش مصرف','USAGE'),t('گزارش مصرف سازمان','Organization usage report'),t('نمای خلاصه مصرف و بودجه پروژه‌ها','Usage, requests and budgets at a glance'),`<div class="fpills" role="group" aria-label="${t('بازه زمانی','Period')}"><button type="button" data-period="7" aria-pressed="${state.period===7}">${t('۷ روز','7 days')}</button><button type="button" data-period="30" aria-pressed="${state.period===30}">${t('۳۰ روز','30 days')}</button></div>`)+
+ `<div class="grid-main split2" style="grid-template-columns:1fr 1.6fr">${capCard()}<article class="card"><div class="card-head"><div><p class="sub" style="margin:0">${t('درخواست‌های ثبت‌شده','Recorded requests')}</p><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><strong class="num" style="font-family:Manrope;font-size:52px;font-weight:400;letter-spacing:-.04em;line-height:1.05">${total}</strong><span class="sub">${t('درخواست نمونه','sample requests')}</span></div></div><button class="pill tap-pill" type="button" data-go="requests">${state.period===7?t('۷ روز اخیر','Last 7 days'):t('۳۰ روز اخیر','Last 30 days')}${ic('arrow-ur','flip')}</button></div>${chart('usage',200,t('نمودار نمایشی تعداد درخواست‌ها','Sample request chart'))}</article></div>
+ <div class="tiles t3" style="margin-top:12px">${tile('2.84M',t('توکن ورودی','Input tokens'),up('9%'),'tin')}${tile('782K',t('توکن خروجی','Output tokens'),up('4%'),'tout')}${tile('1.8s',t('میانگین زمان پاسخ','Avg. response time'),good_down('0.2s'),'latency')}</div>
+ <section class="tbl-card"><div class="card-head"><div><h2 style="margin:0;font-size:var(--fs-md)">${t('مصرف به تفکیک پروژه','Usage by project')}</h2><p class="sub">${t('مرتب‌سازی با کلیک روی سرستون · جزئیات با کلیک روی ردیف','Click a column head to sort, a row for details')}</p></div>${sample()}</div>${table({all:1,cols,row:p=>`data-proj="${p.id}"`,rows:projectData.slice(0,5).map(P),note:t('هزینه‌ها پس از تسویه با مصرف واقعی ثبت می‌شوند · داده نمایشی.','Costs are recorded after settlement · demo data.')})}</section>`;
+}
+function projectsView(){
+ const rows=projects().filter(p=>match(p,p.fa+' '+p.en+' '+p.model+' '+p.id));
+ const cols=[{k:'n',label:t('نام پروژه','PROJECT'),sort:p=>pn(p),cell:p=>`<span class="pc">${pname(p)}</span><div class="id" style="font-size:var(--fs-xs)">${p.id}</div>`},{k:'m',label:t('مدل','MODEL'),sort:p=>p.model,cell:p=>`<span class="id">${p.model}</span>`},{k:'k',label:t('کلیدها','KEYS'),num:1,sort:p=>p.key,cell:p=>`<span class="num">${p.key}</span>`},{k:'b',label:t('سقف بودجه','BUDGET CAP'),num:1,sort:p=>toNum(p.budget),cell:p=>money(esc(p.budget))},{k:'s',label:t('مصرف','SPENT'),num:1,sort:p=>toNum(p.spent),cell:p=>money(p.spent)},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:p=>st(p.status)},{k:'a',label:t('جزئیات','DETAILS'),cls:'act',cell:p=>viewBtn(`data-proj="${p.id}"`)}];
+ return head(t('PROJECTS · پروژه‌ها','PROJECTS'),t('پروژه‌های من','Projects'),t('مدیریت پروژه‌ها، مدل‌ها و بودجه اختصاصی','Budgets, models and spend for every project'),`<button class="btn btn-dark" type="button" data-modal="project">${ic('plus')}${t('پروژه جدید','New project')}</button>`)+
+ `<section class="tbl-card">${tools(t('جست‌وجوی پروژه','Search projects'),[F_ALL(),F_ACT(),F_PAU()],csvBtn)}${table({cols,rows,row:p=>`data-proj="${p.id}"`,note:t('سقف بودجه هر پروژه پیش از ارسال درخواست بررسی می‌شود · داده نمایشی.','Each project’s cap is checked before a request is sent · demo data.'),empty:t('پروژه‌ای پیدا نشد','No projects found')})}</section>`;
+}
+function keysView(){
+ const rows=allKeys().filter(k=>match(k,k.id+' '+k.name+' '+keyProj(k).fa+' '+keyProj(k).en));
+ const cols=[{k:'n',label:t('عنوان کلید','KEY NAME'),sort:k=>k.name,cell:k=>`<span class="pc en">${esc(k.name)}</span>`},{k:'t',label:t('شناسه پنهان','MASKED KEY'),cell:k=>`<span class="id">${k.tail}</span>`},{k:'p',label:t('پروژه','PROJECT'),cell:k=>pname(keyProj(k))},{k:'c',label:t('تاریخ ساخت','CREATED'),num:1,sort:k=>k.created,cell:k=>`<span class="num dim">${k.created}</span>`},{k:'l',label:t('آخرین استفاده','LAST USED'),cell:k=>`<span class="dim">${t(k.lastFa,k.lastEn)}</span>`},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:k=>st(k.status)},{k:'a',label:t('عملیات','ACTION'),cls:'act',cell:k=>`<button class="rowbtn" type="button" data-kstatus="${k.id}">${k.status==='paused'?t('فعال‌سازی','Activate'):t('غیرفعال‌سازی','Revoke')}</button>`}];
+ return head(t('API KEYS · کلیدها','API KEYS'),t('کلیدهای API','API keys'),t('کنترل دسترسی، تفکیک کلیدها و وضعیت استفاده','Isolate and control keys across projects'),`<button class="btn btn-dark" type="button" data-modal="key">${ic('plus')}${t('ساخت کلید آزمایشی','Create demo key')}</button>`)+
+ `<article class="card card-w note-card"><div class="l"><span class="itile">${ic('lock')}</span><div><h2>${t('نکته امنیتی','Security notice')}</h2><p>${t('رشته کامل کلید هرگز در این پیش‌نمایش نمایش داده نمی‌شود؛ فقط یک‌بار هنگام ساخت.','The full secret is never shown again — only once, at creation.')}</p></div></div><span class="pill soft">${t('کلیدهای نمایشی','Demo credentials')}</span></article>
+ <section class="tbl-card">${tools(t('جست‌وجو بر اساس کلید یا پروژه','Search keys or projects'),[F_ALL(),F_ACT(),F_PAU()],csvBtn)}${table({cols,rows,row:k=>`data-key="${k.id}"`,note:t('تغییر وضعیت در این پیش‌نمایش فقط ردیف را به‌روز می‌کند.','Changing a status here only updates the row in this preview.'),empty:t('کلیدی پیدا نشد','No keys found')})}</section>`;
+}
+function requestsView(){
+ const rows=requestData.filter(r=>match(r,r.id+' '+projectData[r.project].fa+' '+projectData[r.project].en+' '+r.model));
+ const cols=[{k:'i',label:t('شناسه درخواست','REQUEST ID'),sort:r=>r.id,cell:r=>`<span class="id" style="color:var(--ink);font-weight:600">${r.id}</span>`},{k:'p',label:t('پروژه','PROJECT'),cell:r=>pname(projectData[r.project])},{k:'m',label:t('مدل','MODEL'),cell:r=>`<span class="id">${r.model}</span>`},{k:'tk',label:t('توکن ورودی / خروجی','TOKENS IN / OUT'),num:1,sort:r=>r.tin,cell:r=>`<span class="num">${r.tin?r.tin.toLocaleString('en-US')+' / '+r.tout:'—'}</span>`},{k:'c',label:t('هزینه','AMOUNT'),num:1,sort:r=>toNum(r.cost),cell:r=>money(r.cost)},{k:'tm',label:t('زمان','TIME'),cell:r=>`<span class="dim">${fa()?r.time:r.enTime}</span>`},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:r=>st(r.status)},{k:'a',label:t('جزئیات','DETAILS'),cls:'act',cell:r=>viewBtn(`data-req="${r.id}"`)}];
+ return head(t('REQUESTS · درخواست‌ها','REQUESTS'),t('درخواست‌ها','Requests'),t('ردیابی درخواست، توکن و مراحل تسویه','Trace each request, its tokens and settlement'),`<button class="btn btn-dark" type="button" data-req="req_7f3a92">${ic('list')}${t('نمونه جزئیات درخواست','Sample request detail')}</button>`)+
+ `<section class="tbl-card">${tools(t('شناسه درخواست یا پروژه','Request ID or project'),[F_ALL(),['settled',t('تسویه‌شده','Settled')],['failed',t('ناموفق','Failed')]],csvBtn)}${table({cols,rows,row:r=>`data-req="${r.id}"`,note:t('هر درخواست یک شناسه و یک نوبت ارسال دارد · داده آزمایشی.','One ID, one submission per request · test data.'),empty:t('درخواستی پیدا نشد','No requests found')})}</section>`;
+}
+function billing(){
+ const rows=transactions.filter(x=>match(x,x.id+' '+x.nameFa+' '+x.nameEn+' '+(x.req||'')));
+ const cols=[{k:'i',label:t('شناسه تراکنش','TRANSACTION'),sort:x=>x.id,cell:x=>`<span class="id">${x.id}</span>`},{k:'d',label:t('شرح','DESCRIPTION'),cell:x=>`<span class="pc">${t(x.nameFa,x.nameEn)}</span>`},{k:'dt',label:t('تاریخ','DATE'),num:1,sort:x=>x.date,cell:x=>`<span class="num dim">${x.date}</span>`},{k:'a',label:t('مبلغ','AMOUNT'),num:1,sort:x=>toNum(x.amount),cell:x=>`<span class="money"><span class="num amt ${x.amount.startsWith('+')?'plus':''}">${x.amount}</span> <span class="dim" style="font-size:var(--fs-xs)">${t('تومان','IRT')}</span></span>`},{k:'st',label:t('وضعیت','STATUS'),cls:'lead2',cell:x=>st(x.status)},{k:'r',label:t('جزئیات','DETAILS'),cls:'act',cell:x=>x.req?`<button class="rowbtn" type="button" data-req="${x.req}">${t('پیگیری درخواست','View request')} ${ic('arrow-ur','flip')}</button>`:viewBtn(`data-tx="${x.id}"`)}];
+ return head(t('BILLING · مالی','BILLING'),t('کیف پول و امور مالی','Billing & wallet'),t('موجودی، رزرو اعتبار و ریزتراکنش‌های شفاف','Balance, reservations and transparent transactions'),`<button class="btn btn-line" type="button" data-csv>${ic('download')}${t('دریافت گردش حساب','Download statement')}</button><button class="btn btn-dark" type="button" data-modal="topup">${ic('plus')}${t('افزایش اعتبار','Top up')}</button>`)+
+ `<div class="grid-main"><article class="card card-w" style="position:relative;overflow:hidden;isolation:isolate"><div style="position:absolute;z-index:-1;inset:auto -20% -50% auto;width:90%;height:120%;background:radial-gradient(closest-side,var(--p-45),rgba(217,119,87,0))"></div>${balance(t('موجودی قابل استفاده','Available balance'),t('تومان · نمونه · برای افزایش اعتبار بزنید','IRT · sample · tap to top up'),'data-modal="topup" style="padding:0"')}<div class="tiles t3" style="margin-top:18px">${tile('182K',t('رزرو موقت · در انتظار تسویه','Reserved · pending'),'','reserved')}${tile('1.36M',t('هزینه ماه جاری','This month’s spend'),good_down('8%'),'spend')}${tile('+1.1K',t('آزادشده از رزرو','Released from reserve'),'','released')}</div></article>${capCard()}</div>
+ <section class="tbl-card">${tools(t('جست‌وجو در تراکنش‌ها','Search transactions'),[F_ALL()],'')}${table({cols,rows,row:x=>`data-tx="${x.id}"`,note:t('هر کسر با شناسه درخواست قابل پیگیری است · مبالغ نمونه.','Every charge links to a request ID · sample amounts.'),empty:t('تراکنشی پیدا نشد','No transactions found')})}</section>`;
+}
+function security(){
+ const S=[['email','اعلان‌های ایمیلی','Email notifications','دریافت وضعیت مصرف و هشدارهای حساب','Usage and account alerts'],['budget','هشدار سقف بودجه','Budget threshold alerts','اعلان پیش از رسیدن به حد مجاز','Warn before the limit'],['limits','محدودسازی مدل‌ها','Model allowlist','اجازه استفاده تنها از مدل‌های تأییدشده','Only approved models'],['security','اعلان ورود جدید','New sign-in alerts','خبر دادن درباره ورود از دستگاه تازه','Unfamiliar sign-ins']];
+ return head(t('SECURITY · امنیت','SECURITY'),t('تنظیمات امنیتی','Security settings'),t('گزینه‌های نمایشی کنترل بودجه و دسترسی','Demo controls for cost and access'),`<span class="pill w">${t('تغییرات فقط در مرورگر','Local preview only')}</span>`)+
+ `<div class="grid-main split2" style="grid-template-columns:1fr 1fr"><article class="card card-w"><div class="card-head"><div><h2>${t('کنترل‌ها و اعلان‌ها','Controls & alerts')}</h2><p class="sub">${t('نمونه · روی هر ردیف بزنید','Sample · tap any row')}</p></div></div>${S.map(([k,p,e,pd,ed])=>`<div class="set-row tap-row"><div><strong id="lbl-${k}">${t(p,e)}</strong><p>${t(pd,ed)}</p></div><button type="button" class="switch" role="switch" aria-checked="${!!state.settings[k]}" aria-labelledby="lbl-${k}" data-toggle="${k}"></button></div>`).join('')}</article>
+ <div class="stack">${capCard()}<article class="card card-w"><h2>${t('مصرف از بودجه','Budget utilization')}</h2><p class="sub">${t('نسبت نمونه را تغییر دهید تا کارت‌ها به‌روز شوند.','Move the sample value to update the cards.')}</p><label class="sr-only" for="budgetRange">${t('درصد بودجه','Budget percentage')}</label><input type="range" id="budgetRange" min="0" max="100" value="${state.budget}"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-dark" type="button" data-toast="${t('تغییرات فقط در این پیش‌نمایش اعمال شدند.','Applied to this preview only.')}">${t('ثبت تغییرات نمایشی','Save demo changes')}</button><button class="btn btn-line" type="button" data-go="overview">${t('دیدن اثر در نمای کلی','See it on the overview')}</button></div></article></div></div>`;
+}
+const R={overview,usage,projects:projectsView,keys:keysView,requests:requestsView,billing,security};
+
+/* ---- sheets (modals) ---- */
+let lastFocus=null;
+function openModal(html){closePop();const m=$('modal');if(!m.classList.contains('open'))lastFocus=document.activeElement;$('dlgBody').innerHTML=html;m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';m.querySelector('.dialog').scrollTop=0;const f=m.querySelector('.dialog input,.dialog select');(f||$('dlgClose')).focus()}
+function closeModal(){const m=$('modal');if(!m.classList.contains('open'))return;m.classList.remove('open');m.setAttribute('aria-hidden','true');document.body.style.overflow='';if(lastFocus&&lastFocus.isConnected&&lastFocus.focus)lastFocus.focus()}
+const modalOpen=()=>$('modal').classList.contains('open');
+function reqModal(id){const r=requestData.find(x=>x.id===id)||requestData[0];const ok=r.status==='settled',p=projectData[r.project],tx=transactions.find(x=>x.req===r.id);
+ openModal(`<h2 id="dlgTitle">${t('جزئیات یک درخواست','Request details')}</h2><p class="sub">${t('فرآیند مالی · داده آزمایشی','Financial timeline · test data')} · <span class="num">${r.id}</span></p><div class="alerts" style="padding:8px 0 0;background:none;border:0;box-shadow:none">
+ <div class="arow"><span class="itile">${ic('lock')}</span><div><h3>${t('رزرو اعتبار','Credit reserved')}</h3><p>${t('نرخ توکن و سقف هزینه در لحظه ثبت شد.','Token rates and max charge locked at submission.')}</p></div><span class="pill">${t('ثبت شد','Recorded')}</span></div>
+ <div class="arow"><span class="itile">${ic('send')}</span><div><h3>${t('درخواست به مدل ارسال شد','Sent to the model')}</h3><p>${t('یک شناسه، یک نوبت ارسال.','One ID, one submission.')}</p></div><span class="pill">${t('انجام شد','Done')}</span></div>
+ <div class="arow focus"><span class="itile">${ic(ok?'check-sq':'alert')}</span><div><h3>${ok?t('تسویه با مصرف نهایی','Settled on final usage'):t('عدم تکمیل درخواست','Request not completed')}</h3><p>${ok?t('مانده اعتبار به کیف پول برگشت.','Unused credit returned to the wallet.'):t('درخواست ناموفق در سوابق ثبت شد.','The failed request was recorded.')}</p></div><span class="pill ${ok?'p':''}">${ok?t('تسویه شد','Settled'):t('ناموفق','Failed')}</span>
+ <div class="acts"><span class="pill w">${t('هزینه','Cost')} <b class="num">${r.cost}</b> ${t('تومان','IRT')}</span><span class="pill w">${t('توکن','Tokens')} <span class="num">${r.tin?r.tin.toLocaleString('en-US')+' / '+r.tout:'—'}</span></span><span class="pill w en">${r.model}</span></div></div></div>
+ <div class="f-actions"><button class="btn btn-line" type="button" data-proj="${p.id}">${ic('layers')}${pname(p)}</button>${tx?`<button class="btn btn-line" type="button" data-tx="${tx.id}">${ic('wallet')}${t('تراکنش مرتبط','Linked transaction')}</button>`:''}</div>
+ <div class="dark-foot"><span>${t('صورت‌حساب این درخواست، قابل پیگیری با شناسه','This bill is traceable by its ID')}</span><strong>${t('شفاف تا سطح توکن','Transparent to the token')} ${ic('check')}</strong></div>`)}
+function projectModal(){openModal(`<h2 id="dlgTitle">${t('پروژه جدید','New project')}</h2><p class="sub">${t('فقط در این پیش‌نمایش ساخته می‌شود · نمونه','Created in this preview only · sample')}</p><form id="projForm"><div class="field"><label for="pName">${t('نام پروژه','Project name')}</label><input id="pName" required maxlength="40" placeholder="${t('مثلاً دستیار فروش','e.g. Sales assistant')}"></div><div class="field"><label for="pModel">${t('مدل مجاز','Allowed model')}</label><select id="pModel"><option>Sonnet</option><option>Haiku</option></select></div><div class="field"><label for="pBudget">${t('سقف بودجه ماهانه (تومان)','Monthly cap (IRT)')}</label><input id="pBudget" inputmode="numeric" value="300,000"><span class="hint">${t('درخواست‌ها با رسیدن به سقف پیش از ارسال متوقف می‌شوند.','Requests pause before sending at the cap.')}</span></div><div class="f-actions"><button class="btn btn-dark" type="submit">${t('ساخت پروژه','Create project')}</button><button class="btn btn-line" type="button" data-close>${t('انصراف','Cancel')}</button></div></form>`)}
+function keyModal(){openModal(`<h2 id="dlgTitle">${t('ساخت کلید آزمایشی','Create demo key')}</h2><p class="sub">${t('کلید واقعی ساخته نمی‌شود · نمونه','No real key is created · sample')}</p><form id="keyForm"><div class="field"><label for="kName">${t('عنوان کلید','Key name')}</label><input id="kName" required maxlength="40" value="Staging · Docs" dir="ltr"></div><div class="field"><label for="kProj">${t('پروژه','Project')}</label><select id="kProj">${projectData.map((p,i)=>`<option value="${i}">${pname(p)}</option>`).join('')}</select></div><div class="f-actions"><button class="btn btn-dark" type="submit">${t('ساخت کلید','Create key')}</button><button class="btn btn-line" type="button" data-close>${t('انصراف','Cancel')}</button></div></form>`)}
+function keyShown(name,secret){$('dlgBody').innerHTML=`<h2 id="dlgTitle">${t('کلید ساخته شد','Key created')}</h2><p class="sub"><span class="en">${esc(name)}</span> · ${t('نمونه','sample')}</p><div class="keybox"><code id="secret">${secret}</code><button class="btn" type="button" id="copySecret">${ic('copy')}<span>${t('کپی','Copy')}</span></button></div><div class="warn">${ic('alert')}<div><strong>${t('این کلید فقط همین یک‌بار نمایش داده می‌شود.','This key is shown only once.')}</strong><br>${t('آن را در جای امن نگه دارید. این رشته نمایشی است و به هیچ API متصل نیست.','Store it safely. This string is a demo and works with no API.')}</div></div><div class="f-actions"><button class="btn btn-dark" type="button" data-close>${t('ذخیره کردم','I’ve saved it')}</button></div>`;$('copySecret').focus()}
+function projModal(id){const p=findProj(id);if(!p)return;const on=p.status==='active',cap=toNum(p.budget),pct=cap?Math.min(100,Math.round(toNum(p.spent)/cap*100)):0,ks=allKeys().filter(k=>keyProj(k).id===p.id);
+ openModal(`<h2 id="dlgTitle">${pname(p)}</h2><p class="sub"><span class="id">${p.id}</span> · ${t('پروژه نمونه','Sample project')}</p>
+ <div class="chiprow">${st(p.status)}<span class="pill w en">${p.model}</span><span class="pill w"><span class="num">${ks.length}</span> ${t('کلید','keys')}</span></div>
+ <div class="meter"><div class="pfoot"><span>${t('مصرف از سقف ماهانه','Spent of monthly cap')}</span><b class="num">${pct}%</b></div><div class="progress" aria-hidden="true"><span style="width:${pct}%"></span></div><div class="pfoot"><span>${money(p.spent)}</span><span>${money(esc(p.budget))}</span></div></div>
+ <dl class="dl"><div><dt>${t('درخواست · ماه','Requests · month')}</dt><dd class="num">${p.req.toLocaleString('en-US')}</dd></div><div><dt>${t('مدل مجاز','Allowed model')}</dt><dd class="en">${p.model}</dd></div></dl>
+ <div class="f-actions"><button class="btn btn-dark" type="button" data-pstatus="${p.id}">${on?t('توقف پروژه','Pause project'):t('فعال‌سازی پروژه','Resume project')}</button><button class="btn btn-line" type="button" data-go="keys" data-q="${pname(p)}">${ic('key')}${t('کلیدها','Keys')}</button><button class="btn btn-line" type="button" data-go="requests" data-q="${pname(p)}">${ic('list')}${t('درخواست‌ها','Requests')}</button></div>`)}
+function keyDetail(id){const k=allKeys().find(x=>x.id===id);if(!k)return;const p=keyProj(k),on=k.status==='active';
+ openModal(`<h2 id="dlgTitle" class="en">${esc(k.name)}</h2><p class="sub">${t('کلید نمایشی','Demo key')} · <span class="id">${k.id}</span></p>
+ <div class="keybox"><code>${k.tail}</code>${st(k.status)}</div>
+ <dl class="dl"><div><dt>${t('پروژه','Project')}</dt><dd><button type="button" class="linkbtn" data-proj="${p.id}">${pname(p)}</button></dd></div><div><dt>${t('تاریخ ساخت','Created')}</dt><dd class="num">${k.created}</dd></div><div><dt>${t('آخرین استفاده','Last used')}</dt><dd>${t(k.lastFa,k.lastEn)}</dd></div><div><dt>${t('دامنه دسترسی','Scope')}</dt><dd>${t('فقط همین پروژه','This project only')}</dd></div></dl>
+ <div class="f-actions"><button class="btn ${on?'btn-line':'btn-dark'}" type="button" data-kstatus="${k.id}">${on?t('غیرفعال‌سازی','Revoke'):t('فعال‌سازی دوباره','Reactivate')}</button><button class="btn btn-line" type="button" data-copy="${k.id}">${ic('copy')}${t('کپی شناسه','Copy ID')}</button></div>`)}
+function txModal(id){const x=transactions.find(v=>v.id===id);if(!x)return;const plus=x.amount.startsWith('+');
+ openModal(`<h2 id="dlgTitle">${t(x.nameFa,x.nameEn)}</h2><p class="sub"><span class="id">${x.id}</span> · ${t('تراکنش نمونه','Sample transaction')}</p><div class="mbig"><span class="num">${x.amount}</span><small> ${t('تومان','IRT')}</small></div>
+ <dl class="dl"><div><dt>${t('تاریخ','Date')}</dt><dd class="num">${x.date}</dd></div><div><dt>${t('وضعیت','Status')}</dt><dd>${st(x.status)}</dd></div><div><dt>${t('نوع','Type')}</dt><dd>${plus?t('واریز','Credit'):t('کسر','Debit')}</dd></div><div><dt>${t('درخواست مرتبط','Linked request')}</dt><dd>${x.req?`<button type="button" class="linkbtn num" data-req="${x.req}">${x.req}</button>`:'—'}</dd></div></dl>
+ <div class="f-actions"><button class="btn btn-dark" type="button" data-receipt="${x.id}">${ic('download')}${t('رسید نمونه','Sample receipt')}</button><button class="btn btn-line" type="button" data-close>${t('بستن','Close')}</button></div>`)}
+function topupModal(){openModal(`<h2 id="dlgTitle">${t('افزایش اعتبار (شبیه‌سازی)','Top up (simulated)')}</h2><p class="sub">${t('هیچ پرداختی انجام نمی‌شود؛ فقط موجودی نمونه تغییر می‌کند.','No payment is made; only the sample balance changes.')}</p><form id="topForm"><fieldset class="chips"><legend class="sr-only">${t('مبلغ به تومان','Amount in IRT')}</legend>${[500000,1000000,2000000,5000000].map((v,i)=>`<label class="chip"><input type="radio" name="amt" value="${v}"${i===1?' checked':''}><span class="num">${fmt(v)}</span></label>`).join('')}</fieldset><p class="hint" style="margin:8px 0 0">${t('مبالغ به تومان · موجودی فعلی','Amounts in IRT · current balance')} <span class="num">${fmt(state.balance)}</span></p><div class="f-actions"><button class="btn btn-dark" type="submit">${t('شبیه‌سازی افزایش اعتبار','Simulate top-up')}</button><button class="btn btn-line" type="button" data-close>${t('انصراف','Cancel')}</button></div></form>`)}
+function inviteModal(){openModal(`<h2 id="dlgTitle">${t('دعوت مدیر','Invite a manager')}</h2><p class="sub">${t('ایمیلی ارسال نمی‌شود · نمونه','No email is sent · sample')}</p><form id="invForm"><div class="field"><label for="iMail">${t('ایمیل','Email')}</label><input id="iMail" type="email" required maxlength="60" dir="ltr" placeholder="name@example.com" autocomplete="off"></div><div class="field"><label for="iRole">${t('نقش','Role')}</label><select id="iRole">${ROLES.map((r,i)=>`<option value="${i}">${t(...r)}</option>`).join('')}</select><span class="hint">${t('نقش را بعداً از فهرست مدیران تغییر دهید.','Change the role later from the managers list.')}</span></div><div class="f-actions"><button class="btn btn-dark" type="submit">${t('ارسال دعوت نمایشی','Send demo invite')}</button><button class="btn btn-line" type="button" data-close>${t('انصراف','Cancel')}</button></div></form>`)}
+const METRICS={
+ budget:{l:['بودجه مصرف‌شده ماهانه','Monthly budget used'],v:()=>state.budget+'%',s:[12,19,25,31,38,44,49,55,59,63,66,68],go:'security',g:['تنظیم بودجه','Adjust budget'],n:['سهم مصرف‌شده از سقف ماهانه ۲ میلیون تومان؛ با هر تسویه به‌روز می‌شود.','Share of the 2M IRT monthly cap; updated with every settlement.']},
+ keys:{l:['کلیدهای API فعال','Active API keys'],v:()=>String(activeKeys()).padStart(2,'0'),s:[1,1,1,2,2,2,2,3,3,3,3,3],go:'keys',g:['مدیریت کلیدها','Manage keys'],n:['کلیدهایی که اکنون می‌توانند درخواست بفرستند. غیرفعال‌سازی فوری اثر می‌کند.','Keys that can send requests right now. Revoking takes effect immediately.']},
+ requests:{l:['درخواست · ۷ روز','Requests · 7 days'],v:()=>'18,420',s:[1.9,2.2,2.1,2.5,2.4,2.8,2.6,2.9,3.1,2.7,3,3.3],go:'requests',g:['مشاهده درخواست‌ها','View requests'],n:['همه درخواست‌های ثبت‌شده در همه پروژه‌ها، شامل درخواست‌های ناموفق.','All recorded requests across projects, including failed ones.']},
+ latency:{l:['میانگین زمان پاسخ','Avg. response time'],v:()=>'1.8s',s:[2.4,2.3,2.3,2.1,2.2,2,2,1.9,1.9,1.8,1.9,1.8],go:'usage',g:['گزارش مصرف','Usage report'],n:['زمان از ارسال تا پایان پاسخ، میانگین ۷ روز.','Time from submission to the end of the response, 7-day average.']},
+ tin:{l:['توکن ورودی','Input tokens'],v:()=>'2.84M',s:[1.9,2,2.1,2.2,2.3,2.2,2.4,2.5,2.6,2.6,2.7,2.84],go:'usage',g:['گزارش مصرف','Usage report'],n:['توکن‌های ورودی (پرامپت و زمینه) در بازه انتخاب‌شده.','Input tokens (prompt and context) in the selected period.']},
+ tout:{l:['توکن خروجی','Output tokens'],v:()=>'782K',s:[480,510,530,560,590,600,640,660,700,720,760,782],go:'usage',g:['گزارش مصرف','Usage report'],n:['توکن‌های تولیدشده توسط مدل در بازه انتخاب‌شده.','Tokens generated by the model in the selected period.']},
+ reserved:{l:['رزرو موقت','Reserved'],v:()=>'182K',s:[120,160,140,190,170,150,210,180,160,200,170,182],go:'billing',g:['کیف پول','Billing'],n:['اعتبار رزروشده برای درخواست‌های در جریان؛ پس از تسویه آزاد می‌شود.','Credit held for in-flight requests; released after settlement.']},
+ spend:{l:['هزینه ماه جاری','This month’s spend'],v:()=>'1.36M',s:[.2,.3,.42,.55,.66,.78,.88,.97,1.08,1.18,1.27,1.36],go:'billing',g:['کیف پول','Billing'],n:['مجموع تسویه‌های ماه جاری در همه پروژه‌ها.','Total settled this month across projects.']},
+ released:{l:['آزادشده از رزرو','Released from reserve'],v:()=>'+1.1K',s:[.4,.8,.6,1.2,.9,.7,1.4,1,.8,1.3,.9,1.1],go:'billing',g:['کیف پول','Billing'],n:['مانده رزرو که پس از تسویه به کیف پول برگشت.','Reserved credit returned to the wallet after settlement.']}};
+function spark(s){const w=480,h=130,mn=Math.min(...s),mx=Math.max(...s),rg=mx-mn||1;const pts=s.map((v,i)=>[i/(s.length-1)*w,h-14-(v-mn)/rg*(h-34)]);const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' '),z=pts[pts.length-1];
+ return `<svg class="spark" viewBox="0 0 ${w} ${h}" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D97757" stop-opacity=".35"/><stop offset="1" stop-color="#D97757" stop-opacity="0"/></linearGradient></defs><path d="${d} L${w} ${h} L0 ${h} Z" fill="url(#sg)"/><path d="${d}" fill="none" stroke="#D97757" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${z[0].toFixed(1)}" cy="${z[1].toFixed(1)}" r="6" fill="#fff" stroke="#D97757" stroke-width="3"/></svg>`}
+function metricModal(k){const m=METRICS[k];if(!m)return;
+ openModal(`<h2 id="dlgTitle">${t(...m.l)}</h2><p class="sub">${t('روند ۱۲ هفته · داده نمونه','12-week trend · sample data')}</p><div class="mbig num">${m.v()}</div><div class="spark-wrap">${spark(m.s)}<div class="axis en" aria-hidden="true" style="margin-top:6px"><span>W1</span><span>W6</span><span>W12</span></div></div><p class="mnote">${t(...m.n)}</p><div class="f-actions"><button class="btn btn-dark" type="button" data-go="${m.go}">${t(...m.g)} ${ic('arrow-ur','flip')}</button><button class="btn btn-line" type="button" data-close>${t('بستن','Close')}</button></div>`)}
+
+/* ---- popovers (notifications, managers, account) ---- */
+let popFor=null;
+function openPop(btn,html,label){if(popFor===btn){closePop();return}closePop();const p=$('pop');p.innerHTML=html;p.setAttribute('aria-label',label);p.classList.add('open');popFor=btn;btn.setAttribute('aria-expanded','true');placePop();const f=p.querySelector('button:not([disabled]),a[href]');f&&f.focus({preventScroll:true})}
+function placePop(){if(!popFor)return;const p=$('pop'),r=popFor.getBoundingClientRect(),w=p.offsetWidth;p.style.top=(r.bottom+10)+'px';p.style.left=Math.max(12,Math.min(innerWidth-w-12,r.left+r.width/2-w/2))+'px';p.style.maxHeight=Math.max(220,innerHeight-r.bottom-22)+'px'}
+function closePop(refocus){if(!popFor)return;$('pop').classList.remove('open');popFor.setAttribute('aria-expanded','false');if(refocus)popFor.focus();popFor=null}
+function refreshPop(fn,sel){$('pop').innerHTML=fn();placePop();const f=sel&&$('pop').querySelector(sel);f&&f.focus({preventScroll:true})}
+function bellPop(){const u=unread();return `<h3>${t('اعلان‌ها','Notifications')}${u?` · <span class="num">${u}</span> ${t('تازه','new')}`:''}</h3>${ALERTS.map(a=>`<button type="button" class="mi" data-alert="${a.id}"><span class="itile">${ic(a.ic)}</span><span><b>${t(...a.h)}</b><small>${t(...a.p)}</small></span><span class="end">${state.read.has(a.id)?'':`<span class="unread" aria-hidden="true"></span><span class="sr-only">${t('(خوانده‌نشده)','(unread)')}</span>`}<small>${t(...a.w)}</small></span></button>`).join('')}<hr><div class="pop-foot"><button type="button" class="btn btn-line" data-readall${u?'':' disabled'}>${t('خواندن همه','Mark all read')}</button><button type="button" class="btn btn-dark" data-go="overview" data-scroll="alerts">${t('همه در نمای کلی','Open overview')}</button></div>`}
+function mgrPop(){return `<h3>${t('مدیران فضای کاری','Workspace managers')} · <span class="num">${state.managers.length}</span> · ${t('برای تغییر نقش بزنید','tap to change role')}</h3>${state.managers.map((m,i)=>`<button type="button" class="mi" data-mgr="${i}"><span class="av">${esc(m.i)}</span><span><b><bdi>${esc(fa()?m.fa:m.en)}</bdi></b><small>${t(...m.r)}</small></span>${i?`<span class="end">${ic('arrow-ur','flip')}</span>`:`<span class="end pill w">${t('مالک','Owner')}</span>`}</button>`).join('')}<hr><div class="pop-foot"><button type="button" class="btn btn-dark" data-modal="invite">${ic('plus')}${t('دعوت مدیر','Invite manager')}</button></div>`}
+function mePop(){const solid=document.documentElement.classList.contains('solid');return `<div class="pop-id"><span class="me" aria-hidden="true">CI</span><span><b>${t('حساب نمایشی','Demo account')}</b><small class="en">demo@example.com</small></span></div><hr>
+ <button type="button" class="mi" data-lang>${ic('link')}<span><b>${t('English','فارسی')}</b><small>${t('تغییر زبان رابط','Switch interface language')}</small></span><span class="end en">${fa()?'EN':'FA'}</span></button>
+ <button type="button" class="mi" role="switch" aria-checked="${solid}" data-solid>${ic('layers')}<span><b>${t('کاهش شفافیت','Reduce transparency')}</b><small>${t('سطوح مات به‌جای شیشه‌ای','Solid surfaces instead of glass')}</small></span><span class="end switch sm" data-on="${solid}" aria-hidden="true"></span></button>
+ <button type="button" class="mi" data-spot-open>${ic('search')}<span><b>${t('جست‌وجوی سریع','Quick search')}</b><small>${t('پروژه، کلید، درخواست، تراکنش','Projects, keys, requests, transactions')}</small></span><kbd class="end">${MAC?'⌘K':'Ctrl K'}</kbd></button>
+ <button type="button" class="mi" data-reset>${ic('back')}<span><b>${t('بازنشانی داده‌های نمونه','Reset sample data')}</b><small>${t('همه تغییرات این صفحه پاک می‌شود','Clears every change on this page')}</small></span></button>
+ <hr><a class="mi" href="/">${ic('arrow-ur','flip')}<span><b>${t('بازگشت به وب‌سایت','Back to website')}</b></span></a>`}
+function openAlert(id){state.read.add(id);closePop();
+ if(id==='budget')go('security',{after:focusRange});
+ else if(id==='failed'){render();reqModal('req_700ee2')}
+ else if(id==='keypaused')go('keys',{filter:'paused'});
+ else go('overview',{after:()=>{const a=$('alerts');a&&a.scrollIntoView({behavior:RM()?'auto':'smooth',block:'center'});const b=document.querySelector('[data-approve]');b&&b.focus({preventScroll:true})}});}
+function focusRange(){const r=$('budgetRange');if(r){r.scrollIntoView({behavior:RM()?'auto':'smooth',block:'center'});r.focus({preventScroll:true})}}
+
+/* ---- spotlight (Ctrl/⌘ K) ---- */
+let spotRes=[],spotLast=null;
+function spotItems(){const I=[],add=(g,ic,l,s,run)=>I.push({g,ic,l,s,run});
+ NAV.forEach(([id,i,p,e])=>add(t('بخش‌ها','Sections'),i,t(p,e),'',()=>{go(id);$('view').focus({preventScroll:true})}));
+ add(t('عملیات','Actions'),'plus',t('پروژه جدید','New project'),'',projectModal);add(t('عملیات','Actions'),'key',t('ساخت کلید آزمایشی','Create demo key'),'',keyModal);add(t('عملیات','Actions'),'wallet',t('افزایش اعتبار (شبیه‌سازی)','Top up (simulated)'),'',topupModal);add(t('عملیات','Actions'),'plus',t('دعوت مدیر','Invite manager'),'',inviteModal);
+ projects().forEach(p=>add(t('پروژه‌ها','Projects'),'layers',pn(p),p.id,()=>projModal(p.id)));
+ allKeys().forEach(k=>add(t('کلیدها','Keys'),'key',k.name,k.tail,()=>keyDetail(k.id)));
+ requestData.forEach(r=>add(t('درخواست‌ها','Requests'),'list',r.id,pn(projectData[r.project]),()=>reqModal(r.id)));
+ transactions.forEach(x=>add(t('تراکنش‌ها','Transactions'),'wallet',t(x.nameFa,x.nameEn),x.id+' · '+x.amount,()=>txModal(x.id)));
+ return I}
+function openSpot(){closePop();const s=$('spot');if(s.classList.contains('open'))return;spotLast=document.activeElement;state.spotQ='';state.spotIdx=0;s.classList.add('open');s.setAttribute('aria-hidden','false');const i=$('spotIn');i.value='';i.placeholder=t('جست‌وجو در پروژه‌ها، کلیدها، درخواست‌ها…','Search projects, keys, requests…');renderSpot();i.focus()}
+function closeSpot(refocus=true){const s=$('spot');if(!s.classList.contains('open'))return;s.classList.remove('open');s.setAttribute('aria-hidden','true');if(refocus&&spotLast&&spotLast.isConnected)spotLast.focus()}
+function renderSpot(){const q=state.spotQ.trim().toLowerCase();spotRes=spotItems().filter(x=>!q||(x.l+' '+x.s+' '+x.g).toLowerCase().includes(q)).slice(0,40);state.spotIdx=Math.min(state.spotIdx,Math.max(0,spotRes.length-1));let g='';
+ $('spotList').innerHTML=spotRes.length?spotRes.map((x,i)=>{const h=x.g!==g?`<div class="spot-g" role="presentation">${esc(x.g)}</div>`:'';g=x.g;return h+`<button type="button" role="option" id="so-${i}" class="mi" data-spot="${i}" aria-selected="${i===state.spotIdx}" tabindex="-1">${ic(x.ic)}<span><b><bdi>${esc(x.l)}</bdi></b>${x.s?`<small><bdi>${esc(x.s)}</bdi></small>`:''}</span>${i===state.spotIdx?'<kbd class="end">↵</kbd>':''}</button>`}).join(''):`<p class="spot-empty">${t('نتیجه‌ای پیدا نشد','No results')}</p>`;
+ const inp=$('spotIn');spotRes.length?inp.setAttribute('aria-activedescendant','so-'+state.spotIdx):inp.removeAttribute('aria-activedescendant');const a=$('so-'+state.spotIdx);a&&a.scrollIntoView({block:'nearest'})}
+function runSpot(i){const x=spotRes[i];if(!x)return;closeSpot(false);x.run()}
+
+/* ---- window chrome ---- */
+function minimize(on){closePop();if(on)scrollTo({top:0});const a=document.querySelector('.app'),d=$('dock'),b=$('dockBtn');a.classList.toggle('min',on);a.inert=on;d.classList.toggle('on',on);d.setAttribute('aria-hidden',String(!on));b.tabIndex=on?0:-1;(on?b:$('minBtn')).focus({preventScroll:true})}
+function setSolid(on){document.documentElement.classList.toggle('solid',on);try{localStorage.setItem('ci-solid',on?'1':'0')}catch(_){}}
+
+/* ---- render ---- */
+let thumbInstant=true;
+function thumb(){const n=$('tabs'),s=n.querySelector('[aria-selected="true"]');if(!s)return;const inst=thumbInstant;thumbInstant=false;if(inst)n.classList.add('no-anim');n.style.setProperty('--tx',s.offsetLeft+'px');n.style.setProperty('--tw',s.offsetWidth+'px');if(inst){void n.offsetWidth;n.classList.remove('no-anim')}}
+function renderTabs(){const n=$('tabs');
+ if(n.dataset.lang!==state.lang){n.dataset.lang=state.lang;n.innerHTML=NAV.map(([id,i,p,e])=>`<button class="tab" role="tab" type="button" data-go="${id}" aria-controls="view">${ic(i)}<span>${t(p,e)}</span>${id==='requests'?`<span class="count num">${requestData.length}</span>`:''}</button>`).join('');thumbInstant=true}
+ n.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.go===state.view;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1});thumb()}
+function renderChrome(){const m=state.managers,b=$('mgrBtn');b.innerHTML=m.slice(0,3).map(x=>`<span>${esc(x.i)}</span>`).join('')+(m.length>3?`<span class="en">+${m.length-3}</span>`:'');b.setAttribute('aria-label',t(`مدیران فضای کاری (${m.length})`,`Workspace managers (${m.length})`));
+ const u=unread(),bell=$('bellBtn');bell.classList.toggle('has',u>0);bell.setAttribute('aria-label',t('اعلان‌ها','Notifications')+(u?` (${u})`:''))}
+function render(){renderTabs();const v=$('view');v.innerHTML=R[state.view]();v.classList.toggle('anim',state.anim);state.anim=false;renderChrome()}
+function go(v,o={}){if(!R[v])v='overview';const same=v===state.view;state.view=v;state.query=o.q||'';state.filter=o.filter||'all';state.page=1;state.sort={k:null,dir:1};if(o.period){state.period=+o.period;state.sel.usage=null}
+ closePop();const done=()=>{o.after&&o.after()};
+ if(!STATIC&&!state.demo){state.loading=true;state.anim=!same&&!RM();render();setTimeout(()=>{state.loading=false;render();done()},340)}else{render();done()}
+ if(!same){const y=$('view').getBoundingClientRect().top+scrollY-90;if(scrollY>y)scrollTo({top:Math.max(0,y),behavior:RM()?'auto':'smooth'})}
+ history.replaceState(null,'',`console.html?view=${v}&lang=${state.lang}`);}
+function setLang(l){state.lang=l;const h=document.documentElement;h.lang=l;h.dir=l==='fa'?'rtl':'ltr';
+ const s=(id,p,e)=>{const el=$(id);if(el)el.textContent=t(p,e)},a=(id,p,e)=>{const el=$(id);if(el)el.setAttribute('aria-label',t(p,e))};
+ s('demoTop','پیش‌نمایش محصول · داده نمونه','Product preview · sample data');s('addManagerLbl','افزودن مدیر','Add manager');s('footNote','کنسول تعاملی کلاود ایران · کانسپت رابط کاربری · همه داده‌ها نمونه‌اند و هیچ درخواست یا پرداختی انجام نمی‌شود.','ClaudeIran interactive console · UI concept · all data is sample; no request or payment is made.');s('backLink','بازگشت به وب‌سایت ↗','Back to website ↗');s('dockLbl','کنسول کلاود ایران','ClaudeIran Console');s('skipLink','پرش به محتوا','Skip to content');
+ a('spotBtn','جست‌وجوی سریع','Quick search');a('meBtn','حساب نمایشی','Demo account');a('lightClose','بستن کنسول و بازگشت به وب‌سایت','Close the console and go back to the website');a('minBtn','کوچک کردن پنجره','Minimize window');a('fullBtn','تمام‌صفحه','Full screen');a('spotBox','جست‌وجوی سریع','Quick search');a('spotScrim','بستن','Close');a('scrim','بستن','Close');a('dlgClose','بستن','Close');a('tabs','بخش‌های کنسول','Console sections');a('spotIn','جست‌وجو','Search');
+ $('langToggle').textContent=fa()?'EN':'فا';$('spotKbd').textContent=MAC?'⌘K':'Ctrl K';closePop();render()}
+function toast(m,act){const el=$('toast');el.innerHTML=`<span>${esc(m)}</span>`+(act?`<button type="button" data-go="${act.go}">${esc(act.l)}</button>`:'');el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),act?5000:3000)}
+function download(name,text,type){const url=URL.createObjectURL(new Blob(['﻿'+text],{type}));const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500)}
+function copy(s,msg){(navigator.clipboard?navigator.clipboard.writeText(s):Promise.reject()).then(()=>toast(msg),()=>toast(t('متن را دستی انتخاب کنید.','Select the text to copy.')))}
+function exportCSV(){let c,r;const v=state.view;if(v==='projects'){c=['Project','Model','Keys','Budget','Spent','Status'];r=projects().map(p=>[p.en,p.model,p.key,p.budget,p.spent,p.status])}else if(v==='keys'){c=['Name','Masked key','Project','Created','Status'];r=allKeys().map(k=>[k.name,k.tail,keyProj(k).en,k.created,k.status])}else if(v==='requests'){c=['ID','Project','Model','Tokens in','Tokens out','Cost','Status'];r=requestData.map(x=>[x.id,projectData[x.project].en,x.model,x.tin,x.tout,x.cost,x.status])}else{c=['Transaction','Description','Amount','Date','Status'];r=transactions.map(x=>[x.id,x.nameEn,x.amount,x.date,x.status])}
+ download(`claudeiran-${v}-demo.csv`,[c,...r].map(row=>row.map(x=>'"'+String(x).replaceAll('"','""')+'"').join(',')).join('\r\n'),'text/csv;charset=utf-8')}
+function receipt(id){const x=transactions.find(v=>v.id===id);if(!x)return;download(`claudeiran-${x.id}-sample-receipt.txt`,['ClaudeIran console - SAMPLE RECEIPT','Demo data from a UI concept. Not a financial document; no payment was made.','',`Transaction: ${x.id}`,`Description: ${x.nameEn}`,`Amount: ${x.amount} IRT`,`Date: ${x.date}`,`Status: ${x.status}`,x.req?`Request: ${x.req}`:''].join('\r\n'),'text/plain;charset=utf-8');toast(t('رسید نمونه دانلود شد.','Sample receipt downloaded.'))}
+
+/* ---- bar hover ---- */
+let hv=null;
+function barAt(f,x){const c=chartCache[f.dataset.chart],r=f.getBoundingClientRect(),p=Math.min(.9999,Math.max(0,(x-r.left)/r.width)),i=Math.floor(p*c.n);return{c,i,d:Math.floor(i*c.D/c.n)}}
+function unhover(){if(!hv)return;hv.f.querySelectorAll('i.hov').forEach(b=>b.classList.remove('hov'));const tp=hv.f.querySelector('.tip');tp&&tp.classList.remove('on');hv=null}
+document.addEventListener('pointermove',e=>{const f=e.target.closest&&e.target.closest('.barfield[data-chart]');if(!f||!chartCache[f.dataset.chart]){unhover();return}
+ const {c,d}=barAt(f,e.clientX);if(hv&&hv.f===f&&hv.d===d)return;unhover();
+ f.querySelectorAll('i').forEach((b,j)=>{if(Math.floor(j*c.D/c.n)===d)b.classList.add('hov')});
+ const tp=f.querySelector('.tip');tp.innerHTML=`<b class="num">${kfmt(c.avg[d]*c.S)}</b>${esc(c.labels[d])}`;tp.style.setProperty('--x',((d+.5)/c.D*100).toFixed(2)+'%');tp.classList.add('on');hv={f,d}},{passive:true});
+
+/* ---- events ---- */
+document.addEventListener('click',e=>{const T=s=>e.target.closest(s);let el;
+ if(popFor&&!T('#pop')&&!popFor.contains(e.target))closePop();
+ if(T('#minBtn')){minimize(true);return}
+ if(T('#dockBtn')){minimize(false);return}
+ if(T('#fullBtn')){const d=document,x=d.documentElement;(d.fullscreenElement?d.exitFullscreen():x.requestFullscreen?x.requestFullscreen():Promise.reject()).catch(()=>toast(t('تمام‌صفحه در این مرورگر در دسترس نیست.','Full screen is not available in this browser.')));return}
+ if(el=T('[data-go]')){const isTab=el.classList.contains('tab');if(T('#toast'))$('toast').classList.remove('on');closeModal();closeSpot(false);const sc=el.dataset.scroll;
+  go(el.dataset.go,{q:el.dataset.q,period:el.dataset.period,filter:el.dataset.f,after:sc?()=>{const a=$(sc);a&&a.scrollIntoView({behavior:RM()?'auto':'smooth',block:'center'})}:null});
+  if(isTab){const s=$('tabs').querySelector('[aria-selected="true"]');s&&s.focus();s&&s.scrollIntoView({block:'nearest',inline:'nearest'})}else $('view').focus({preventScroll:true});return}
+ if(el=T('[data-period]')){state.period=+el.dataset.period;state.sel.usage=null;render();const b=document.querySelector(`[data-period="${state.period}"]`);b&&b.focus();return}
+ if(el=T('[data-filter]')){state.filter=el.dataset.filter;state.page=1;render();const b=document.querySelector(`[data-filter="${state.filter}"]`);b&&b.focus();return}
+ if(el=T('[data-sort]')){const k=el.dataset.sort;state.sort=state.sort.k===k?{k,dir:-state.sort.dir}:{k,dir:1};render();const b=document.querySelector(`[data-sort="${k}"]`);b&&b.focus();return}
+ if(el=T('[data-page]')){if(el.disabled)return;state.page=+el.dataset.page;render();const b=document.querySelector('.pager [aria-current="page"]');b&&b.focus();return}
+ if(T('[data-clear]')){state.query='';state.filter='all';state.page=1;render();return}
+ if(T('[data-retry]')){state.demo='';render();toast(t('داده‌های نمونه دوباره بارگذاری شد.','Sample data reloaded.'));return}
+ if(el=T('[data-day]')){const [k,v]=el.dataset.day.split(':');state.sel[k]=v==='clear'||state.sel[k]===+v?null:+v;render();const b=document.querySelector(`[data-day="${el.dataset.day}"]`)||document.querySelector(`[data-day^="${k}:"]`);b&&b.focus();return}
+ if(el=T('.barfield[data-chart]')){const k=el.dataset.chart;if(!chartCache[k])return;const {d}=barAt(el,e.clientX);state.sel[k]=state.sel[k]===d?null:d;render();return}
+ if(el=T('[data-week]')){state.week=+el.dataset.week;render();const b=document.querySelector(`[data-week="${state.week}"]`);b&&b.focus();return}
+ if(el=T('[data-gsel]')){state.gsel=el.dataset.gsel;render();const b=document.querySelector(`button[data-gsel="${state.gsel}"]`);b&&b.focus();return}
+ if(el=T('[data-approve]')){const v=el.dataset.approve;state.read.add('approval');
+  if(v==='undo'){state.approval='pending';state.keysExtra=state.keysExtra.filter(k=>k.id!=='key_demo_docs')}
+  else{state.approval=v;if(v==='yes'&&!state.keysExtra.some(k=>k.id==='key_demo_docs'))state.keysExtra.unshift({id:'key_demo_docs',name:'Docs · Review',project:5,tail:'•••• 5c1e',created:'2026-11-23',lastFa:'هرگز',lastEn:'Never',status:'active'})}
+  render();const b=document.querySelector('[data-approve]');b&&b.focus();
+  toast(v==='yes'?t('درخواست نمونه تأیید شد؛ کلید نمایشی به فهرست اضافه شد.','Sample approved; a demo key was added to the list.'):v==='no'?t('درخواست نمونه رد شد.','Sample request declined.'):t('تصمیم بازگردانده شد.','Decision undone.'),v==='yes'?{l:t('مشاهده کلیدها','View keys'),go:'keys'}:null);return}
+ if(T('[data-readall]')){const inPop=!!T('#pop');ALERTS.forEach(a=>state.read.add(a.id));render();if(inPop)refreshPop(bellPop,'[data-alert]');toast(t('همه اعلان‌ها خوانده شد.','All notifications marked as read.'));return}
+ if(el=T('[data-alert]')){openAlert(el.dataset.alert);return}
+ if(el=T('[data-metric]')){metricModal(el.dataset.metric);return}
+ if(T('[data-cap]')){state.view==='security'?focusRange():go('security',{after:focusRange});return}
+ if(el=T('[data-req]')){reqModal(el.dataset.req);return}
+ if(el=T('[data-modal]')){({key:keyModal,project:projectModal,topup:topupModal,invite:inviteModal})[el.dataset.modal]();return}
+ if(el=T('[data-kstatus]')){const id=el.dataset.kstatus,k=allKeys().find(x=>x.id===id);if(!k)return;const to=k.status==='active'?'paused':'active',inM=modalOpen();state.keyStatus[id]=to;render();
+  if(inM){keyDetail(id);const b=$('dlgBody').querySelector('[data-kstatus]');b&&b.focus()}else{const b=document.querySelector(`[data-kstatus="${id}"]`);b&&b.focus()}
+  toast(to==='paused'?t('کلید نمایشی غیرفعال شد.','Demo key revoked.'):t('کلید نمایشی دوباره فعال شد.','Demo key reactivated.'));return}
+ if(el=T('[data-pstatus]')){const id=el.dataset.pstatus,p=findProj(id);if(!p)return;const to=p.status==='active'?'paused':'active';state.projStatus[id]=to;render();projModal(id);const b=$('dlgBody').querySelector('[data-pstatus]');b&&b.focus();
+  toast(to==='paused'?t('پروژه نمونه متوقف شد.','Sample project paused.'):t('پروژه نمونه فعال شد.','Sample project resumed.'));return}
+ if(el=T('[data-copy]')){copy(el.dataset.copy,t('شناسه کپی شد.','ID copied.'));return}
+ if(el=T('[data-receipt]')){receipt(el.dataset.receipt);return}
+ if(el=T('[data-toggle]')){const k=el.dataset.toggle;state.settings[k]=!state.settings[k];el.setAttribute('aria-checked',String(state.settings[k]));return}
+ if(el=T('.set-row')){const sw=el.querySelector('[data-toggle]');sw&&sw.click();return}
+ if(el=T('[data-toast]')){toast(el.dataset.toast);return}
+ if(T('[data-csv]')){exportCSV();return}
+ if(T('[data-close]')||T('#dlgClose')||T('#scrim')){closeModal();return}
+ if(T('#spotScrim')){closeSpot();return}
+ if(el=T('[data-spot]')){runSpot(+el.dataset.spot);return}
+ if(T('[data-spot-open]')||T('#spotBtn')){openSpot();return}
+ if(T('#copySecret')){copy($('secret').textContent,t('کلید نمونه کپی شد.','Sample key copied.'));return}
+ if(el=T('#bellBtn')){openPop(el,bellPop(),t('اعلان‌ها','Notifications'));return}
+ if(el=T('#mgrBtn')){openPop(el,mgrPop(),t('مدیران','Managers'));return}
+ if(el=T('#meBtn')){openPop(el,mePop(),t('حساب','Account'));return}
+ if(el=T('[data-mgr]')){const i=+el.dataset.mgr,m=state.managers[i];if(!i){toast(t('نقش مالک قابل تغییر نیست.','The owner role can’t be changed.'));return}const j=ROLES.findIndex(r=>r[1]===m.r[1]);m.r=ROLES[(j+1)%ROLES.length];refreshPop(mgrPop,`[data-mgr="${i}"]`);toast(t(`نقش نمونه: ${m.r[0]}`,`Sample role: ${m.r[1]}`));return}
+ if(T('[data-solid]')){setSolid(!document.documentElement.classList.contains('solid'));refreshPop(mePop,'[data-solid]');return}
+ if(T('[data-lang]')||T('#langToggle')){setLang(fa()?'en':'fa');history.replaceState(null,'',`console.html?view=${state.view}&lang=${state.lang}`);return}
+ if(T('[data-reset]')){location.href=`console.html?view=${state.view}&lang=${state.lang}`;return}
+ if(T('#demoBtn')){toast(t('همه داده‌ها نمونه‌اند؛ هیچ درخواست یا پرداختی انجام نمی‌شود.','All data is sample; no request or payment is made.'));return}
+ if(T('#addManager')){inviteModal();return}
+ if(el=T('[data-proj]')){projModal(el.dataset.proj);return}
+ if(el=T('[data-key]')){keyDetail(el.dataset.key);return}
+ if(el=T('[data-tx]')){txModal(el.dataset.tx);return}
+});
+document.addEventListener('submit',e=>{e.preventDefault();const id=e.target.id;
+ if(id==='projForm'){const n=$('pName').value.trim()||t('پروژه نمونه','Sample project');state.projectsExtra.unshift({fa:n,en:n,model:$('pModel').value,key:0,budget:$('pBudget').value||'0',spent:'0',status:'active',id:'proj_demo_'+(state.projectsExtra.length+1),req:0});closeModal();go('projects');toast(t('پروژه نمونه اضافه شد؛ چیزی ذخیره نشد.','Sample project added; nothing was saved.'))}
+ if(id==='keyForm'){const name=$('kName').value.trim()||'Demo key',pi=+$('kProj').value;const hex=Array.from(crypto.getRandomValues(new Uint8Array(12)),b=>b.toString(16).padStart(2,'0')).join('');state.keysExtra.unshift({id:'key_demo_'+hex.slice(-4),name,project:pi,tail:'•••• '+hex.slice(-4),created:'2026-11-23',lastFa:'هرگز',lastEn:'Never',status:'active'});keyShown(name,'ci-demo-'+hex);render()}
+ if(id==='topForm'){const v=+new FormData(e.target).get('amt')||1000000;state.balance+=v;transactions.unshift({id:'tx_demo_'+(transactions.filter(x=>x.id.startsWith('tx_demo')).length+1),nameFa:'افزایش اعتبار (شبیه‌سازی)',nameEn:'Top-up (simulated)',amount:'+'+fmt(v),date:'2026-11-23',status:'settled'});closeModal();state.view==='billing'?render():go('billing');toast(t('موجودی نمونه افزایش یافت؛ هیچ پرداختی انجام نشد.','Sample balance increased; no payment was made.'))}
+ if(id==='invForm'){const em=$('iMail').value.trim();if(!em)return;state.managers.push({i:em.slice(0,2).toUpperCase(),fa:em,en:em,r:ROLES[+$('iRole').value]||ROLES[0]});closeModal();renderChrome();toast(t('دعوت شبیه‌سازی شد؛ هیچ ایمیلی ارسال نشد.','Invite simulated; no email was sent.'))}
+});
+document.addEventListener('input',e=>{const id=e.target.id;
+ if(id==='q'){const pos=e.target.selectionStart;state.query=e.target.value;state.page=1;render();const i=$('q');i.focus();i.setSelectionRange(pos,pos)}
+ if(id==='budgetRange'){state.budget=+e.target.value;render();$('budgetRange').focus()}
+ if(id==='spotIn'){state.spotQ=e.target.value;state.spotIdx=0;renderSpot()}});
+document.addEventListener('keydown',e=>{const spot=$('spot').classList.contains('open'),tg=e.target;
+ if((e.metaKey||e.ctrlKey)&&!e.altKey&&e.key.toLowerCase()==='k'){e.preventDefault();spot?closeSpot():modalOpen()||openSpot();return}
+ if(spot){if(e.key==='Escape'){e.preventDefault();closeSpot()}else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(spotRes.length){state.spotIdx=(state.spotIdx+(e.key==='ArrowDown'?1:-1)+spotRes.length)%spotRes.length;renderSpot()}}else if(e.key==='Enter'){e.preventDefault();runSpot(state.spotIdx)}else if(e.key==='Tab'){e.preventDefault();$('spotIn').focus()}return}
+ const m=$('modal');
+ if(m.classList.contains('open')){if(e.key==='Escape')closeModal();
+  if(e.key==='Tab'){const f=[...m.querySelectorAll('.dialog button,.dialog input,.dialog select,.dialog a[href]')].filter(x=>!x.disabled);if(!f.length)return;const a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}return}
+ if(popFor&&e.key==='Escape'){closePop(true);return}
+ if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(tg.tagName)){e.preventDefault();openSpot();return}
+ if((e.key==='Enter'||e.key===' ')&&tg.matches&&tg.matches('[role="button"][tabindex],tr[tabindex]')){e.preventDefault();tg.click();return}
+ if(tg.classList&&tg.classList.contains('tab')&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){const tabs=[...document.querySelectorAll('.tab')];let i=tabs.indexOf(tg);i=(i+((e.key==='ArrowLeft')===fa()?1:-1)+tabs.length)%tabs.length;go(tabs[i].dataset.go);tabs[i].focus()}});
+document.addEventListener('focusin',e=>{if(popFor&&!$('pop').contains(e.target)&&!popFor.contains(e.target))closePop()});
+addEventListener('resize',()=>{thumbInstant=true;thumb();placePop()});
+addEventListener('scroll',placePop,{passive:true});
+
+/* ---- boot (URL params for previews: view, lang, request, modal=key|project|keyshown|topup|invite, spot=1, q, filter, demo=loading|error, static) ---- */
+try{if(localStorage.getItem('ci-solid')==='1')document.documentElement.classList.add('solid')}catch(_){}
+const v0=Q.get('view')||location.hash.slice(1);state.view=R[v0]?v0:'overview';
+if(Q.get('q'))state.query=Q.get('q');if(Q.get('filter'))state.filter=Q.get('filter');
+setLang(state.lang);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{thumbInstant=true;thumb()});
+if(Q.get('request'))reqModal(Q.get('request'));
+const M0={key:keyModal,project:projectModal,topup:topupModal,invite:inviteModal}[Q.get('modal')];if(M0)M0();
+if(Q.get('modal')==='keyshown'){keyModal();keyShown('Staging · Docs','ci-demo-3f9a1c7be20d4a85e61f09c2')}
+if(Q.get('spot'))openSpot();
+})();
+</script>
+</body>
+</html>

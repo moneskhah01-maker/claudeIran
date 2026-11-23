@@ -1,0 +1,17 @@
+{
+  "name": "mehvar-landing",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "serve": "node server.mjs"
+  },
+  "devDependencies": {
+    "@iconify-json/solar": "^1.2.17",
+    "@iconify/utils": "^3.1.7",
+    "puppeteer-core": "^25.18.1",
+    "vite": "^8.3.8"
+  }
+}

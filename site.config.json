@@ -1,0 +1,7 @@
+{
+  "siteUrl": "https://claudeiran.com",
+  "siteName": "کلاود ایران",
+  "locale": "fa_IR",
+  "themeColor": "#E9E9EB",
+  "note": "siteUrl is the live domain since 2026-11-22; canonical, Open Graph, sitemap, robots and JSON-LD read it at build time."
+}

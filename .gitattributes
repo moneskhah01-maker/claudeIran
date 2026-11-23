@@ -1,0 +1,2 @@
+# shell scripts run in bash (Git Bash / the VPS): keep LF line endings on every checkout
+*.sh text eol=lf
