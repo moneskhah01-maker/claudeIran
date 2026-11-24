@@ -12,7 +12,7 @@ export const cleanPhone = v => toLatin(v).replace(/[\s\-().]/g, '');
 export const PHONE_OK = v => /^(?:\+98|0098|0)?9\d{9}$/.test(v) || /^(?:\+|00)(?!98)[1-9]\d{7,14}$/.test(v);
 export const EMAIL_OK = v => /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,24}$/.test(v);
 
-const RELIEF = '/img/relief-servants.webp';
+const RELIEF = '/img/relief-servants-600.webp';
 
 const markup = () => `
 <dialog class="ea" id="ea-dialog" aria-labelledby="ea-title" aria-describedby="ea-desc">

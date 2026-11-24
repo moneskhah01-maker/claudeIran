@@ -30,9 +30,9 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="preload" href="/fonts/Vazirmatn-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Vazirmatn-fa.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/Manrope-wght.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/img/capital-persepolis.webp" as="image" fetchpriority="high">
+<link rel="preload" as="image" media="(min-width: 761px)" imagesrcset="/img/capital-persepolis-480.webp 480w, /img/capital-persepolis-800.webp 800w, /img/capital-persepolis-1100.webp 1100w" imagesizes="(max-width:760px) 88vw, 540px" fetchpriority="high">
 <script type="module" src="/src/main.js"></script>
 </head>
 <body>
@@ -100,7 +100,7 @@
     </ul>
    </div>
    <div class="hero-visual rv" aria-label="سرستون هخامنشی تخت جمشید با کارت‌های نمونه رابط کاربری؛ داده‌ها نمایشی هستند">
-    <img class="statue" src="/img/capital-persepolis.webp" width="1300" height="1602" alt="سرستون سنگی دوسر اسب از تخت جمشید، دوره هخامنشی" fetchpriority="high">
+    <img class="statue" src="/img/capital-persepolis-800.webp" srcset="/img/capital-persepolis-480.webp 480w, /img/capital-persepolis-800.webp 800w, /img/capital-persepolis-1100.webp 1100w" sizes="(max-width:760px) 88vw, 540px" width="1300" height="1602" decoding="async" fetchpriority="low" alt="سرستون سنگی دوسر اسب از تخت جمشید، دوره هخامنشی">
     <div class="float f-conf" aria-hidden="true">
      <h3>بودجه ماهانه</h3>
      <div class="big num">68%</div>
@@ -287,7 +287,7 @@
     </ul>
    </div>
    <div class="guard-stage rv">
-    <img class="statue" src="/img/relief-guard.webp" width="900" height="1805" alt="نقش‌برجسته سنگی یک ملازم پارسی در صف ملل، تخت جمشید، دوره هخامنشی" loading="lazy">
+    <img class="statue" src="/img/relief-guard-400.webp" srcset="/img/relief-guard-300.webp 300w, /img/relief-guard-400.webp 400w, /img/relief-guard-600.webp 600w" sizes="(max-width:760px) 220px, 340px" loading="lazy" decoding="async" width="900" height="1805" alt="نقش‌برجسته سنگی یک ملازم پارسی در صف ملل، تخت جمشید، دوره هخامنشی" loading="lazy">
     <div class="keys-card">
      <div class="head"><h3>کلیدهای API</h3><span class="tag-demo">کلیدهای نمایشی</span></div>
      <table class="ktable">
@@ -364,7 +364,7 @@
  <section class="sec" id="how" style="padding-top:20px" aria-labelledby="how-h">
   <div class="wrap how-grid">
    <div class="alerts-stage rv">
-    <img class="relief" src="/img/relief-servants.webp" width="1100" height="1472" alt="نقش‌برجسته دو خدمتکار با ظرف خوراک و نوشیدنی، تخت جمشید، دوره هخامنشی" loading="lazy">
+    <img class="relief" src="/img/relief-servants-600.webp" loading="lazy" decoding="async" width="1100" height="1472" alt="نقش‌برجسته دو خدمتکار با ظرف خوراک و نوشیدنی، تخت جمشید، دوره هخامنشی" loading="lazy">
     <div class="alerts" role="group" aria-label="جزئیات یک درخواست؛ داده آزمایشی">
      <div class="head"><div><h3>جزئیات یک درخواست</h3><p>فرآیند مالی · داده آزمایشی</p></div><span class="seg-mini" aria-hidden="true"><span class="on en">req_7f3a…</span></span></div>
      <div class="arow"><span class="itile"><svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg></span><div><h4>رزرو اعتبار</h4><p>نرخ توکن و سقف هزینه در لحظه ثبت شد.</p></div><span class="pill pill-grey">ثبت شد</span></div>
@@ -390,7 +390,7 @@
 
  <!-- 07 DEVELOPERS: dark panel -->
  <section class="dev dark" id="developers" aria-labelledby="dev-h">
-  <img class="statue" src="/img/capital-persepolis.webp" width="1300" height="1602" alt="" aria-hidden="true" loading="lazy">
+  <img class="statue" src="/img/capital-persepolis-800.webp" srcset="/img/capital-persepolis-480.webp 480w, /img/capital-persepolis-800.webp 800w, /img/capital-persepolis-1100.webp 1100w" sizes="(max-width:760px) 120vw, 60vw" width="1300" height="1602" alt="" aria-hidden="true" loading="lazy" decoding="async">
   <div class="wrap">
    <div class="dev-grid">
     <div class="rv">
@@ -570,7 +570,7 @@
    <nav class="f-col" aria-label="محصول"><h3>محصول</h3><a href="#features">مزیت‌ها</a><a href="#dashboard">داشبورد</a><a href="#how">روش کار</a><a href="#products">مسیر توسعه</a></nav>
    <nav class="f-col" aria-label="اطلاعات"><h3>اطلاعات</h3><a href="/blog/">بلاگ</a><a href="#developers">توسعه‌دهندگان</a><a href="#faq">سؤالات متداول</a><a href="#early-access">دسترسی زودهنگام</a><a href="/console.html">کنسول تعاملی</a></nav>
    <a class="f-console" href="/console.html">
-    <img class="f-relief" src="/img/relief-guard.webp" width="900" height="1805" alt="" aria-hidden="true" loading="lazy">
+    <img class="f-relief" src="/img/relief-guard-300.webp" decoding="async" width="900" height="1805" alt="" aria-hidden="true" loading="lazy">
     <span class="f-console-top"><span class="eyebrow"><span class="dot" aria-hidden="true"></span>کنسول تعاملی <span class="en">LIVE DEMO</span></span><span class="go" aria-hidden="true"><svg class="ico flip"><use href="#i-arrow-ur"/></svg></span></span>
     <b>پیش از شروع پایلوت، کنسول را امتحان کنید.</b>
     <small>پروژه بسازید، کلید آزمایشی بگیرید و هزینهٔ هر درخواست را تا سطح توکن دنبال کنید؛ همه با دادهٔ نمونه.</small>

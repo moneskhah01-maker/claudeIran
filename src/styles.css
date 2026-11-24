@@ -1,6 +1,6 @@
 /* ClaudeIran — Keel visual language. Only change from Keel's palette: Primary -> Terracotta #D97757 (see docs/DESIGN_SYSTEM_FA.md) */
 @font-face{font-family:"Manrope";src:url("/fonts/Manrope-wght.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+2000-206F,U+2190-21FF,U+2212,U+2215}
-@font-face{font-family:"Vazirmatn";src:url("/fonts/Vazirmatn-wght.woff2") format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Vazirmatn";src:url("/fonts/Vazirmatn-fa.woff2") format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0020-007E,U+00A0-00BB,U+0600-06FF,U+200C-200F,U+2010-2027,U+2066-2069,U+2190-2193,U+FDFC}
 :root{
  /* Keel palette (primary replaced) */
  --primary:#D97757;        /* replaces Keel's primary */
@@ -1010,3 +1010,16 @@ a.tag-demo:hover{background:#fff;border-color:var(--primary)}
  #how .op > div{padding:8px 12px 10px}
  .access .checks li{padding:10px 12px}
 }
+
+/* ==========================================================================
+   Performance layer (2026-11-24, GTmetrix/Lighthouse pass)
+   1. The hero copy is the LCP element: it must paint on the first frame, so it never
+      starts at opacity 0; it only rises into place (transform does not delay LCP).
+   2. Sections below the fold skip style/layout/paint until they approach the viewport.
+      Sections with sticky children (#products, #how) are left out on purpose.
+   ========================================================================== */
+.js .hero .rv{opacity:1;filter:none;transform:none;animation:hero-rise .9s var(--ease) both}
+.js .hero .rv.hero-visual{animation-delay:.08s}
+@keyframes hero-rise{from{transform:translateY(16px)}}
+@media (prefers-reduced-motion:reduce){.js .hero .rv{animation:none}}
+.strip,#features,.access,#dashboard,#developers,#faq,.join,.footer,.blog-latest{content-visibility:auto;contain-intrinsic-size:auto 900px}

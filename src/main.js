@@ -57,7 +57,8 @@ initEarlyAccess({ source: 'header', triggers: 'a[href="#early-access"], a[href="
  function navTo(a){if(!np||!a||!a.offsetWidth)return;np.style.setProperty('--nx',a.offsetLeft+'px');np.style.setProperty('--nw',a.offsetWidth+'px');np.style.setProperty('--no','1')}
  var navHov=null;
  function navCur(){if(np)navTo(navHov||np.querySelector('a[aria-current="true"]'))}
- if(np){np.classList.add('ready');navCur();
+ /* measure after the first frame: reading offsetLeft during start-up would force a full-page layout inside the script task */
+ if(np){np.classList.add('ready');requestAnimationFrame(function(){requestAnimationFrame(navCur)});
   np.querySelectorAll('a').forEach(function(a){a.addEventListener('pointerenter',function(){navHov=a;navTo(a)});a.addEventListener('focus',function(){navTo(a)})});
   np.addEventListener('pointerleave',function(){navHov=null;navCur()});np.addEventListener('focusout',function(e){if(!np.contains(e.relatedTarget))navCur()});
   addEventListener('resize',navCur);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(navCur);}
@@ -342,10 +343,12 @@ initEarlyAccess({ source: 'header', triggers: 'a[href="#early-access"], a[href="
     scrollTo({ top: scrollY + r.top + offset0 - top + travel * (i / (n - 1)), behavior: reduce ? 'auto' : 'smooth' });
   }));
   addEventListener('scroll', onScroll, { passive: true });
-  let rt = 0, lastW = innerWidth, lastH = innerHeight;
+  // innerWidth/innerHeight force a full layout in Chrome: read them after the first frame, not at start-up
+  let rt = 0, lastW = 0, lastH = 0;
+  requestAnimationFrame(() => { lastW = innerWidth; lastH = innerHeight; });
   addEventListener('resize', () => { if (innerWidth === lastW && Math.abs(innerHeight - lastH) < 80) return; lastW = innerWidth; lastH = innerHeight; clearTimeout(rt); rt = setTimeout(layout, 150); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
-  layout();
+  requestAnimationFrame(layout); // measure after the first paint, not inside the start-up task
 })();
 
 /* ----------------------------------------------------------
@@ -373,7 +376,7 @@ initEarlyAccess({ source: 'header', triggers: 'a[href="#early-access"], a[href="
   }
   addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
   addEventListener('resize', update);
-  update();
+  requestAnimationFrame(update);
 })();
 
 /* ----------------------------------------------------------

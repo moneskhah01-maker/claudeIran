@@ -27,6 +27,8 @@ if [ -n "$PREV" ] && [ -d "$PREV/data" ] && [ ! -L "$PREV/data" ] && [ -f "$PREV
 fi
 tar -xzf /root/claudeiran.tgz -C "$R" --strip-components=1
 rm -f /root/claudeiran.tgz
+# precompressed copies for Nginx gzip_static (static files are served by Nginx, HTML/API by Node)
+find "$R/dist" -type f \( -name '*.js' -o -name '*.css' -o -name '*.svg' -o -name '*.xml' -o -name '*.json' -o -name '*.webmanifest' -o -name '*.txt' -o -name '*.html' \) -size +1k -exec gzip -k -9 -f {} +
 ln -sfn /var/lib/claudeiran "$R/data"
 chown -R claudeiran:claudeiran "$R" /var/lib/claudeiran
 chmod 750 /var/lib/claudeiran

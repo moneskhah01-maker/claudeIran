@@ -122,7 +122,7 @@ ${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="alternate" type="application/rss+xml" title="بلاگ ${esc(BRAND)}" href="${SITE}/blog/feed.xml">
-<link rel="preload" href="/fonts/Vazirmatn-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Vazirmatn-fa.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/Manrope-wght.woff2" as="font" type="font/woff2" crossorigin>
 ${extra}<script type="module" src="/src/blog.js"></script>
 </head>`;
@@ -158,7 +158,7 @@ function footer() {
    <nav class="f-col" aria-label="محصول"><h3>محصول</h3><a href="/#features">مزیت‌ها</a><a href="/#dashboard">داشبورد</a><a href="/#how">روش کار</a><a href="/#products">مسیر توسعه</a></nav>
    <nav class="f-col" aria-label="اطلاعات"><h3>اطلاعات</h3><a href="/blog/">بلاگ</a><a href="/#developers">توسعه‌دهندگان</a><a href="/#faq">سؤالات متداول</a><a href="/#early-access" data-ea>دسترسی زودهنگام</a></nav>
    <a class="f-console" href="/console.html">
-    <img class="f-relief" src="/img/relief-guard.webp" width="900" height="1805" alt="" aria-hidden="true" loading="lazy">
+    <img class="f-relief" src="/img/relief-guard-300.webp" decoding="async" width="900" height="1805" alt="" aria-hidden="true" loading="lazy">
     <span class="f-console-top"><span class="eyebrow"><span class="dot" aria-hidden="true"></span>کنسول تعاملی <span class="en">LIVE DEMO</span></span><span class="go" aria-hidden="true"><svg class="ico flip"><use href="#i-arrow-ur"/></svg></span></span>
     <b>پیش از شروع پایلوت، کنسول را امتحان کنید.</b>
     <small>پروژه بسازید، کلید آزمایشی بگیرید و هزینهٔ هر درخواست را تا سطح توکن دنبال کنید؛ همه با دادهٔ نمونه.</small>
@@ -175,7 +175,7 @@ function footer() {
 
 function ctaBand(h = 'وقتی راه‌اندازی شد،<br><b>اول به شما خبر می‌دهیم.</b>') {
   return `<section class="post-cta" aria-labelledby="cta-h">
-  <img src="/img/relief-servants.webp" width="1100" height="1472" alt="" aria-hidden="true" loading="lazy">
+  <img src="/img/relief-servants-600.webp" decoding="async" width="1100" height="1472" alt="" aria-hidden="true" loading="lazy">
   <div class="post-cta-copy">
    <span class="eyebrow"><span class="dot" aria-hidden="true"></span>دسترسی زودهنگام <span class="en">EARLY ACCESS</span></span>
    <h2 id="cta-h">${h}</h2>
@@ -277,7 +277,7 @@ function indexPage(posts) {
 <main id="main">
  <section class="wrap blog-featured" aria-label="مقالهٔ ستون">
   <a class="feature" href="/blog/${featured.slug}/">
-   <span class="feature-art" aria-hidden="true"><img src="/img/capital-persepolis.webp" width="1300" height="1602" alt="" fetchpriority="high"></span>
+   <span class="feature-art" aria-hidden="true"><img src="/img/capital-persepolis-800.webp" srcset="/img/capital-persepolis-480.webp 480w, /img/capital-persepolis-800.webp 800w, /img/capital-persepolis-1100.webp 1100w" sizes="(max-width:1020px) 70vw, 440px" width="1300" height="1602" alt="" fetchpriority="high" decoding="async"></span>
    <span class="feature-copy">
     <span class="chip chip-dark"><span class="dot" aria-hidden="true"></span>نقطهٔ شروع · ${esc(featured.cluster)}</span>
     <h2>${tt(featured.title)}</h2>
