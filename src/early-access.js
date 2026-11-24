@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------
    Early-access dialog (header button, announcement bar, mobile menu, sticky CTA,
-   blog CTAs) → POST /api/waitlist with source "header" or "blog".
+   blog and services CTAs) → POST /api/waitlist with source "header", "blog" or "services".
    Three fields: full name, email, mobile. Without JavaScript every trigger is a
    plain link to the full form at /#early-access, so nothing is lost.
 ---------------------------------------------------------- */

@@ -34,12 +34,13 @@ const TYPES = {
   '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg',
   '.webp': 'image/webp', '.woff2': 'font/woff2', '.ttf': 'font/ttf', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8',
   '.xml': 'application/xml; charset=utf-8', '.webmanifest': 'application/manifest+json; charset=utf-8',
+  '.md': 'text/markdown; charset=utf-8', '.zip': 'application/zip', '.mp4': 'video/mp4', '.webm': 'video/webm',
 };
-const COMPRESSIBLE = new Set(['.html', '.js', '.css', '.json', '.svg', '.ttf', '.txt', '.xml', '.webmanifest']);
+const COMPRESSIBLE = new Set(['.html', '.js', '.css', '.json', '.svg', '.ttf', '.txt', '.xml', '.webmanifest', '.md']);
 const SEC = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'X-Frame-Options': 'SAMEORIGIN' };
 
 const ROLES = new Set(['developer', 'founder', 'product', 'it', 'finance', 'other']);
-const SOURCES = new Set(['section', 'header', 'blog']);
+const SOURCES = new Set(['section', 'header', 'blog', 'services']);
 const EMAIL = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,24}$/;
 const IR_MOBILE = /^(?:\+98|0098|0)?(9\d{9})$/;
 const INTL = /^(?:\+|00)((?!98)[1-9]\d{7,14})$/;
