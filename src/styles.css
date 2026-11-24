@@ -1023,3 +1023,19 @@ a.tag-demo:hover{background:#fff;border-color:var(--primary)}
 @keyframes hero-rise{from{transform:translateY(16px)}}
 @media (prefers-reduced-motion:reduce){.js .hero .rv{animation:none}}
 .strip,#features,.access,#dashboard,#developers,#faq,.join,.footer,.blog-latest{content-visibility:auto;contain-intrinsic-size:auto 900px}
+/* ===== sticky navbar (src/sticky-nav.js moves .nav and #mnav into .nav-float once the bar leaves the top) ===== */
+html{scroll-padding-top:96px}
+.nav-float{position:fixed;z-index:115;top:10px;left:50%;translate:-50% 0;width:min(100vw - 40px,calc(var(--wrap) + 36px));animation:navIn .55s var(--out) both}
+.nav-float .nav{padding:8px 10px 8px 18px;border-radius:20px;background:rgba(236,236,239,.76);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 24px 48px -28px rgba(24,28,37,.45),0 0 0 1px rgba(24,28,37,.04)}
+.nav-float .navpill{background:rgba(255,255,255,.55)}
+.nav-float .nav-end .btn{min-height:44px}
+.nav-float .menu-btn{background:rgba(255,255,255,.75)}
+.nav-float .mnav.open{margin-top:8px;max-height:calc(100dvh - 110px);overflow:auto;box-shadow:0 30px 60px -30px rgba(24,28,37,.45)}
+@keyframes navIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.nav-float{animation:none}}
+@media (max-width:760px){
+ html{scroll-padding-top:84px}
+ .nav-float{top:8px;width:calc(100vw - 16px)}
+ .nav-float .nav{padding:6px 6px 6px 14px;border-radius:18px}
+}
+

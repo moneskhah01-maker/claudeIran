@@ -2,8 +2,10 @@
 import './styles.css';
 import './blog.css';
 import { initEarlyAccess, cleanPhone, PHONE_OK } from './early-access.js';
+import { initStickyNav } from './sticky-nav.js';
 
 initEarlyAccess({ source: 'header', triggers: 'a[href="#early-access"], a[href="/#early-access"]' });
+initStickyNav();
 (function(){
  'use strict';
  var root=document.documentElement; root.classList.add('js');

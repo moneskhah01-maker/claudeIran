@@ -1,0 +1,299 @@
+/* «خدمات و آموزش» — /services/ and /services/skills/<slug>/.
+   Same visual language as the landing: eyebrow + light/bold display headings, gradient cards with an
+   icon tile and an outlined number (.principle), the dark relief section with a white tabbed card
+   (.dev, .code-card, reused as is), glass surfaces and the terracotta glow. Builds on styles.css + blog.css. */
+
+.inline-link{color:var(--ink);font-weight:650;text-decoration:underline;text-decoration-color:var(--p-45);text-underline-offset:5px}
+.inline-link:hover{text-decoration-color:var(--primary)}
+[data-copy-url].is-done,[data-copy-panel].is-done{box-shadow:0 0 0 3px var(--p-30)}
+
+/* ---------- hero ---------- */
+.is-services .page-hero{padding-bottom:40px}
+.svc-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:48px;align-items:center;margin-top:40px}
+.svc-hero .crumbs{margin-bottom:20px}
+/* two deliberate lines, light then bold, like the landing hero; each line stays whole on desktop */
+.svc-hero h1{margin:16px 0 0;font-weight:300;font-size:clamp(34px,3.7vw,54px);line-height:1.32;letter-spacing:-.01em}
+.svc-hero h1 .h1-l{display:block}
+.svc-hero h1 b{font-weight:800}
+.svc-hero h1 .en{font-family:"Manrope",sans-serif;font-weight:300;letter-spacing:-.045em}
+@media (min-width:1021px){.svc-hero h1 span.h1-l{white-space:nowrap}}
+.svc-hero h1 b.h1-l{text-wrap:balance}
+.svc-hero .lead{max-width:580px;margin-top:20px}
+.svc-hero .lead b{color:var(--ink);font-weight:700}
+.svc-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.svc-actions .btn .ico{width:16px;height:16px}
+.svc-actions .btn-line .ico{width:13px;height:13px;fill:currentColor;stroke:none}
+.svc-proof{list-style:none;display:flex;flex-wrap:wrap;gap:8px 22px;margin:28px 0 0;padding:0}
+.svc-proof li{display:inline-flex;align-items:center;gap:8px;font-size:var(--fs-xs);font-weight:600;color:var(--text-2)}
+.svc-proof .ico{width:15px;height:15px;color:var(--primary);stroke-width:2.4}
+.svc-meta{margin:18px 0 0;font-size:13px;color:var(--text-2)}
+
+/* hero art: a glass SKILL.md card on the terracotta glow, with two floating labels */
+.svc-art{position:relative;min-height:460px;display:grid;place-items:center;isolation:isolate;padding:40px 0}
+.svc-art::before{content:"";position:absolute;z-index:-1;inset:0 6%;background:radial-gradient(closest-side,rgba(217,119,87,.34),rgba(217,119,87,0))}
+.file-card{position:relative;width:min(100%,470px);border-radius:24px;overflow:hidden;background:rgba(255,255,255,.8);-webkit-backdrop-filter:saturate(170%) blur(18px);backdrop-filter:saturate(170%) blur(18px);border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1px 0 #fff,0 50px 90px -40px rgba(24,28,37,.5),0 0 0 1px rgba(24,28,37,.04)}
+.art-chip{position:absolute;z-index:2;display:flex;align-items:center;gap:12px;border-radius:18px;background:rgba(255,255,255,.94);-webkit-backdrop-filter:saturate(170%) blur(16px);backdrop-filter:saturate(170%) blur(16px);border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 0 #fff,0 24px 50px -24px rgba(24,28,37,.45);white-space:nowrap}
+.art-chip-a{bottom:18px;inset-inline-end:-6px;padding:10px 16px 10px 12px}
+.art-chip-a .pr-ic{width:42px;height:42px;border-radius:13px}
+.art-chip-a .pr-ic .ico{width:19px;height:19px}
+.art-chip-a b{display:block;font-size:var(--fs-sm);font-weight:750;line-height:1.6}
+.art-chip-a small{display:block;font-size:11.5px;color:var(--secondary)}
+.art-chip-b{top:2px;inset-inline-end:10%;padding:9px 14px;font:700 12px "Manrope",sans-serif;color:var(--ink)}
+.art-chip-b .dot{width:7px;height:7px}
+.file-top{display:flex;align-items:center;gap:12px;min-height:54px;padding:8px 10px 8px 16px;border-bottom:1px solid rgba(24,28,37,.07)}
+.file-dots{display:inline-flex;gap:6px}
+.file-dots i{width:9px;height:9px;border-radius:50%;background:#D5D5DB}
+.file-dots i:first-child{background:var(--primary)}
+.file-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:650 12.5px "Manrope",sans-serif;color:var(--ink)}
+.file-lines{font:700 11px "Manrope",sans-serif;color:var(--secondary);padding-inline-end:6px}
+.file-top .copy-btn{height:36px}
+.file-body{margin:0;padding:16px 18px 26px;font:500 12.5px/1.9 var(--mono);color:#4A4F5A;white-space:pre;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 62%,transparent);mask-image:linear-gradient(180deg,#000 62%,transparent)}
+.pv-h{color:var(--ink);font-weight:700}
+.pv-k{font-style:normal;color:var(--primary-deep);font-weight:700}
+.pv-m{font-style:normal;color:#A3A6AE}
+
+/* ---------- sections ---------- */
+.svc-sec{padding:110px 0 30px}
+.svc-sec .h-display{margin-inline:auto;max-width:900px}
+.svc-head{text-align:center}
+.svc-head .lead,.svc-sec.center .lead{margin-inline:auto;max-width:660px;text-wrap:balance}
+
+/* area filter: the landing's segmented control */
+.seg{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:2px;margin-top:34px;padding:4px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+.seg button{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 16px;border:0;border-radius:10px;background:transparent;font-size:var(--fs-sm);font-weight:600;color:var(--text-2);transition:background .2s,color .2s}
+.seg button:hover{color:var(--ink);background:rgba(255,255,255,.8)}
+.seg button .num{font-size:var(--fs-xs);color:var(--secondary)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--white);box-shadow:0 6px 14px -6px rgba(24,28,37,.55)}
+.seg button[aria-pressed="true"] .num{color:var(--on-dark-2)}
+
+/* skill cards: icon tile + outlined number + inset preview of the file */
+.sk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:30px;text-align:start}
+.sk-card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:20px;padding:22px;border-radius:28px;overflow:hidden;isolation:isolate;transition:transform .6s var(--spring),box-shadow .4s var(--ease)}
+.sk-card{background:linear-gradient(170deg,#FFFFFF 0%,#F7F6F6 52%,#F4ECE8 100%);border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(24,28,37,.05),0 30px 60px -42px rgba(70,44,30,.4)}
+.sk-card::before{content:"";position:absolute;z-index:-1;inset-block-end:-50%;inset-inline-start:-25%;width:80%;aspect-ratio:1;background:radial-gradient(closest-side,rgba(217,119,87,.2),rgba(217,119,87,0));transition:transform 1s var(--ease)}
+.sk-card[hidden]{display:none}
+.sk-body{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.sk-body .pr-top{width:100%}
+.sk-n{font-family:"Manrope",sans-serif;font-size:40px;font-weight:300;letter-spacing:-.05em;line-height:1;color:transparent;-webkit-text-stroke:1px rgba(24,28,37,.22);transition:-webkit-text-stroke-color .4s}
+.sk-card h3{margin:24px 0 0;font-size:var(--fs-md);font-weight:750;line-height:1.55}
+.sk-line{margin-top:4px;font-size:var(--fs-sm);line-height:1.85;color:var(--secondary)}
+.sk-go{margin-top:auto;padding-top:20px;display:inline-flex;align-items:center;gap:8px;font-size:var(--fs-sm);font-weight:700}
+.sk-go .ico{width:14px;height:14px;transition:translate .3s var(--spring)}
+.sk-viz{align-self:stretch;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:12px;border-radius:20px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 0 #fff,0 12px 26px -20px rgba(24,28,37,.3)}
+.sk-file{display:flex;justify-content:space-between;gap:10px;padding:0 4px 2px;font:700 11px "Manrope",sans-serif;letter-spacing:.03em;color:var(--secondary)}
+.sk-row{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:12px;background:#fff;box-shadow:0 0 0 1px rgba(24,28,37,.05);font-size:12.5px;font-weight:600;line-height:1.75;color:var(--ink)}
+.sk-row i{width:6px;height:6px;margin-top:.7em;border-radius:50%;flex:none;background:var(--primary);box-shadow:0 0 0 3px var(--p-16)}
+.sk-row span{min-width:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
+.sk-card:hover{box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(217,119,87,.25),0 40px 70px -40px rgba(70,44,30,.55)}
+.sk-card:hover::before{transform:scale(1.3)}
+.sk-card:hover .pr-ic{transform:rotate(-8deg) scale(1.08)}
+.sk-card:hover .sk-n{-webkit-text-stroke-color:rgba(193,95,60,.7)}
+.sk-card:hover .sk-go .ico{translate:-3px -3px}
+.sk-card:focus-visible{outline-offset:4px;border-radius:28px}
+
+/* install: .dev + .code-card from the landing, with a step list in the first tab */
+.svc-install{margin-top:80px}
+.svc-install .code-tabs{flex-wrap:wrap}
+.svc-install .copy-btn[hidden]{display:none}
+.code-body .inst-steps{padding:2px}
+.inst-steps ol{list-style:none;margin:0 0 24px;padding:0;display:grid;gap:16px;counter-reset:st}
+.inst-steps li{counter-increment:st;display:grid;grid-template-columns:38px minmax(0,1fr);column-gap:14px;align-items:start}
+.inst-steps li::before{content:counter(st,persian);grid-row:span 2;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);font-size:var(--fs-sm);font-weight:800;color:var(--ink)}
+.inst-steps li b{font-size:15px;font-weight:750;line-height:1.7;color:var(--ink)}
+.inst-steps li span{font-size:var(--fs-sm);line-height:1.85;color:var(--secondary)}
+.inst-steps .btn .ico{width:16px;height:16px}
+.code-body pre code{font:inherit}
+
+/* videos: dark thumbnails tinted by topic, episode label, glass play button */
+.vid-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:56px;text-align:start}
+.vid{--tone:217,119,87;display:flex;flex-direction:column;padding:8px;border-radius:26px;background:linear-gradient(170deg,#FFFFFF 0%,#F7F6F6 60%,#F4ECE8 100%);border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(24,28,37,.05),0 30px 60px -42px rgba(70,44,30,.4)}
+.vid[data-tone="2"]{--tone:124,138,236}
+.vid[data-tone="3"]{--tone:226,114,150}
+.vid[data-tone="4"]{--tone:64,178,160}
+.vid[data-tone="5"]{--tone:233,170,80}
+.vid-thumb{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:16/9;margin:0;padding:0;border:0;border-radius:20px;overflow:hidden;isolation:isolate;color:#fff;background:radial-gradient(75% 95% at 88% 6%,rgba(var(--tone),.6),rgba(var(--tone),0) 62%),radial-gradient(60% 80% at 6% 100%,rgba(var(--tone),.2),rgba(var(--tone),0) 60%),linear-gradient(160deg,#262C3A 0%,#161A23 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.vid-thumb::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:26px 26px;-webkit-mask-image:radial-gradient(75% 85% at 50% 45%,#000,transparent 85%);mask-image:radial-gradient(75% 85% at 50% 45%,#000,transparent 85%)}
+.vid-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
+.vid-n{position:absolute;z-index:-1;bottom:-22px;inset-inline-end:8px;font:200 124px/1 "Manrope",sans-serif;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.16);transition:-webkit-text-stroke-color .4s}
+.vid-ep{position:absolute;top:14px;inset-inline-start:16px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.78)}
+.vid-play{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 16px 30px -14px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .5s var(--spring),background .3s}
+.vid:not(.is-soon) .vid-play{background:#fff;color:var(--ink);border-color:#fff}
+.vid-play .ico{width:22px;height:22px;fill:currentColor;stroke:none;margin-left:3px}
+.vid-tag{position:absolute;bottom:14px;inset-inline-start:14px;display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:var(--r-pill);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:11.5px;font-weight:700;color:#fff}
+.vid-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:rgb(var(--tone));box-shadow:0 0 0 3px rgba(var(--tone),.3)}
+.vid-state{position:absolute;top:11px;inset-inline-end:11px;padding:4px 11px;border-radius:var(--r-pill);background:rgba(255,255,255,.94);font-size:11.5px;font-weight:700;color:var(--ink)}
+.is-soon .vid-state{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.vid-body{display:grid;gap:6px;padding:16px 14px 14px}
+.vid-meta{font-size:var(--fs-xs);font-weight:600;color:var(--secondary)}
+.vid h3{margin:0;font-size:var(--fs-base);font-weight:750;line-height:1.7;text-wrap:balance}
+.vid p{margin:0;font-size:13.5px;line-height:1.85;color:var(--secondary)}
+.vid:hover .vid-play{transform:scale(1.08)}
+.vid:hover .vid-n{-webkit-text-stroke-color:rgba(var(--tone),.75)}
+.video-frame{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:20px;background:#000}
+.vid-note{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 10px;margin:36px 0 0;font-size:var(--fs-sm);color:var(--text-2)}
+.vid-note .ico{width:17px;height:17px;color:var(--primary)}
+
+/* FAQ + closing CTA */
+.svc-faq{padding-top:110px;interpolate-size:allow-keywords}
+.svc-faq .lead{margin-top:18px}
+.svc-faq .qa details::details-content{block-size:0;overflow:hidden;opacity:0;transition:block-size .5s var(--ease),opacity .4s var(--ease),content-visibility .5s allow-discrete}
+.svc-faq .qa details[open]::details-content{block-size:auto;opacity:1}
+.svc-faq .qa summary{transition:color .25s var(--ease)}
+.svc-faq .qa summary:hover{color:var(--primary-deep)}
+.svc-cta{padding-bottom:100px}
+
+/* ---------- skill page ---------- */
+.cv-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:48px}
+.cv-card{position:relative;padding:22px 22px 20px;border-radius:24px;overflow:hidden;isolation:isolate;background:linear-gradient(170deg,#FFFFFF 0%,#F7F6F6 52%,#F4ECE8 100%);border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(24,28,37,.05),0 30px 60px -42px rgba(70,44,30,.4)}
+.cv-n{display:block;margin-bottom:20px;font:300 34px/1 "Manrope",sans-serif;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1px rgba(24,28,37,.24)}
+.cv-card p{margin:0;font-size:15px;font-weight:650;line-height:1.85}
+
+/* centered like every other section head; the request card sits under it */
+.svc-try .try-card{max-width:820px;margin:44px auto 0}
+.try-card{position:relative;padding:14px;border-radius:28px;isolation:isolate;overflow:hidden;background:radial-gradient(70% 90% at 100% 0%,rgba(226,140,108,.32),rgba(226,140,108,0) 65%),radial-gradient(70% 90% at 0% 100%,rgba(150,170,235,.25),rgba(150,170,235,0) 65%),linear-gradient(165deg,#F4EFEB,#ECE9F0);box-shadow:0 40px 80px -46px rgba(24,28,37,.45)}
+.try-row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.9);box-shadow:0 12px 26px -20px rgba(24,28,37,.35);font:inherit;font-size:15px;line-height:1.85;color:var(--ink);text-align:start;cursor:pointer}
+.try-row+.try-row{margin-top:10px}
+.try-q{flex:1;min-width:0}
+.try-copy{display:inline-flex;align-items:center;gap:6px;flex:none;height:32px;padding:0 11px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:700;color:var(--secondary);transition:color .2s,border-color .2s,background .2s}
+.try-copy .ico{width:14px;height:14px}
+.try-row:hover .try-copy,.try-row:focus-visible .try-copy{color:var(--ink);border-color:var(--ink)}
+.try-row.is-done .try-copy{background:var(--ink);border-color:var(--ink);color:#fff}
+.try-foot{display:block;margin-top:12px;padding:0 6px;font-size:var(--fs-xs);color:var(--text-2)}
+
+.svc-source-wrap{padding-top:100px}
+.svc-head-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:end;margin-bottom:24px;text-align:start}
+.svc-head-row h2{margin:14px 0 0;font-size:clamp(26px,2.6vw,36px);font-weight:800;line-height:1.45}
+.svc-head-row p{margin:0;font-size:15px;line-height:1.95;color:var(--text-2)}
+.svc-head-row code{font-family:var(--mono);font-size:.86em;direction:ltr;unicode-bidi:isolate;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:.1em .4em}
+.svc-related{padding-bottom:0}
+.svc-related .related-head h2{margin-top:14px}
+.svc-related .sk-grid{margin-top:0}
+
+/* full text: a calm code card with header actions, line numbers and a plain "show the rest" bar */
+.src-card{border-radius:22px;overflow:hidden;background:var(--ink);box-shadow:0 40px 80px -46px rgba(24,28,37,.7),0 0 0 1px rgba(24,28,37,.08)}
+.src-top{display:flex;align-items:center;gap:12px;min-height:58px;padding:8px 10px 8px 18px;border-bottom:1px solid var(--dark-line);background:#1F2430}
+.src-top .file-dots i{background:#3A4050}
+.src-top .file-dots i:first-child{background:var(--primary)}
+.src-name{font:650 13px "Manrope",sans-serif;color:#E6E7EA;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.src-lines{flex:none;font:600 11.5px "Manrope",sans-serif;color:var(--on-dark-2);padding:3px 9px;border-radius:var(--r-pill);background:rgba(255,255,255,.06)}
+.src-actions{margin-left:auto;display:flex;gap:6px;flex:none}
+.src-btn{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px;border-radius:10px;border:1px solid var(--dark-line);background:var(--dark-2);color:#DADCE1;font:650 12px "Manrope",sans-serif;transition:background .2s,color .2s,border-color .2s}
+.src-btn:hover{background:#2C3240;color:#fff}
+.src-btn.is-done{border-color:var(--primary);color:#fff;box-shadow:none}
+.src-btn .ico{width:14px;height:14px}
+.src-pre{margin:0;padding:16px 22px 18px 0;font:500 13px/1.85 var(--mono);color:#C9CCD3;tab-size:2}
+.src-pre code{display:block;font:inherit;counter-reset:ln}
+.src-pre .l{display:block;min-height:1.85em;padding-left:64px;text-indent:-64px;white-space:pre-wrap;overflow-wrap:anywhere;counter-increment:ln}
+.src-pre .l::before{content:counter(ln);display:inline-block;width:46px;margin-right:18px;text-indent:0;text-align:right;color:#4B5263;-webkit-user-select:none;user-select:none}
+.src-pre .l.h{color:#fff;font-weight:700}
+.src-pre .l.m{color:#6B7180}
+.src-pre .k{font-style:normal;font-weight:700;color:#E8957A}
+.src-more{display:none}
+/* height is animated by JS (eased, with the bar held under the pointer); the shade fades instead of snapping */
+.src-body{position:relative;overflow-anchor:none}
+.js .src-pre{overflow:hidden}
+.js .src-card:not(.open) .src-pre{max-height:calc(18 * 1.85em + 34px)}
+.src-shade{display:none}
+.js .src-shade{display:block;position:absolute;inset-inline:0;bottom:0;height:150px;background:linear-gradient(180deg,rgba(24,28,37,0),rgba(24,28,37,.85) 70%,var(--ink));pointer-events:none;transition:opacity .6s var(--ease)}
+.js .src-card.open .src-shade{opacity:0}
+.js .src-more{display:flex;width:100%;align-items:center;justify-content:center;gap:10px;min-height:54px;border:0;border-top:1px solid var(--dark-line);background:#1F2430;color:#E6E7EA;font:inherit;font-size:var(--fs-sm);font-weight:650;transition:background .2s,color .2s}
+.js .src-more:hover{background:#262C39;color:#fff}
+.src-more .ico{width:16px;height:16px;stroke-width:2.2;transition:rotate .45s var(--spring)}
+.src-card.open .src-more .ico{rotate:180deg}
+.src-card :focus-visible{outline-color:var(--white)}
+
+/* gloss + edge glow (same contract as the landing: JS adds .glow on fine pointers; the sheen follows --mx/--my) */
+.sk-card.glow,.cv-card.glow{background-image:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,calc(var(--sheen)*var(--glow))),rgba(255,255,255,0) 50%),linear-gradient(170deg,#FFFFFF 0%,#F7F6F6 52%,#F4ECE8 100%)}
+.vid.glow{background-image:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,calc(var(--sheen)*var(--glow))),rgba(255,255,255,0) 50%),linear-gradient(170deg,#FFFFFF 0%,#F7F6F6 60%,#F4ECE8 100%)}
+.sk-card.glow:hover,.vid.glow:hover,.cv-card.glow:hover{box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(217,119,87,.25),0 40px 70px -40px rgba(70,44,30,.55)}
+.sk-card.glow:hover{translate:0 -4px}
+.file-card.glow,.art-chip.glow,.try-row.glow{--sheen:.9}
+.try-row.glow:hover{translate:0 -2px}
+.art-chip.glow:hover{translate:none;scale:1.04}
+.cv-card:hover .cv-n{-webkit-text-stroke-color:rgba(193,95,60,.7)}
+.cv-n{transition:-webkit-text-stroke-color .4s}
+/* the hero file card tilts toward the pointer, like the landing's dashboard */
+.file-card{transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .5s var(--ease),--glow .35s var(--ease),box-shadow .35s var(--ease),translate .45s var(--spring)}
+.file-card.glow:hover{translate:none}
+.art-chip{animation:drift 7s ease-in-out infinite}
+.art-chip-b{animation-delay:-3.5s}
+@media (prefers-reduced-motion:reduce){.art-chip{animation:none}}
+
+/* sliding indicators: the nav pill (white) and the area filter (ink), like the landing */
+.js .navpill.ready a[aria-current="page"]{background:transparent;box-shadow:none}
+.js .navpill a[aria-current="page"]::after{transform:scale(1)}
+.seg{position:relative;isolation:isolate}
+.seg::before{content:"";position:absolute;z-index:-1;top:4px;bottom:4px;left:var(--tx,4px);width:var(--tw,0);border-radius:10px;background:var(--ink);box-shadow:0 6px 14px -6px rgba(24,28,37,.55);opacity:var(--to,0);transition:left .45s var(--spring),width .45s var(--spring),opacity .2s}
+.seg.ready button[aria-pressed="true"]{background:transparent;box-shadow:none}
+.seg button{transition:color .3s var(--ease),background .2s}
+/* tab panels fade in */
+.code-body:not([hidden]){animation:svcPanel .45s var(--ease)}
+@keyframes svcPanel{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* the horse stays inside the dark panel */
+.svc-install::before{content:"";position:absolute;z-index:-3;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1.6px);background-size:24px 24px;-webkit-mask-image:radial-gradient(55% 70% at 22% 72%,#000,transparent 80%);mask-image:radial-gradient(55% 70% at 22% 72%,#000,transparent 80%);pointer-events:none}
+.svc-install::after{content:"";position:absolute;z-index:-2;inset-inline-end:-6%;bottom:-26%;width:60%;aspect-ratio:1;background:radial-gradient(closest-side,rgba(217,119,87,.36),rgba(217,119,87,0));pointer-events:none}
+.svc-install .statue{top:auto;bottom:0;inset-inline-end:5%;width:min(620px,42vw);opacity:1;-webkit-mask-image:linear-gradient(180deg,#000 72%,transparent 100%);mask-image:linear-gradient(180deg,#000 72%,transparent 100%)}
+
+/* ---------- responsive ---------- */
+/* medium widths: the code card covers the lower corner, so the statue moves up beside the heading */
+@media (min-width:761px) and (max-width:1180px){
+ .svc-install .statue{top:28px;bottom:auto;width:min(440px,40vw);-webkit-mask-image:linear-gradient(180deg,#000 50%,transparent 82%);mask-image:linear-gradient(180deg,#000 50%,transparent 82%)}
+}
+@media (min-width:761px) and (max-width:1020px){.svc-install .statue{opacity:.4}}
+@media (max-width:1020px){
+ .svc-hero{grid-template-columns:1fr;gap:20px}
+ .svc-art{min-height:380px}
+ .sk-grid{grid-template-columns:1fr}
+ .vid-grid,.cv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .svc-head-row{grid-template-columns:1fr;gap:28px}
+}
+@media (max-width:760px){
+ .svc-hero{margin-top:26px}
+ .svc-hero h1{font-size:clamp(32px,9vw,44px)}
+ .svc-actions .btn{flex:1 1 auto}
+ .svc-art{min-height:0;padding:56px 0 64px}
+ .art-chip-a{bottom:8px;inset-inline-end:0}
+ .art-chip-b{top:12px;inset-inline-end:0}
+ .file-body{font-size:11px;padding:14px 14px 22px}
+ .svc-sec{padding:72px 0 20px}
+ .seg{display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;justify-content:flex-start}
+ .seg::-webkit-scrollbar{display:none}
+ .seg button{flex:none}
+ .sk-card{grid-template-columns:1fr;padding:18px;border-radius:24px}
+ .sk-viz{display:none}
+ .svc-install .code-top{flex-wrap:wrap}
+ .svc-install .code-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%}
+ .svc-install .code-tabs::-webkit-scrollbar{display:none}
+ .svc-install .code-tabs button{flex:none}
+ .sk-card h3{margin-top:18px}
+ .sk-go{padding-top:14px}
+ .vid-grid,.cv-grid{grid-template-columns:1fr}
+ .svc-install{margin-top:56px}
+ .svc-install .statue{top:-10px;bottom:auto;width:72vw;inset-inline-end:-8%;opacity:.35;-webkit-mask-image:linear-gradient(180deg,#000 30%,transparent 62%);mask-image:linear-gradient(180deg,#000 30%,transparent 62%)}
+ .svc-install::before,.svc-install::after{display:none}
+ .src-top{flex-wrap:wrap;padding:10px 12px}
+ .src-actions{margin-left:0;width:100%}
+ .src-btn{flex:1;justify-content:center}
+ .src-pre{font-size:11.5px}
+ .src-pre .l{padding-left:44px;text-indent:-44px}
+ .src-pre .l::before{width:30px;margin-right:14px}
+ .svc-faq{padding-top:72px}
+ .svc-source-wrap{padding-top:72px}
+ .svc-cta{padding-bottom:64px}
+}
+
+/* install chips: shortcuts to the tabs of the install card (SKILL.md jumps to the full text) */
+.inst-facts a,.inst-facts button{position:relative;height:36px;display:inline-flex;align-items:center;gap:7px;padding:0 13px;border:1px solid var(--dark-line);border-radius:10px;background:rgba(255,255,255,.03);font:600 var(--fs-xs)/1 "Manrope",sans-serif;color:#DADCE1;text-decoration:none;cursor:pointer;-webkit-user-select:none;user-select:none;transition:border-color .25s,background-color .25s,color .25s,translate .35s var(--out),box-shadow .35s}
+.inst-facts a::before,.inst-facts button::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.35;transition:opacity .25s,background-color .25s,box-shadow .25s}
+.inst-facts a::after{content:"↓";font-size:11px;opacity:.5;margin-inline-start:-1px}
+@media (hover:hover){
+ .inst-facts a:hover,.inst-facts button:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.07);color:#fff;translate:0 -2px;box-shadow:0 10px 24px -14px rgba(0,0,0,.8)}
+ .inst-facts a:hover::before,.inst-facts button:hover::before{opacity:.8}
+}
+.inst-facts a:active,.inst-facts button:active{translate:0 0;transition-duration:.08s}
+.inst-facts button[aria-pressed="true"]{border-color:rgba(217,119,87,.7);background:rgba(217,119,87,.14);color:#fff}
+.inst-facts button[aria-pressed="true"]::before{opacity:1;background:var(--primary);box-shadow:0 0 0 3px rgba(217,119,87,.25)}
+/* the card answers the chip with a short terracotta ring */
+.svc-install .code-card.is-ping{animation:instPing .9s var(--out)}
+@keyframes instPing{0%{outline:2px solid rgba(217,119,87,.75);outline-offset:0}100%{outline:2px solid rgba(217,119,87,0);outline-offset:12px}}
+@media (prefers-reduced-motion:reduce){.svc-install .code-card.is-ping{animation:none}.inst-facts a,.inst-facts button{transition:none}}

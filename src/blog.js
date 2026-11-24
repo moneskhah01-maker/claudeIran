@@ -3,12 +3,14 @@
 import './styles.css';
 import './blog.css';
 import { initEarlyAccess } from './early-access.js';
+import { initStickyNav } from './sticky-nav.js';
 
 const root = document.documentElement;
 root.classList.add('js');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-initEarlyAccess({ source: 'blog', triggers: '[data-ea]' });
+// pages built on this script (blog, 404, services) tag their sign-ups via <body data-ea-source>
+initEarlyAccess({ source: document.body.dataset.eaSource || 'blog', triggers: '[data-ea]' });
 
 /* mobile menu */
 const mb = document.getElementById('menuBtn'), mn = document.getElementById('mnav');
@@ -21,6 +23,8 @@ if (mb && mn) {
   mn.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { mn.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); }));
   addEventListener('keydown', e => { if (e.key === 'Escape' && mn.classList.contains('open')) { mn.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); mb.focus(); } });
 }
+
+initStickyNav();
 
 /* FAQ: expose state on summary */
 document.querySelectorAll('.qa details').forEach(d => {
@@ -87,10 +91,12 @@ document.querySelectorAll('[data-copy]').forEach(btn => {
   });
 });
 
-/* topic filters on /blog/ (all posts stay in the HTML for crawlers and no-JS readers) */
+/* topic filters on /blog/ and /services/ (all cards stay in the HTML for crawlers and no-JS readers) */
 const filters = [...document.querySelectorAll('[data-filter]')];
-if (filters.length) {
-  const cards = [...document.querySelectorAll('#postCards .post-card')];
+const grid = document.getElementById('postCards');
+if (filters.length && grid) {
+  const cards = [...grid.querySelectorAll(':scope > [data-cluster]')];
+  const unit = grid.dataset.unit || 'مقاله';
   const empty = document.getElementById('filterEmpty');
   const apply = val => {
     filters.forEach(f => f.setAttribute('aria-pressed', String(f.dataset.filter === val)));
@@ -102,7 +108,7 @@ if (filters.length) {
     const vis = cards.filter(c => !c.hidden);
     cards.forEach(c => c.classList.remove('is-wide'));
     if (vis.length > 3 && vis.length % 3 === 1) vis[0].classList.add('is-wide');
-    if (live) live.textContent = `${shown.toLocaleString('fa-IR')} مقاله نمایش داده می‌شود`;
+    if (live) live.textContent = `${shown.toLocaleString('fa-IR')} ${unit} نمایش داده می‌شود`;
   };
   const live = document.createElement('p');
   live.className = 'sr-only';

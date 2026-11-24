@@ -446,6 +446,11 @@ button.pill:active{transform:scale(.94)}
 .legend button:hover{background:rgba(255,255,255,.1)}
 .legend button[aria-pressed="true"]{background:rgba(255,255,255,.16);color:#fff}
 .gauge .legend button:focus-visible,.gauge :focus-visible{outline-color:#fff}
+/* narrow cards (two side by side on phones): the legend wraps instead of running past the card edge */
+.legend{flex-wrap:wrap;row-gap:4px}
+@media (max-width:480px){.gauge .legend{justify-content:center;column-gap:2px}.gauge .legend button{margin:0;padding:0 7px}}
+/* window buttons keep their look but get a finger-sized hit area on touch screens */
+@media (pointer:coarse){.lights>*{width:32px;height:32px}.lights>*::before{inset:9.5px}}
 .gauge path[data-gsel]{cursor:pointer;transition:stroke-width .35s var(--spring),opacity .3s,stroke .3s}
 
 /* tables, search, filters */
