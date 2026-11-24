@@ -4,10 +4,12 @@
   "version": "2.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node tools/build-blog.mjs && vite --host 127.0.0.1",
+    "dev": "npm run pages && vite --host 127.0.0.1",
     "blog": "node tools/build-blog.mjs",
-    "build": "node tools/build-blog.mjs && vite build",
-    "serve": "node server.mjs"
+    "build": "npm run pages && vite build",
+    "serve": "node server.mjs",
+    "pages": "node tools/build-blog.mjs && node tools/build-services.mjs",
+    "services": "node tools/build-services.mjs"
   },
   "devDependencies": {
     "@iconify-json/solar": "^1.2.17",

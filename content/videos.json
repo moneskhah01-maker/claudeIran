@@ -1,0 +1,47 @@
+{
+ "_doc": "Video tutorials on /services/#tutorials, in page order. status: 'soon' shows a placeholder card; 'live' needs one of aparat (video hash from aparat.com/v/<hash>), youtube (video id) or src (a file under public/, e.g. /videos/x.mp4). Optional: poster (/img/... 16:9), minutes, uploadDate (YYYY-MM-DD; with poster it adds VideoObject structured data).",
+ "videos": [
+  {
+   "status": "soon",
+   "topic": "شروع کار",
+   "level": "مقدماتی",
+   "title": "اسکیل Claude چیست و چطور کار می‌کند؟",
+   "summary": "فرقش با یک پرامپت معمولی چیست، داخل فایل SKILL.md چه می‌نویسیم و Claude از کجا می‌فهمد کی باید سراغش برود."
+  },
+  {
+   "status": "soon",
+   "topic": "شروع کار",
+   "level": "مقدماتی",
+   "title": "نصب اسکیل در Claude.ai و Claude Code",
+   "summary": "قدم‌به‌قدم: آپلود فایل ZIP در Claude.ai، گذاشتن فایل در پوشهٔ پروژه برای Claude Code و اولین درخواست."
+  },
+  {
+   "status": "soon",
+   "topic": "اسکیل‌ها",
+   "level": "متوسط",
+   "title": "ساخت اسکیل اختصاصی برای تیم خودتان",
+   "summary": "روال کاری تیم‌تان را به یک اسکیل تبدیل کنید و قبل از اینکه دست همه بدهید، روی کارهای واقعی امتحانش کنید."
+  },
+  {
+   "status": "soon",
+   "topic": "طراحی",
+   "level": "متوسط",
+   "title": "طراحی رابط کاربری فارسی با Claude",
+   "summary": "از بریف تا وایرفریم و فایل تحویل با اسکیل طراح UI/UX؛ با حواسِ جمع برای راست‌به‌چپ و حروف فارسی."
+  },
+  {
+   "status": "soon",
+   "topic": "توسعه",
+   "level": "متوسط",
+   "title": "ساخت یک API کامل با Claude Code",
+   "summary": "طراحی endpointها، پایگاه داده، تست و بازبینی امنیتی؛ همه با اسکیل توسعه‌دهندهٔ بک‌اند، در یک پروژهٔ واقعی."
+  },
+  {
+   "status": "soon",
+   "topic": "Claude API",
+   "level": "پیشرفته",
+   "title": "کنترل هزینه در پروژه‌های Claude API",
+   "summary": "کدام مدل برای کدام کار، کش پرامپت، سقف بودجه و دنبال کردن مصرف توکن؛ با عددهای یک پروژهٔ واقعی."
+  }
+ ]
+}
