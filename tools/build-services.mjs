@@ -7,7 +7,7 @@
 // Everything written here is build output (git-ignored); content/ is the source.
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync, statSync } from 'node:fs';
 import path from 'node:path';
-import { ROOT, SITE, BRAND, esc, faNum, jalali, jsonLd, fixText, ARROW, ico, head, topbar, footer, ctaBand } from './lib/site.mjs';
+import { ROOT, SITE, BRAND, esc, faNum, jalali, jsonLd, fixText, ARROW, ico, orgLd, head, topbar, footer, ctaBand } from './lib/site.mjs';
 
 const SKILLS = path.join(ROOT, 'content', 'skills');
 const OUT = path.join(ROOT, 'services');
@@ -58,7 +58,6 @@ function zip(files) {
 const groupTitle = id => groups.find(g => g.id === id)?.title || '';
 const crumbs = items => `<nav class="crumbs" aria-label="مسیر صفحه">${items.map(([href, t], i) => (i ? '<span aria-hidden="true">/</span>' : '') + (href ? `<a href="${href}">${esc(t)}</a>` : `<span>${esc(t)}</span>`)).join('')}</nav>`;
 const crumbLd = items => ({ '@type': 'BreadcrumbList', itemListElement: items.map(([href, name], i) => ({ '@type': 'ListItem', position: i + 1, name, item: `${SITE}${href}` })) });
-const orgLd = { '@type': 'Organization', '@id': `${SITE}/#org`, name: BRAND, url: `${SITE}/`, logo: { '@type': 'ImageObject', url: `${SITE}/icon-512.png` } };
 const zipUrl = s => `/downloads/skills/${s.slug}.zip`;
 const mdUrl = s => `/downloads/skills/${s.slug}/SKILL.md`;
 const pad = n => String(n).padStart(2, '0');

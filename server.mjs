@@ -227,6 +227,8 @@ async function serveStatic(req, res) {
   try { url = new URL(req.url, 'http://localhost'); rel = decodeURIComponent(url.pathname); }
   catch { return send(req, res, 400, 'Bad request', 'text/plain; charset=utf-8'); }
   if (rel === '/favicon.ico') rel = '/favicon.svg';
+  // /index.html and /blog/x/index.html → the directory URL (one URL per page; the canonical tag alone still lets the copy be crawled)
+  if (url.pathname.endsWith('/index.html')) return send(req, res, 301, '', 'text/plain; charset=utf-8', { Location: url.pathname.slice(0, -'index.html'.length) + url.search, 'Cache-Control': 'public, max-age=3600' });
   if (rel.endsWith('/')) rel += 'index.html';
   const file = path.normalize(path.join(DIST, rel));
   if (file !== DIST && !file.startsWith(DIST + path.sep)) return send(req, res, 403, 'Forbidden', 'text/plain; charset=utf-8');
@@ -237,14 +239,17 @@ async function serveStatic(req, res) {
     if (existsSync(path.join(file, 'index.html'))) return send(req, res, 301, '', 'text/plain; charset=utf-8', { Location: url.pathname + '/' + url.search, 'Cache-Control': 'public, max-age=3600' });
     return notFound(req, res);
   }
-  if (!s || !s.isFile() || path.basename(file) === '404.html' && rel !== '/404.html') return notFound(req, res);
+  // the 404 page answers 404 at its own URL too
+  if (!s || !s.isFile() || path.basename(file) === '404.html') return notFound(req, res);
   const ext = path.extname(file).toLowerCase();
   const hashed = /[\\/]assets[\\/]/.test(file);
   const cache = hashed ? 'public, max-age=31536000, immutable' : (ext === '.woff2' || ext === '.ttf' || ext === '.webp') ? 'public, max-age=86400' : 'no-cache';
   const type = TYPES[ext] || 'application/octet-stream';
+  // raw skill files (SKILL.md, ZIP) repeat the skill pages without links or context: downloadable, not indexed
+  const extra = rel.startsWith('/downloads/') ? { 'Cache-Control': cache, 'X-Robots-Tag': 'noindex' } : { 'Cache-Control': cache };
   const data = await readFile(file);
-  if (COMPRESSIBLE.has(ext)) return send(req, res, 200, data, type, { 'Cache-Control': cache });
-  res.writeHead(200, { 'Content-Type': type, 'Cache-Control': cache, ...SEC });
+  if (COMPRESSIBLE.has(ext)) return send(req, res, 200, data, type, extra);
+  res.writeHead(200, { 'Content-Type': type, ...extra, ...SEC });
   res.end(req.method === 'HEAD' ? undefined : data);
 }
 

@@ -2,7 +2,9 @@ import { defineConfig } from 'vite';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { getIconData, iconToSVG, iconToHTML, replaceIDs } from '@iconify/utils';
+import { orgLd, ALT_NAMES } from './tools/lib/site.mjs';
 
 // Solar icons (Iconify, CC BY 4.0) are inlined into the HTML at build time,
 // so the page is complete without JavaScript and without any network request.
@@ -28,13 +30,26 @@ function structuredData(html) {
   const title = text((html.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || '');
   const description = meta(html, 'description');
   const graph = [
-    { '@type': 'Organization', '@id': `${SITE}/#org`, name: site.siteName, url: `${SITE}/`, logo: `${SITE}/icon-512.png` },
-    { '@type': 'WebSite', '@id': `${SITE}/#website`, url: `${SITE}/`, name: site.siteName, inLanguage: 'fa-IR', publisher: { '@id': `${SITE}/#org` } },
+    orgLd,
+    // name + alternateName feed the site name Google shows in results («کلود ایران» is how most people spell it)
+    { '@type': 'WebSite', '@id': `${SITE}/#website`, url: `${SITE}/`, name: site.siteName, alternateName: ALT_NAMES, inLanguage: 'fa-IR', publisher: { '@id': `${SITE}/#org` } },
     { '@type': 'WebPage', '@id': `${SITE}/#webpage`, url: `${SITE}/`, name: title, description, inLanguage: 'fa-IR', isPartOf: { '@id': `${SITE}/#website` }, about: { '@id': `${SITE}/#service` }, primaryImageOfPage: `${SITE}/og-image.png` },
-    { '@type': 'Service', '@id': `${SITE}/#service`, name: 'پلتفرم API کلاود ایران', serviceType: 'دسترسی کنترل‌شده به مدل‌های Claude از راه API', description, provider: { '@id': `${SITE}/#org` }, inLanguage: 'fa-IR' },
+    { '@type': 'Service', '@id': `${SITE}/#service`, name: 'پلتفرم API کلاود ایران', serviceType: 'دسترسی کنترل‌شده به مدل‌های Claude از راه API', description, provider: { '@id': `${SITE}/#org` }, inLanguage: 'fa-IR',
+      areaServed: { '@type': 'Country', name: 'ایران' }, audience: { '@type': 'BusinessAudience', audienceType: 'تیم‌های نرم‌افزاری، توسعه‌دهندگان و کسب‌وکارهای ایرانی' } },
   ];
   if (faqs.length) graph.push({ '@type': 'FAQPage', '@id': `${SITE}/#faq`, mainEntity: faqs, inLanguage: 'fa-IR' });
   return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c');
+}
+
+// The landing's <lastmod> is when index.html last changed, not when the site was built: a date that
+// moves on every build teaches crawlers to ignore it. Uncommitted edits count as today.
+function landingModified() {
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    const git = args => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    if (git(['status', '--porcelain', '--', 'index.html'])) return today;
+    return git(['log', '-1', '--format=%cs', '--', 'index.html']) || today;
+  } catch { return today; } // no git (e.g. a plain copy of the source)
 }
 
 // Blog pages are generated from content/blog/*.md by tools/build-blog.mjs (run before vite build).
@@ -76,9 +91,8 @@ export default defineConfig({
     },
     generateBundle() {
       this.emitFile({ type: 'asset', fileName: 'robots.txt', source: `User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n` });
-      const today = new Date().toISOString().slice(0, 10);
       const urls = [
-        { loc: `${SITE}/`, lastmod: today, freq: 'weekly', pr: '1.0' },
+        { loc: `${SITE}/`, lastmod: landingModified(), freq: 'weekly', pr: '1.0' },
         ...(posts.length ? [{ loc: `${SITE}/blog/`, lastmod: posts.map(p => p.updated).sort().pop(), freq: 'weekly', pr: '0.8' }] : []),
         ...posts.map(p => ({ loc: `${SITE}/blog/${p.slug}/`, lastmod: p.updated, freq: 'monthly', pr: '0.7' })),
         ...servicePages.map(p => ({ loc: `${SITE}${p.loc}`, lastmod: p.lastmod, freq: p.key === 'services' ? 'weekly' : 'monthly', pr: p.key === 'services' ? '0.8' : '0.6' })),

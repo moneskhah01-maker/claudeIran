@@ -5,7 +5,7 @@
 import { writeFileSync, mkdirSync, readdirSync, rmSync, existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { Marked } from 'marked';
-import { ROOT, SITE, BRAND, esc, strip, tt, faNum, jalali, jsonLd, RLM, LRI, PDI, fixText, fixHtml, ARROW, head, topbar, footer, ctaBand } from './lib/site.mjs';
+import { ROOT, SITE, BRAND, esc, strip, tt, faNum, jalali, jsonLd, RLM, LRI, PDI, fixText, fixHtml, ARROW, orgLd, editorialLd, head, topbar, footer, ctaBand } from './lib/site.mjs';
 
 const SRC = path.join(ROOT, 'content', 'blog');
 const OUT = path.join(ROOT, 'blog');
@@ -85,8 +85,8 @@ function articlePage(p, posts) {
   const toc = [...p.toc, ...(p.faq.length ? [{ id: 'faq-h', text: 'سؤالات متداول' }] : [])];
   const ld = { '@context': 'https://schema.org', '@graph': [
     { '@type': 'BlogPosting', '@id': `${url}#article`, headline: p.title, description: p.description, inLanguage: 'fa-IR', datePublished: p.date, dateModified: p.updated, mainEntityOfPage: url, url, image: `${SITE}/og-image.png`, keywords: p.keywords.join(', '), articleSection: p.cluster, wordCount: p.words, timeRequired: `PT${p.minutes}M`,
-      author: { '@type': 'Organization', name: `تیم تحریریهٔ ${BRAND}`, url: `${SITE}/` }, publisher: { '@id': `${SITE}/#org` }, isPartOf: { '@id': `${SITE}/blog/#blog` } },
-    { '@type': 'Organization', '@id': `${SITE}/#org`, name: BRAND, url: `${SITE}/`, logo: { '@type': 'ImageObject', url: `${SITE}/icon-512.png` } },
+      author: { '@id': editorialLd['@id'] }, publisher: { '@id': `${SITE}/#org` }, isPartOf: { '@id': `${SITE}/blog/#blog` } },
+    orgLd, editorialLd,
     { '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: BRAND, item: `${SITE}/` },
       { '@type': 'ListItem', position: 2, name: 'بلاگ', item: `${SITE}/blog/` },
@@ -136,7 +136,7 @@ function indexPage(posts) {
   const ld = { '@context': 'https://schema.org', '@graph': [
     { '@type': 'Blog', '@id': `${url}#blog`, url, name: `بلاگ ${BRAND}`, description: 'راهنماهای فارسی Claude API برای توسعه‌دهندگان و تیم‌ها', inLanguage: 'fa-IR', publisher: { '@id': `${SITE}/#org` },
       blogPost: posts.map(p => ({ '@type': 'BlogPosting', headline: p.title, url: `${SITE}/blog/${p.slug}/`, datePublished: p.date, dateModified: p.updated })) },
-    { '@type': 'Organization', '@id': `${SITE}/#org`, name: BRAND, url: `${SITE}/`, logo: { '@type': 'ImageObject', url: `${SITE}/icon-512.png` } },
+    orgLd,
     { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: BRAND, item: `${SITE}/` }, { '@type': 'ListItem', position: 2, name: 'بلاگ', item: url }] },
   ] };
   return head({ title: `بلاگ Claude API؛ راهنمای فارسی برای تیم‌ها | ${BRAND}`, description: 'راهنماهای فارسی و دقیق Claude API: توکن و هزینه، انتخاب مدل، مهاجرت از OpenAI، پرامپت‌نویسی و امنیت کلید؛ برای توسعه‌دهندگان، مدیران محصول و تیم‌های مالی.', canonical: url, extra: `${jsonLd(ld)}\n` })

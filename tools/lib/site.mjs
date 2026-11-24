@@ -14,7 +14,23 @@ export const strip = html => html.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' 
 export const tt = s => esc(s).replace(/(Claude|Messages|OpenAI) (API)/g, '$1&nbsp;$2'); // keep brand + API together in headings
 export const faNum = n => Number(n).toLocaleString('fa-IR', { useGrouping: false });
 export const jalali = iso => new Intl.DateTimeFormat('fa-IR-u-ca-persian', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Tehran' }).format(new Date(iso + 'T12:00:00Z'));
-export const jsonLd = obj => `<script type="application/ld+json">${JSON.stringify(obj).replace(/</g, '\\u003c')}</script>`;
+/* ---------- the brand entity ----------
+   One Organization node for every page (landing, blog, services), so search engines and AI answers
+   build a single entity: what ClaudeIran is, who it is for, the spellings people search for, and that
+   it is independent of Anthropic. Keep it factual; do not add prices, partners or claims here. */
+export const ALT_NAMES = ['کلود ایران', 'ClaudeIran', 'Claude Iran'];
+export const ORG_ID = `${SITE}/#org`;
+export const orgLd = {
+  '@type': 'Organization', '@id': ORG_ID, name: BRAND, alternateName: ALT_NAMES, url: `${SITE}/`,
+  logo: { '@type': 'ImageObject', url: `${SITE}/icon-512.png`, width: 512, height: 512 },
+  description: 'سکوی مستقل و در مرحلهٔ پیش‌عرضه برای دسترسی کنترل‌شدهٔ تیم‌ها و توسعه‌دهندگان ایرانی به Claude API: کلید جدا برای هر پروژه، بودجه و سقف مصرف، گزارش مصرف و رهگیری هر درخواست، و تسویه تا سطح توکن. کلاود ایران وابسته به Anthropic یا نمایندهٔ رسمی آن نیست.',
+  areaServed: { '@type': 'Country', name: 'ایران' },
+  knowsAbout: ['Claude API', 'Claude Code', 'مدل‌های زبانی بزرگ', 'پرامپت‌نویسی', 'کنترل هزینهٔ API'],
+};
+// articles are credited to the editorial team, which belongs to the same organization
+export const editorialLd = { '@type': 'Organization', '@id': `${SITE}/#editorial`, name: `تیم تحریریهٔ ${BRAND}`, url: `${SITE}/blog/`, parentOrganization: { '@id': ORG_ID } };
+
+export const jsonLd = obj =>`<script type="application/ld+json">${JSON.stringify(obj).replace(/</g, '\\u003c')}</script>`;
 
 /* ---------- bidi hygiene ----------
    Latin words separated by the Persian comma («Haiku، Sonnet») form one LTR run and read in
