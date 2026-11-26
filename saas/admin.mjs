@@ -211,6 +211,37 @@ export function createAdmin({ db, payments, send, readJson, withLock, loadList, 
     return send(req, res, 200, { ok: true });
   }
 
+  // Usage report for the owner: how much the API is used, by day, model, customer and hour of the day.
+  async function usage(req, res) {
+    const days = [7, 30, 60].includes(Number(new URL(req.url, 'http://x').searchParams.get('days'))) ? Number(new URL(req.url, 'http://x').searchParams.get('days')) : 30;
+    const since = `now() - make_interval(days => ${days})`;
+    const [[totals], daily, byModel, byCustomer, hourly] = await Promise.all([
+      db.query(`SELECT count(*) AS requests, count(*) FILTER (WHERE status = 'error') AS errors,
+                       COALESCE(sum(cost), 0) AS cost, COALESCE(sum(input_tokens), 0) AS tin, COALESCE(sum(output_tokens), 0) AS tout,
+                       COALESCE(round(avg(latency_ms) FILTER (WHERE status = 'ok')), 0) AS latency,
+                       count(DISTINCT account_id) AS customers
+                  FROM usage_events WHERE created_at > ${since}`),
+      db.query(`SELECT to_char(d, 'YYYY-MM-DD') AS day, count(e.id) AS requests, COALESCE(sum(e.cost), 0) AS cost,
+                       COALESCE(sum(e.input_tokens + e.output_tokens), 0) AS tokens, count(e.id) FILTER (WHERE e.status = 'error') AS errors
+                  FROM generate_series(current_date - ($1::int - 1), current_date, interval '1 day') d
+                  LEFT JOIN usage_events e ON e.created_at >= d AND e.created_at < d + interval '1 day'
+                 GROUP BY d ORDER BY d`, [days]),
+      db.query(`SELECT model, count(*) AS requests, COALESCE(sum(cost), 0) AS cost, COALESCE(sum(input_tokens), 0) AS tin, COALESCE(sum(output_tokens), 0) AS tout,
+                       COALESCE(round(avg(latency_ms) FILTER (WHERE status = 'ok')), 0) AS latency, count(*) FILTER (WHERE status = 'error') AS errors
+                  FROM usage_events WHERE created_at > ${since} GROUP BY model ORDER BY cost DESC`),
+      db.query(`SELECT u.id, u.name, u.email, u.mobile, u.status, count(e.id) AS requests, COALESCE(sum(e.cost), 0) AS cost,
+                       COALESCE(sum(e.input_tokens + e.output_tokens), 0) AS tokens, count(e.id) FILTER (WHERE e.status = 'error') AS errors, max(e.created_at) AS last
+                  FROM usage_events e JOIN accounts a ON a.id = e.account_id JOIN users u ON u.id = a.owner_id
+                 WHERE e.created_at > ${since} GROUP BY u.id ORDER BY cost DESC`),
+      // average requests per hour of the day (Tehran time; the session time zone is Asia/Tehran)
+      db.query(`SELECT h AS hour, COALESCE(count(e.id), 0)::float / $1 AS avg
+                  FROM generate_series(0, 23) h
+                  LEFT JOIN usage_events e ON extract(hour FROM e.created_at) = h AND e.created_at > ${since}
+                 GROUP BY h ORDER BY h`, [days]),
+    ]);
+    return send(req, res, 200, { ok: true, days, totals, daily, byModel, byCustomer, hourly, models: Object.fromEntries(Object.entries(pricing.models).map(([id, p]) => [id, p.label])) });
+  }
+
   async function auditList(req, res) {
     const rows = await db.query('SELECT * FROM audit_log ORDER BY id DESC LIMIT 300');
     return send(req, res, 200, { ok: true, rows });
@@ -224,6 +255,7 @@ export function createAdmin({ db, payments, send, readJson, withLock, loadList, 
     'GET /api/admin/payments': paymentsList,
     'POST /api/admin/payments/review': paymentReview,
     'GET /api/admin/audit': auditList,
+    'GET /api/admin/usage': usage,
   };
   const routes = {
     'GET /api/admin/me': (req, res) => send(req, res, 200, { ok: true }),

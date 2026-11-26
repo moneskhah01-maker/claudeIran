@@ -4,6 +4,7 @@
 //   DATABASE_URL=pglite:memory    -> PGlite in memory (tests)
 // The rest of the app only uses db.query(sql, params) and db.tx(fn), so the same SQL runs on both.
 import { readdir, readFile, mkdir } from 'node:fs/promises';
+import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -13,12 +14,31 @@ const INT8 = 20, NUMERIC = 1700; // Postgres type ids: BIGINT/BIGSERIAL and COUN
 const toNum = v => (v === null ? null : Number(v));
 const TZ = 'Asia/Tehran';
 
+// A PGlite folder must be open in ONE program at a time (e.g. the server, or the seed script, not both):
+// two writers on the same files lose or corrupt data. A small lock file next to the folder records which
+// process has it open; a second program gets a clear message instead of silently writing in parallel.
+function alive(pid) { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } }
+function takeLock(dir) {
+  const lock = path.resolve(dir) + '.lock';
+  if (existsSync(lock)) {
+    const pid = Number(readFileSync(lock, 'utf8'));
+    if (pid && pid !== process.pid && alive(pid)) {
+      throw Object.assign(new Error(`The local database "${dir}" is already open in another program (process ${pid}), probably the server. Stop it first (Ctrl+C in its terminal), then run this again.`), { code: 'DB_LOCKED' });
+    }
+  }
+  writeFileSync(lock, String(process.pid));
+  const release = () => { try { if (readFileSync(lock, 'utf8') === String(process.pid)) unlinkSync(lock); } catch {} };
+  process.once('exit', release);
+  return release;
+}
+
 export async function openDb(url) {
   let db;
   if (url.startsWith('pglite:')) {
     const { PGlite } = await import('@electric-sql/pglite');
     const where = url.slice('pglite:'.length);
     if (where !== 'memory') await mkdir(where, { recursive: true }); // PGlite does not create parent folders
+    const release = where === 'memory' ? () => {} : takeLock(where);
     const pg = new PGlite(where === 'memory' ? undefined : where, { parsers: { [INT8]: toNum, [NUMERIC]: toNum } });
     const wrap = q => ({ query: async (sql, params = []) => (await q.query(sql, params)).rows });
     db = {
@@ -26,7 +46,7 @@ export async function openDb(url) {
       ...wrap(pg),
       exec: sql => pg.exec(sql),
       tx: fn => pg.transaction(t => fn(wrap(t))),
-      close: () => pg.close(),
+      close: async () => { await pg.close(); release(); },
     };
     await pg.exec(`SET TIME ZONE '${TZ}'`); // PGlite is a single connection, so once is enough
   } else {

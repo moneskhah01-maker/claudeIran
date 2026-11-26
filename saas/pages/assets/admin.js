@@ -3,12 +3,12 @@
 (() => {
 'use strict';
 
-const state = { ov: null, view: 'overview', query: '', filter: 'all', page: 1, perPage: 10, sort: { k: null, dir: 1 }, sel: {}, metric: 'revenue', cache: {} };
+const state = { ov: null, view: 'overview', query: '', filter: 'all', page: 1, perPage: 10, sort: { k: null, dir: 1 }, sel: {}, metric: 'revenue', uDays: 30, uMetric: 'requests', cache: {} };
 const ui = createUI({ state, rerender: () => rerender() });
 const { byId, fmt, tmn, kfmt, stamp, dateOf, phone, ago, ic, money, signedMoney, st, pwToggle, openModal, closeModal, confirmModal,
   head, tile, figure, btn, tapPill, cardHead, chart, ktable, tools, matches, viewBtn } = ui;
 
-const NAV = [['overview', 'grid', 'نمای کلی'], ['payments', 'wallet', 'پرداخت‌ها'], ['customers', 'users', 'مشتریان'], ['waitlist', 'list', 'فهرست انتظار'], ['audit', 'shield', 'گزارش رویدادها']];
+const NAV = [['overview', 'grid', 'نمای کلی'], ['usage', 'chart', 'گزارش مصرف'], ['payments', 'wallet', 'پرداخت‌ها'], ['customers', 'users', 'مشتریان'], ['waitlist', 'list', 'فهرست انتظار'], ['audit', 'shield', 'گزارش رویدادها']];
 const PAY = { pending: 'در انتظار بررسی', paid: 'پرداخت‌شده', rejected: 'ردشده', failed: 'ناموفق' };
 const USTAT = { active: 'فعال', suspended: 'غیرفعال' };
 const WAIT = { new: 'جدید', approved: 'تأییدشده', invited: 'دعوت‌شده', rejected: 'ردشده' };
@@ -168,6 +168,80 @@ function overview() {
           { k: 'j', label: 'عضویت', cell: u => h('span', { class: 'dim' }, ago(u.created_at)) },
           { k: 's', label: 'وضعیت', cls: 'lead2', cell: u => st(u.status === 'active' ? 'ok' : 'error', USTAT[u.status]) },
         ] }))),
+  ];
+}
+
+/* ================= usage report ================= */
+const U_METRICS = { requests: ['درخواست', 'requests', 'درخواست'], cost: ['هزینه', 'cost', 'تومان'], tokens: ['توکن', 'tokens', 'توکن'], errors: ['خطا', 'errors', 'خطا'] };
+const pct = (a, b) => (b ? (a / b * 100) : 0);
+
+// average requests per hour of the day: 24 bars (00 to 23, Tehran time), the busiest hour highlighted
+function hourBars(hourly) {
+  const max = Math.max(1e-9, ...hourly.map(x => x.avg)), peak = hourly.findIndex(x => x.avg === max);
+  const field = h('div', { class: 'barfield', role: 'img', 'aria-label': 'میانگین درخواست در هر ساعت شبانه‌روز' });
+  field.style.height = '150px';
+  hourly.forEach((x, i) => {
+    const b = h('i', { class: i === peak ? 'hi' : null, title: `ساعت ${i}: ${x.avg.toFixed(1)} درخواست` });
+    b.style.setProperty('--h', `${Math.max(1.5, x.avg / max * 100).toFixed(1)}%`);
+    b.style.setProperty('--i', i);
+    field.append(b);
+  });
+  const two = n => String(n).padStart(2, '0');
+  return [field,
+    h('div', { class: 'axis' }, [0, 3, 6, 9, 12, 15, 18, 21].map(hh => h('span', null, two(hh)))),
+    h('p', { class: 'readout' },
+      h('span', null, 'شلوغ‌ترین ساعت: ', h('b', null, `${two(peak)}:00 تا ${two(peak + 1)}:00 · ${hourly[peak].avg.toFixed(1)} درخواست در روز`)),
+      h('span', null, 'به وقت تهران'))];
+}
+
+async function usage() {
+  const r = await api('/api/admin/usage?days=' + state.uDays);
+  if (!r.ok) return [head('USAGE', 'گزارش مصرف', errText(r))];
+  const t = r.totals, m = state.uMetric, field = U_METRICS[m][1];
+  const totalCost = r.byModel.reduce((a, x) => a + x.cost, 0) || 1;
+  return [
+    head('USAGE · گزارش مصرف', 'گزارش مصرف', 'حجم استفاده از API به تفکیک روز، مدل، مشتری و ساعت', [
+      h('div', { class: 'fpills', role: 'group', 'aria-label': 'بازهٔ زمانی' }, [[7, '۷ روز'], [30, '۳۰ روز'], [60, '۶۰ روز']].map(([d, l]) =>
+        h('button', { type: 'button', 'aria-pressed': String(state.uDays === d), onclick: () => { state.uDays = d; delete state.sel.ausage; rerender(); } }, l))),
+    ]),
+    h('div', { class: 'kpi-row' },
+      tile(fmt(t.requests), `درخواست · ${r.days} روز`),
+      tile(tmn(t.cost), 'هزینهٔ مصرف · تومان'),
+      tile(fmt(t.customers), 'مشتری فعال'),
+      tile(t.latency ? (t.latency / 1000).toFixed(1) + 's' : '—', 'میانگین زمان پاسخ')),
+    h('div', { class: 'kpi-row mt12' },
+      tile(kfmt(t.tin), 'توکن ورودی'), tile(kfmt(t.tout), 'توکن خروجی'),
+      tile(pct(t.errors, t.requests).toFixed(1) + '%', 'نرخ خطا'),
+      tile(t.requests ? tmn(t.cost / t.requests) : '—', 'میانگین هزینهٔ هر درخواست · تومان')),
+    h('article', { class: 'card mt12' },
+      h('div', { class: 'chart-head' }, h('div', null, h('h2', null, `${U_METRICS[m][0]} روزانه`), h('p', { class: 'sub' }, `${r.days} روز گذشته`)),
+        h('div', { class: 'fpills metric-pills', role: 'group', 'aria-label': 'شاخص نمودار' }, Object.entries(U_METRICS).map(([k, [label]]) =>
+          h('button', { type: 'button', 'aria-pressed': String(m === k), onclick: () => { state.uMetric = k; delete state.sel.ausage; rerender(); } }, label)))),
+      chart('ausage', r.daily, field, U_METRICS[m][2], 200, `نمودار ${U_METRICS[m][0]} روزانه`)),
+    h('div', { class: 'grid-main split-b' },
+      h('section', { class: 'tbl-card' },
+        h('div', { class: 'card-head' }, h('div', null, h('h2', { class: 'fs-md' }, 'به تفکیک مدل'), h('p', { class: 'sub' }, 'سهم هر مدل از هزینهٔ مصرف'))),
+        ktable({ all: 1, rows: r.byModel, empty: 'در این بازه مصرفی نیست', note: '', cols: [
+          { k: 'm', label: 'مدل', cell: x => h('span', { class: 'pc' }, r.models[x.model] || x.model) },
+          { k: 'r', label: 'درخواست', num: 1, cell: x => h('span', { class: 'num' }, fmt(x.requests)) },
+          { k: 'c', label: 'هزینه', num: 1, cell: x => money(x.cost) },
+          { k: 's', label: 'سهم', cls: 'lead2', cell: x => {
+            const bar = h('span'); bar.style.width = pct(x.cost, totalCost).toFixed(1) + '%';
+            return h('span', { class: 'share-cell' }, h('span', { class: 'progress share' }, bar), h('span', { class: 'num dim' }, pct(x.cost, totalCost).toFixed(0) + '%'));
+          } },
+        ] })),
+      h('article', { class: 'card' }, cardHead('ساعت‌های شلوغ', 'میانگین درخواست در هر ساعت از شبانه‌روز'), hourBars(r.hourly))),
+    h('section', { class: 'tbl-card' },
+      h('div', { class: 'card-head' }, h('div', null, h('h2', { class: 'fs-md' }, 'به تفکیک مشتری'), h('p', { class: 'sub' }, 'برای پروندهٔ مشتری روی ردیف بزنید'))),
+      ktable({ rows: r.byCustomer, row: c => customerModal(c.id), empty: 'در این بازه مصرفی نیست', note: `${fmt(r.byCustomer.length)} مشتری در این بازه درخواست فرستاده‌اند.`, cols: [
+        { k: 'n', label: 'مشتری', sort: c => c.name, cell: c => who(c.name, contact(c)) },
+        { k: 'r', label: 'درخواست', num: 1, sort: c => c.requests, cell: c => h('span', { class: 'num' }, fmt(c.requests)) },
+        { k: 't', label: 'توکن', num: 1, sort: c => c.tokens, cell: c => h('span', { class: 'num' }, kfmt(c.tokens)) },
+        { k: 'c', label: 'هزینه', num: 1, sort: c => c.cost, cell: c => money(c.cost) },
+        { k: 'e', label: 'خطا', num: 1, sort: c => c.errors, cell: c => h('span', { class: 'num dim' }, pct(c.errors, c.requests).toFixed(1) + '%') },
+        { k: 'l', label: 'آخرین درخواست', sort: c => c.last, cell: c => h('span', { class: 'dim' }, ago(c.last)) },
+        { k: 's', label: 'وضعیت', cls: 'lead2', cell: c => st(c.status === 'active' ? 'ok' : 'error', USTAT[c.status]) },
+      ] })),
   ];
 }
 
@@ -368,7 +442,7 @@ async function audit() {
   ];
 }
 
-const VIEWS = { overview, payments, customers, waitlist, audit };
-ui.autoRefresh(['overview', 'payments', 'customers', 'audit']); // live numbers during a demo or a busy day
+const VIEWS = { overview, usage, payments, customers, waitlist, audit };
+ui.autoRefresh(['overview', 'usage', 'payments', 'customers', 'audit']); // live numbers during a demo or a busy day
 start();
 })();

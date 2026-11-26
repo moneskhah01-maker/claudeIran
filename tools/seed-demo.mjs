@@ -92,8 +92,22 @@ const C = [
 ];
 const MODELS = Object.entries(pricing.models); // [Opus, Sonnet, Haiku] in pricing.json order
 
+/* ---------- the server must not be running on the same database ---------- */
+// A running ClaudeIran server keeps the database open; writing to it from here at the same time loses data.
+for (const port of [process.env.PORT || '5230']) {
+  try {
+    const r = await fetch(`http://127.0.0.1:${port}/v1/models`, { signal: AbortSignal.timeout(800) });
+    if (r.ok && (await r.json()).data) {
+      console.error(`A ClaudeIran server is running on port ${port}. Stop it first (Ctrl+C in its terminal), then run:  npm run demo`);
+      process.exit(1);
+    }
+  } catch { /* nothing listening: good */ }
+}
+
 /* ---------- reset ---------- */
-const db = await openDb(URL_);
+let db;
+try { db = await openDb(URL_); }
+catch (e) { if (e.code === 'DB_LOCKED') { console.error(e.message); process.exit(1); } throw e; }
 const existing = await db.query(`SELECT id FROM users WHERE email LIKE $1 OR mobile = ANY($2)`, [`%${DOMAIN}`, C.map(c => c.mobile).filter(Boolean)]);
 if (existing.length) {
   if (!process.argv.includes('--reset')) { console.log('Demo data already exists. Run with --reset to recreate it.'); await db.close(); process.exit(0); }

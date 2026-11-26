@@ -211,6 +211,10 @@ test('admin: login required, suspend logs the customer out and blocks their keys
   assert.ok(Array.isArray(ov.json.recentPayments) && Array.isArray(ov.json.recentUsers) && Array.isArray(ov.json.topCustomers));
   assert.ok(ov.json.topCustomers.some(c => c.id === id), 'a customer who spent shows up in the top list');
   assert.ok((await a.get('/api/admin/audit')).json.rows.some(r => r.action === 'user_status'));
+  const u = (await a.get('/api/admin/usage?days=30')).json;
+  assert.equal(u.daily.length, 30);
+  assert.equal(u.hourly.length, 24);
+  assert.ok(u.totals.requests >= 1 && u.byModel.length >= 1 && u.byCustomer.some(c => c.id === id), 'usage report counts this customer');
 });
 
 test('SMS codes expire after 2 minutes', async () => {

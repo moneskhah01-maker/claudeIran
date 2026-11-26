@@ -79,3 +79,8 @@ body{background:var(--canvas)}
  .admin .brand span:not(.pill){display:none}
  .demo-pill span:last-child{display:none}
 }
+
+/* usage report: share bars in the model table */
+.share-cell{display:inline-flex;align-items:center;gap:8px}
+.progress.share{width:110px;margin:0;background:var(--white);height:7px}
+.progress.share span{background:var(--primary)}

@@ -12,7 +12,8 @@
     "services": "node tools/build-services.mjs",
     "test": "node --test saas/test/",
     "demo:seed": "node tools/seed-demo.mjs --reset",
-    "demo:traffic": "node tools/demo-traffic.mjs"
+    "demo:traffic": "node tools/demo-traffic.mjs",
+    "demo": "node tools/seed-demo.mjs --reset && node server.mjs 5230"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.6.0",

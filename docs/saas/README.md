@@ -68,11 +68,11 @@ Demo data for development: see **Presenting the demo** below.
 
 Everything runs on your computer against the local PGlite database; nothing is sent anywhere.
 
-1. Stop the server if it is running (the local database can be open in one program at a time).
-2. `npm run demo:seed`: 16 demo customers and 60 days of history: ~15,000 API requests following Tehran office hours (quieter on Thursday and Friday), top-ups sized to each customer's spending (paid, pending, one rejected), active and revoked keys, a customer who stopped using the service, a suspended account, an early-access list, and an audit trail. Running it again rebuilds the same data. Refuses to run unless `DATABASE_URL` is `pglite:`.
-3. `node server.mjs 5230`
+1. Stop the server if it is running (Ctrl+C). The local database can be open in one program at a time: a lock file (`data/pgdata.lock`) and a check for a running server make the seed refuse instead of losing data.
+2. `npm run demo` loads the demo data and then starts the server on port 5230 (or `npm run demo:seed` to only load it): 16 demo customers and 60 days of history: ~15,000 API requests following Tehran office hours (quieter on Thursday and Friday), top-ups sized to each customer's spending (paid, pending, one rejected), active and revoked keys, a customer who stopped using the service, a suspended account, an early-access list, and an audit trail. Running it again rebuilds the same data. Refuses to run unless `DATABASE_URL` is `pglite:`.
+3. (only after `demo:seed`) `node server.mjs 5230`
 4. In a second terminal: `npm run demo:traffic` (or `node tools/demo-traffic.mjs --rate 60` for busier). It sends real requests through the gateway with the demo customers' keys (`data/demo-keys.json`), so holds, charges, the ledger and both panels update during the presentation. The overview, usage, requests and payments views refresh themselves every 15 s. Ctrl+C prints a summary.
-5. Customer view: `/app/` → «رمز عبور» → `09120000000` / `demo-password-123`. Owner view: `/admin/` with the admin password.
+5. Customer view: `/app/` → «رمز عبور» → `09120000000` / `demo-password-123`. Owner view: `/admin/` with the admin password; its «گزارش مصرف» tab shows usage by day, model, customer and hour.
 
 The mock upstream now behaves like a model in the numbers billing sees (answer length 25–90 % of `max_tokens`, 0.4–2.5 s latency); the text it returns is still a labelled placeholder. Prices are the placeholders in `saas/pricing.json`.
 
