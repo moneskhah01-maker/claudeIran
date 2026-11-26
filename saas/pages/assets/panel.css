@@ -39,8 +39,8 @@
 
 /* password field with a show/hide button */
 .pw{position:relative}
-.pw input{padding-inline-end:52px}
-.pw button{position:absolute;inset-block:4px;inset-inline-end:4px;width:40px;border:0;border-radius:10px;background:transparent;display:grid;place-items:center;color:var(--secondary);transition:background .2s,color .2s}
+.pw input{padding-left:52px;padding-right:14px} /* the field is LTR inside an RTL page: inline-end would be the right side, but the eye button sits on the left */
+.pw button{position:absolute;inset-block:4px;left:4px;width:40px;border:0;border-radius:10px;background:transparent;display:grid;place-items:center;color:var(--secondary);transition:background .2s,color .2s}
 .pw button:hover{background:var(--fill);color:var(--ink)}
 .pw button .ico{width:18px;height:18px}
 
