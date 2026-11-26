@@ -14,15 +14,36 @@ async function start() {
   route();
 }
 
+// eye icon drawn with SVG DOM calls (no innerHTML), open or crossed out
+function eyeIcon(off) {
+  const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true');
+  const d = off ? ['M10.6 5.6A9.7 9.7 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-2.6 3.4M6.5 7.2C3.9 9 2.5 12 2.5 12S6 18.5 12 18.5c1.8 0 3.3-.5 4.6-1.3M9.9 9.9a3 3 0 0 0 4.2 4.2M3.5 3.5l17 17']
+    : ['M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z', 'M9 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0'];
+  for (const x of d) { const p = document.createElementNS(NS, 'path'); p.setAttribute('d', x); svg.append(p); }
+  return svg;
+}
+
 function showLogin() {
   $('#dash').hidden = true;
   $('#auth').hidden = false;
+  const eye = $('#pwEye');
+  eye.replaceChildren(eyeIcon(false));
+  eye.onclick = () => {
+    const show = $('#pw').type === 'password';
+    $('#pw').type = show ? 'text' : 'password';
+    eye.setAttribute('aria-pressed', String(show));
+    eye.setAttribute('aria-label', show ? 'پنهان کردن رمز' : 'نمایش رمز');
+    eye.replaceChildren(eyeIcon(show));
+    $('#pw').focus();
+  };
   $('#pw').focus();
   $('#loginForm').onsubmit = async e => {
     e.preventDefault();
     const r = await api('/api/admin/login', { password: $('#pw').value });
     if (!r.ok) return void ($('#loginErr').textContent = errText(r));
     $('#pw').value = '';
+    $('#pw').type = 'password';
     start();
   };
 }

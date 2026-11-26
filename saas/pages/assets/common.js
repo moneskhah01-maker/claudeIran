@@ -49,6 +49,14 @@ const ERRORS = {
 const errText = r => ERRORS[r.error] || (r.errors ? 'فیلدهای مشخص‌شده را اصلاح کنید.' : 'خطایی رخ داد. دوباره امتحان کنید.');
 
 function toast(msg) {
+  const host = document.getElementById('toast'); // the console's own toast (/app)
+  if (host) {
+    host.textContent = msg;
+    host.classList.add('on');
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => host.classList.remove('on'), 2800);
+    return;
+  }
   const t = h('div', { class: 'toast', role: 'status' }, msg);
   document.body.append(t);
   setTimeout(() => t.remove(), 2600);

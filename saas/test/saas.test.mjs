@@ -208,3 +208,38 @@ test('admin: login required, suspend logs the customer out and blocks their keys
   assert.equal(ov.json.ledgerOk, true);
   assert.ok((await a.get('/api/admin/audit')).json.rows.some(r => r.action === 'user_status'));
 });
+
+test('SMS codes expire after 2 minutes', async () => {
+  await t.client().post('/api/auth/otp/request', { mobile: '09190001111' });
+  const [row] = await t.db.query(`SELECT extract(epoch FROM expires_at - created_at) AS s FROM otp_codes WHERE mobile = '+989190001111'`);
+  assert.equal(Math.round(row.s), 120);
+  await t.db.query(`UPDATE otp_codes SET expires_at = now() - interval '1 second' WHERE mobile = '+989190001111'`);
+  const { code } = t.sent.at(-1);
+  assert.equal((await t.client().post('/api/auth/otp/verify', { mobile: '+989190001111', code, name: 'x y', terms: true })).status, 401, 'expired code refused');
+});
+
+test('SMS customer sets a password, logs in with mobile + password; change needs the current one and signs out other sessions', async () => {
+  const a = t.client();
+  await a.post('/api/auth/otp/request', { mobile: '09125556666' });
+  const { mobile, code } = t.sent.at(-1);
+  assert.equal((await a.post('/api/auth/otp/verify', { mobile, code, name: 'سارا', terms: true })).status, 200);
+  assert.equal((await a.get('/api/auth/me')).json.user.hasPassword, false);
+  assert.equal((await a.post('/api/auth/password', { password: 'short' })).status, 422);
+  assert.equal((await a.post('/api/auth/password', { password: 'first-password-1' })).status, 200);
+
+  const b = t.client();
+  assert.equal((await b.post('/api/auth/login', { identifier: '۰۹۱۲۵۵۵۶۶۶۶', password: 'first-password-1' })).status, 200, 'mobile in Persian digits works');
+  assert.equal((await a.post('/api/auth/password', { current: 'wrong-one-xx', password: 'second-password-2' })).status, 401);
+  assert.equal((await a.post('/api/auth/password', { current: 'first-password-1', password: 'second-password-2' })).status, 200);
+  assert.equal((await a.get('/api/auth/me')).status, 200, 'the session that changed it stays');
+  assert.equal((await b.get('/api/auth/me')).status, 401, 'other sessions are signed out');
+  assert.equal((await t.client().post('/api/auth/login', { identifier: mobile, password: 'first-password-1' })).status, 401);
+  assert.equal((await t.client().post('/api/auth/login', { identifier: mobile, password: 'second-password-2' })).status, 200);
+});
+
+test('overview returns the console figures', async () => {
+  const { c } = await newUser();
+  const o = (await c.get('/api/app/overview')).json;
+  for (const k of ['req7', 'spend7', 'latency', 'tin', 'tout', 'failed24']) assert.ok(k in o.stats, k);
+  assert.ok('credited' in o.money && 'pending' in o.payments);
+});

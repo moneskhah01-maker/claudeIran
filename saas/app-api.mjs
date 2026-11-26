@@ -14,21 +14,37 @@ export function createAppApi({ db, auth, payments, send, readJson, audit, client
   };
 
   async function overview(req, res, { user, account }) {
-    const [days, [keys], recent] = await Promise.all([
+    const [days, [keys], recent, [s], [money], [pay]] = await Promise.all([
       db.query(
         `SELECT to_char(d, 'YYYY-MM-DD') AS day, COALESCE(sum(u.cost), 0) AS cost, count(u.id) AS requests,
-                COALESCE(sum(u.input_tokens + u.output_tokens), 0) AS tokens
+                COALESCE(sum(u.input_tokens + u.output_tokens), 0) AS tokens, COALESCE(sum(u.output_tokens), 0) AS output
            FROM generate_series(current_date - 29, current_date, interval '1 day') d
            LEFT JOIN usage_events u ON u.account_id = $1 AND u.created_at >= d AND u.created_at < d + interval '1 day' AND u.status = 'ok'
           GROUP BY d ORDER BY d`, [account.id]),
       db.query(`SELECT count(*) FILTER (WHERE revoked_at IS NULL) AS active FROM api_keys WHERE account_id = $1`, [account.id]),
-      db.query(`SELECT id, model, status, input_tokens, output_tokens, cost, latency_ms, created_at FROM usage_events WHERE account_id = $1 ORDER BY id DESC LIMIT 10`, [account.id]),
+      db.query(`SELECT u.id, u.model, u.status, u.input_tokens, u.output_tokens, u.cost, u.latency_ms, u.created_at, k.name AS key_name
+                  FROM usage_events u LEFT JOIN api_keys k ON k.id = u.api_key_id WHERE u.account_id = $1 ORDER BY u.id DESC LIMIT 5`, [account.id]),
+      // usage figures for the tiles: 7 days, 30 days, and the failures of the last 24 hours
+      db.query(`SELECT count(*) FILTER (WHERE created_at > now() - interval '7 days') AS req7,
+                       count(*) AS req30,
+                       COALESCE(sum(cost) FILTER (WHERE created_at > now() - interval '7 days'), 0) AS spend7,
+                       COALESCE(sum(cost), 0) AS spend30,
+                       COALESCE(round(avg(latency_ms) FILTER (WHERE status = 'ok')), 0) AS latency,
+                       COALESCE(sum(input_tokens), 0) AS tin, COALESCE(sum(output_tokens), 0) AS tout,
+                       count(*) FILTER (WHERE status = 'error' AND created_at > now() - interval '24 hours') AS failed24
+                  FROM usage_events WHERE account_id = $1 AND created_at > now() - interval '30 days'`, [account.id]),
+      db.query(`SELECT COALESCE(sum(amount) FILTER (WHERE amount > 0), 0) AS credited, COALESCE(-sum(amount) FILTER (WHERE kind = 'usage'), 0) AS used,
+                       max(created_at) FILTER (WHERE kind = 'topup') AS last_topup
+                  FROM ledger WHERE account_id = $1`, [account.id]),
+      db.query(`SELECT count(*) FILTER (WHERE status = 'pending') AS pending,
+                       max(resolved_at) FILTER (WHERE status = 'rejected') AS last_rejected
+                  FROM payments WHERE account_id = $1`, [account.id]),
     ]);
     return send(req, res, 200, {
       ok: true,
-      user: { name: user.name, email: user.email, mobile: user.mobile },
+      user: { name: user.name, email: user.email, mobile: user.mobile, hasPassword: !!user.password_hash },
       balance: account.balance, held: account.held, available: account.balance - account.held,
-      activeKeys: keys.active, days, recent,
+      activeKeys: keys.active, days, recent, stats: s, money, payments: pay,
       upstream: process.env.UPSTREAM || 'mock',
       models: Object.entries(pricing.models).map(([id, p]) => ({ id, label: p.label, input: p.input, output: p.output })),
     });
@@ -69,9 +85,10 @@ export function createAppApi({ db, auth, payments, send, readJson, audit, client
 
   async function usage(req, res, { account }) {
     const rows = await db.query(
-      `SELECT u.id, u.model, u.status, u.input_tokens, u.output_tokens, u.cost, u.latency_ms, u.created_at, k.name AS key_name
+      `SELECT u.id, u.model, u.status, u.input_tokens, u.output_tokens, u.cost, u.hold, u.error, u.latency_ms, u.created_at, u.settled_at,
+              k.name AS key_name, k.prefix AS key_prefix
          FROM usage_events u LEFT JOIN api_keys k ON k.id = u.api_key_id
-        WHERE u.account_id = $1 ORDER BY u.id DESC LIMIT 200`, [account.id]);
+        WHERE u.account_id = $1 ORDER BY u.id DESC LIMIT 500`, [account.id]);
     return send(req, res, 200, { ok: true, rows });
   }
 

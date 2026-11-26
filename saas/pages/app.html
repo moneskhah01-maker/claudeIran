@@ -2,87 +2,132 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#E9E9EB">
 <title>کنسول کلاود ایران</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/saas-assets/saas.css">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/Vazirmatn-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Manrope-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/saas-assets/console.css">
+<link rel="stylesheet" href="/saas-assets/panel.css">
 <script src="/saas-assets/common.js" defer></script>
+<script src="/saas-assets/legal.js" defer></script>
 <script src="/saas-assets/app.js" defer></script>
 </head>
 <body>
-<noscript><p class="empty">این صفحه به جاوااسکریپت نیاز دارد.</p></noscript>
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="sr-only">
+ <symbol id="i-brand" viewBox="0 0 32 32"><path d="m16 3.5 10.5 12.5L16 28.5 5.5 16 16 3.5Z" stroke-width="2.6"/><path d="M11 16h10" stroke-width="2.6" stroke-linecap="round"/></symbol>
+ <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+ <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16M8 16v-4m4 4V8m4 8v-6"/></symbol>
+ <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8.5-8.5M16 6.5l2.5 2.5M14 8.5l2 2"/></symbol>
+ <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+ <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="14" rx="3"/><path d="M3 9.5h18M16 14.5h2"/></symbol>
+ <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 19.5 6v5.5c0 4.8-3.3 8-7.5 9.5-4.2-1.5-7.5-4.7-7.5-9.5V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></symbol>
+ <symbol id="i-code" viewBox="0 0 24 24"><path d="m8.5 7-5 5 5 5M15.5 7l5 5-5 5"/></symbol>
+ <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 6.5-2.5 7.5-2.5 8.5h17C20.5 16.5 18 15.5 18 9ZM10 20.5a2.2 2.2 0 0 0 4 0"/></symbol>
+ <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+ <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></symbol>
+ <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m-4.5-4.5L12 15l4.5-4.5M4.5 19.5h15"/></symbol>
+ <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+ <symbol id="i-check-sq" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/></symbol>
+ <symbol id="i-arrow-ur" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+ <symbol id="i-down" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8m-3.5-3.5L12 16l3.5-3.5"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 9.5V13l2.5 1.5M9.5 3h5"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+ <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 21 19.5H3L12 4Z"/><path d="M12 10v4.5M12 17.2h.01"/></symbol>
+ <symbol id="i-empty" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M4 13h4.5l1.5 2h4l1.5-2H20"/></symbol>
+ <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+ <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M10.6 5.6A9.7 9.7 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-2.6 3.4M6.5 7.2C3.9 9 2.5 12 2.5 12S6 18.5 12 18.5c1.8 0 3.3-.5 4.6-1.3M9.9 9.9a3 3 0 0 0 4.2 4.2M3.5 3.5l17 17"/></symbol>
+ <symbol id="i-logout" viewBox="0 0 24 24"><path d="M14 4.5h3.5a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H14M10 16l-4-4 4-4M6 12h10"/></symbol>
+ <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.5l-5-5Z"/><path d="M14 3.5v5h5M9 13h6M9 16.5h4"/></symbol>
+</svg>
+<div class="wall" aria-hidden="true"><i></i><i></i><i></i></div>
+<noscript><p class="state">این صفحه به جاوااسکریپت نیاز دارد.</p></noscript>
 
-<!-- login / sign-up -->
+<!-- ============ login / sign-up ============ -->
 <section class="auth" id="auth" hidden>
-  <div class="card">
-    <div class="brand"><i aria-hidden="true"></i>کلاود ایران</div>
-    <h1 id="authTitle">ورود به کنسول</h1>
-    <p class="muted small">پنل مشتریان: کلید API، اعتبار و گزارش مصرف.</p>
-    <div class="seg" role="group" aria-label="روش ورود" id="methodSeg">
-      <button type="button" data-method="sms" aria-pressed="true">پیامک</button>
-      <button type="button" data-method="email" aria-pressed="false">ایمیل و رمز</button>
-    </div>
-
-    <form id="smsForm" novalidate>
-      <div class="field" id="mobileField">
-        <label for="mobile">شمارهٔ موبایل</label>
-        <input id="mobile" type="tel" inputmode="numeric" autocomplete="tel" placeholder="09121234567" class="ltr">
-      </div>
-      <div class="field" id="codeField" hidden>
-        <label for="code">کد ۶ رقمی پیامک‌شده</label>
-        <input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" class="ltr">
-      </div>
-      <div id="smsNew" hidden>
-        <div class="field">
-          <label for="smsName">نام و نام خانوادگی</label>
-          <input id="smsName" type="text" autocomplete="name">
-        </div>
-        <label class="check field"><input type="checkbox" id="smsTerms"> قوانین استفاده و حریم خصوصی را می‌پذیرم.</label>
-      </div>
-      <div class="err" id="smsErr" role="alert"></div>
-      <button class="btn primary w100" id="smsBtn">دریافت کد</button>
-      <button class="btn line sm" type="button" id="smsBack" hidden>تغییر شماره</button>
-    </form>
-
-    <form id="emailForm" novalidate hidden>
-      <div class="field" id="nameField" hidden>
-        <label for="name">نام و نام خانوادگی</label>
-        <input id="name" type="text" autocomplete="name">
-      </div>
-      <div class="field">
-        <label for="email">ایمیل</label>
-        <input id="email" type="email" autocomplete="email" class="ltr">
-      </div>
-      <div class="field">
-        <label for="password">رمز عبور <span class="muted" id="pwHint" hidden>(حداقل ۱۰ نویسه)</span></label>
-        <input id="password" type="password" autocomplete="current-password" class="ltr">
-      </div>
-      <label class="check field" id="termsField" hidden><input type="checkbox" id="terms"> قوانین استفاده و حریم خصوصی را می‌پذیرم.</label>
-      <div class="err" id="emailErr" role="alert"></div>
-      <button class="btn primary w100" id="emailBtn">ورود</button>
-      <p class="small muted mt14">
-        <span id="swapText">حساب ندارید؟</span>
-        <button type="button" class="btn line sm" id="swapMode">ساخت حساب</button>
-      </p>
-    </form>
-    <p class="small muted mt18">کلاود ایران سرویسی مستقل است و وابستگی رسمی به Anthropic ندارد.</p>
+ <div class="auth-card">
+  <a class="brand" href="/" aria-label="ClaudeIran — بازگشت به وب‌سایت"><svg class="ico" aria-hidden="true"><use href="#i-brand"/></svg><span class="en">claudeiran</span></a>
+  <h1 id="authTitle">ورود به کنسول</h1>
+  <p class="lead">کلید API، اعتبار و گزارش مصرف در یک جا.</p>
+  <div class="fpills" role="group" aria-label="روش ورود">
+   <button type="button" data-method="sms" aria-pressed="true">کد پیامکی</button>
+   <button type="button" data-method="password" aria-pressed="false">رمز عبور</button>
   </div>
+
+  <form id="smsForm" novalidate>
+   <div class="field">
+    <label for="mobile">شمارهٔ موبایل</label>
+    <input id="mobile" type="tel" inputmode="numeric" autocomplete="tel" placeholder="09121234567" dir="ltr">
+   </div>
+   <div id="codeBox" hidden>
+    <div class="field">
+     <label for="code">کد ۶ رقمی پیامک‌شده</label>
+     <input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" dir="ltr">
+    </div>
+    <div class="otp-meta" id="otpMeta" aria-live="polite"><span id="otpLeft"></span><button type="button" class="linkbtn" id="resend" hidden>ارسال دوبارهٔ کد</button></div>
+   </div>
+   <div id="smsNew" hidden>
+    <div class="field">
+     <label for="smsName">نام و نام خانوادگی</label>
+     <input id="smsName" type="text" autocomplete="name" maxlength="80">
+    </div>
+    <label class="check"><input type="checkbox" id="smsTerms"><span><button type="button" class="linkbtn" data-legal="terms">قوانین استفاده</button> و <button type="button" class="linkbtn" data-legal="privacy">حریم خصوصی</button> را خوانده‌ام و می‌پذیرم.</span></label>
+   </div>
+   <p class="err-line" id="smsErr" role="alert"></p>
+   <button class="btn btn-dark" id="smsBtn">دریافت کد</button>
+   <p class="swap" id="smsBackRow" hidden><button type="button" class="linkbtn" id="smsBack">تغییر شماره</button></p>
+  </form>
+
+  <form id="pwForm" novalidate hidden>
+   <div class="field" id="nameField" hidden>
+    <label for="name">نام و نام خانوادگی</label>
+    <input id="name" type="text" autocomplete="name" maxlength="80">
+   </div>
+   <div class="field">
+    <label for="ident" id="identLbl">ایمیل یا شمارهٔ موبایل</label>
+    <input id="ident" type="text" autocomplete="username" dir="ltr">
+   </div>
+   <div class="field">
+    <label for="password">رمز عبور <span class="hint" id="pwHint" hidden>(دست‌کم ۱۰ نویسه)</span></label>
+    <div class="pw"><input id="password" type="password" autocomplete="current-password" dir="ltr"></div>
+   </div>
+   <label class="check" id="termsRow" hidden><input type="checkbox" id="terms"><span><button type="button" class="linkbtn" data-legal="terms">قوانین استفاده</button> و <button type="button" class="linkbtn" data-legal="privacy">حریم خصوصی</button> را خوانده‌ام و می‌پذیرم.</span></label>
+   <p class="err-line" id="pwErr" role="alert"></p>
+   <button class="btn btn-dark" id="pwBtn">ورود</button>
+   <p class="swap"><span id="swapText">حساب ندارید؟</span><button type="button" class="linkbtn" id="swapMode">ساخت حساب با ایمیل</button></p>
+  </form>
+  <p class="legal">کلاود ایران سرویسی مستقل است و وابستگی رسمی، نمایندگی یا مشارکتی با Anthropic ندارد. <button type="button" class="linkbtn" data-legal="terms">قوانین</button> · <button type="button" class="linkbtn" data-legal="privacy">حریم خصوصی</button></p>
+ </div>
 </section>
 
-<!-- dashboard -->
-<div class="shell" id="dash" hidden>
-  <nav class="side" aria-label="بخش‌های کنسول">
-    <div class="brand"><i aria-hidden="true"></i>کلاود ایران</div>
-    <a href="#overview">نمای کلی</a>
-    <a href="#keys">کلیدهای API</a>
-    <a href="#billing">اعتبار و پرداخت</a>
-    <a href="#usage">گزارش مصرف</a>
-    <a href="#docs">شروع سریع</a>
-    <div class="grow"></div>
-    <div class="who"><div id="whoName"></div><button class="btn line sm" id="logout">خروج</button></div>
-  </nav>
+<!-- ============ console ============ -->
+<div class="app" id="dash" hidden>
+ <div class="screen">
+  <div class="titlebar">
+   <div class="lights"><a class="r" href="/" aria-label="بستن کنسول و بازگشت به وب‌سایت"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M3 3l4 4M7 3 3 7"/></svg></a><button class="y" type="button" id="minBtn" aria-label="کوچک کردن پنجره"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.5 5h5"/></svg></button><button class="g" type="button" id="fullBtn" aria-label="تمام‌صفحه"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M3 6.8V3h3.8M7 3.2V7H3.2"/></svg></button></div>
+   <span class="wtitle en" aria-hidden="true">ClaudeIran Console</span>
+  </div>
+  <header class="top">
+   <a class="brand" href="/" aria-label="ClaudeIran — بازگشت به وب‌سایت"><svg class="ico" aria-hidden="true"><use href="#i-brand"/></svg><span class="en">claudeiran</span></a>
+   <div class="top-end">
+    <button class="demo-pill mode-pill" type="button" id="modePill"><span class="dot" aria-hidden="true"></span><span id="modeText"></span></button>
+    <button class="icon-btn bell" type="button" id="bellBtn" aria-label="اعلان‌ها" aria-haspopup="dialog" aria-expanded="false"><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg></button>
+    <button class="me" type="button" id="meBtn" aria-label="حساب کاربری" aria-haspopup="dialog" aria-expanded="false"></button>
+   </div>
+  </header>
+  <nav class="tabs" role="tablist" aria-label="بخش‌های کنسول" id="tabs"></nav>
   <main id="view" tabindex="-1"></main>
+  <footer class="foot"><span class="f-l"><span class="live" aria-hidden="true"></span><span id="footNote"></span></span><span class="f-r"><button class="foot-btn" type="button" data-legal="terms">قوانین استفاده</button><button class="foot-btn" type="button" data-legal="privacy">حریم خصوصی</button><a class="foot-btn" href="/">بازگشت به وب‌سایت ↗</a></span></footer>
+ </div>
 </div>
+<div class="dock" id="dock" aria-hidden="true"><button type="button" id="dockBtn" tabindex="-1"><span class="appic" aria-hidden="true"><svg class="ico"><use href="#i-brand"/></svg></span><span>کنسول کلاود ایران</span></button></div>
+<div class="pop" id="pop" role="dialog" aria-label="منو"></div>
+<div class="modal" id="modal" aria-hidden="true"><button class="scrim" type="button" id="scrim" aria-label="بستن" tabindex="-1"></button><div class="dialog" id="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgTitle"><button class="x" type="button" id="dlgClose" aria-label="بستن"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></button><div id="dlgBody"></div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

@@ -9,7 +9,7 @@ import { timingSafeEqual } from 'node:crypto';
 
 const COOKIE = 'ci_session';
 const SESSION_DAYS = 30;
-const OTP_TTL_MIN = 3, OTP_MAX_ATTEMPTS = 5;
+const OTP_TTL_MIN = 2, OTP_MAX_ATTEMPTS = 5; // a code works for 2 minutes; a new one can be asked for after 1
 
 const cleanName = v => String(v ?? '').trim().replace(/\s+/g, ' ');
 const publicUser = u => ({ id: u.id, name: u.name, email: u.email, mobile: u.mobile, hasPassword: !!u.password_hash, createdAt: u.created_at });
@@ -76,22 +76,26 @@ export function createAuth({ db, sms, send, readJson, clientIp, audit }) {
     return send(req, res, 201, { ok: true, user: publicUser(u) }, undefined, { 'Set-Cookie': await startSession(req, u.id) });
   }
 
+  // Password login with an email OR a mobile number (SMS customers can set a password in their account).
   async function login(req, res) {
     const ip = clientIp(req);
     const b = await readJson(req, 4096);
-    const email = normEmail(b.email), password = String(b.password ?? '');
-    if (ipLogin.over(ip, false) || emailLogin.over(email, false)) {
+    const raw = String(b.identifier ?? b.email ?? '').trim(), password = String(b.password ?? '');
+    const mobile = normMobile(raw), email = mobile ? null : normEmail(raw);
+    const who = mobile || email; // rate-limit key per account
+    if (ipLogin.over(ip, false) || emailLogin.over(who, false)) {
       return send(req, res, 429, { ok: false, error: 'rate_limited' }, undefined, { 'Retry-After': '900' });
     }
-    const [u] = EMAIL.test(email) ? await db.query('SELECT * FROM users WHERE email = $1', [email]) : [];
-    // Always run scrypt, even for unknown emails, and give one error for both cases.
+    const [u] = mobile ? await db.query('SELECT * FROM users WHERE mobile = $1', [mobile])
+      : EMAIL.test(email) ? await db.query('SELECT * FROM users WHERE email = $1', [email]) : [];
+    // Always run scrypt, even for unknown accounts, and give one error for both cases.
     const ok = checkPassword(password, u?.password_hash || DUMMY_HASH) && !!u?.password_hash;
     if (!ok) {
-      ipLogin.over(ip); emailLogin.over(email);
+      ipLogin.over(ip); emailLogin.over(who);
       return send(req, res, 401, { ok: false, error: 'bad_credentials' });
     }
     if (u.status !== 'active') return send(req, res, 403, { ok: false, error: 'suspended' });
-    ipLogin.reset(ip); emailLogin.reset(email);
+    ipLogin.reset(ip); emailLogin.reset(who);
     await audit(`user:${u.id}`, 'login', `user:${u.id}`, { method: 'password' }, ip);
     return send(req, res, 200, { ok: true, user: publicUser(u) }, undefined, { 'Set-Cookie': await startSession(req, u.id) });
   }
@@ -165,6 +169,31 @@ export function createAuth({ db, sms, send, readJson, clientIp, audit }) {
     return send(req, res, 200, { ok: true }, undefined, { 'Set-Cookie': cookie(req, COOKIE, '', { maxAge: 0 }) });
   }
 
+  // Set a first password (SMS-only customers) or change it (needs the current one).
+  // Afterwards every other session of this customer is signed out, so a stolen session dies with the old password.
+  async function setPassword(req, res) {
+    const s = await currentUser(req);
+    if (!s) return send(req, res, 401, { ok: false, error: 'unauthorized' });
+    const ip = clientIp(req);
+    const b = await readJson(req, 2048);
+    const password = String(b.password ?? '');
+    if (s.user.password_hash) {
+      if (ipLogin.over(ip, false)) return send(req, res, 429, { ok: false, error: 'rate_limited' });
+      if (!checkPassword(String(b.current ?? ''), s.user.password_hash)) {
+        ipLogin.over(ip);
+        return send(req, res, 401, { ok: false, error: 'wrong_current' });
+      }
+    }
+    if (password.length < 10 || password.length > 200) return send(req, res, 422, { ok: false, errors: { password: 'password' } });
+    const keep = sha256(readCookie(req, COOKIE));
+    await db.tx(async t => {
+      await t.query('UPDATE users SET password_hash = $2 WHERE id = $1', [s.user.id, hashPassword(password)]);
+      await t.query('DELETE FROM sessions WHERE user_id = $1 AND token_hash <> $2', [s.user.id, keep]);
+    });
+    await audit(`user:${s.user.id}`, s.user.password_hash ? 'password_change' : 'password_set', `user:${s.user.id}`, null, ip);
+    return send(req, res, 200, { ok: true });
+  }
+
   async function me(req, res) {
     const s = await currentUser(req);
     if (!s) return send(req, res, 401, { ok: false, error: 'unauthorized' });
@@ -180,6 +209,7 @@ export function createAuth({ db, sms, send, readJson, clientIp, audit }) {
       'POST /api/auth/otp/verify': otpVerify,
       'POST /api/auth/logout': logout,
       'GET /api/auth/me': me,
+      'POST /api/auth/password': setPassword,
     },
   };
 }

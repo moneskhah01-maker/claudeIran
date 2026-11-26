@@ -134,3 +134,9 @@ dialog.wide{width:min(980px,calc(100vw - 32px))}
 /* vertical rhythm between the sections of a view */
 #view{display:flex;flex-direction:column;gap:16px}
 #view>.top,#view>.banner{margin-bottom:0}
+/* password field with a show/hide button (admin login) */
+.pw{position:relative}
+.pw input{padding-inline-end:48px}
+.pw button{position:absolute;inset-block:4px;inset-inline-end:4px;width:38px;border:0;border-radius:9px;background:transparent;display:grid;place-items:center;color:var(--text-2);cursor:pointer}
+.pw button:hover{background:var(--card);color:var(--ink)}
+.pw svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}

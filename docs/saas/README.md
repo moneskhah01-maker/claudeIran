@@ -4,7 +4,7 @@ Branch `feature/admin-panel`. Everything lives in `saas/`; `server.mjs` hands ea
 
 | URL | What | Who |
 |---|---|---|
-| `/app/` | customer panel: sign-up/login (SMS code or email+password), API keys, credit, top-ups, usage, quick start | customers |
+| `/app/` | customer console, same design as `console.html` (its CSS is copied verbatim into `saas/pages/assets/console.css`): sign-up/login by SMS code (valid 2 minutes, resend after 1) or password (email or mobile + password), overview, usage, API keys, requests, wallet and top-ups, account (set/change password), quick start; terms and privacy reader | customers |
 | `/admin/` | owner panel: overview, top-up review, customers (credit adjust, suspend), early-access list, audit log | owner |
 | `/v1/messages`, `/v1/models` | API gateway, same request/response shape as the Messages API, billed from credit | customers' code |
 | `/pay/zarinpal/callback` | Zarinpal return URL | Zarinpal |
@@ -84,6 +84,10 @@ Not done yet. Steps, in order:
    ```
    Restore test: `pg_restore -d claudeiran_test /var/backups/claudeiran-1.dump`.
 6. Smoke test: sign up at `/app/`, create a key, ask the admin to credit it, call `/v1/messages`, confirm the balance dropped and `/admin/` shows "ledger ok".
+
+## Terms and privacy text
+
+`saas/pages/assets/legal.js` holds the Persian terms of use and privacy notice shown at sign-up, in the footer and in the account menu. It is a **draft** written to match what the code does today (what is stored, that request bodies are not stored, holds and charges). Have it reviewed before commercial launch, update `LEGAL_UPDATED` on every change, and revise the privacy section when a real upstream supplier is added (it will then process request content).
 
 ## Changing the schema
 
