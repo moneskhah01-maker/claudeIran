@@ -40,45 +40,56 @@ function showLogin() {
 async function start() {
   const me = await api('/api/admin/me');
   if (!me.ok) return showLogin();
-  byId('auth').hidden = true;
-  byId('dash').hidden = false;
+  const show = () => { byId('auth').hidden = true; byId('dash').hidden = false; };
+  if (document.startViewTransition && !ui.reduced() && !byId('auth').hidden) document.startViewTransition(show); else show();
   window.onhashchange = () => go(location.hash.slice(1));
   go(location.hash.slice(1) || 'overview', true);
 }
-function renderTabs() {
-  const pending = state.ov?.totals?.pending_payments || 0;
-  byId('tabs').replaceChildren(...NAV.map(([k, icon, label]) => h('button', { class: 'tab', type: 'button', role: 'tab', 'aria-selected': String(state.view === k), onclick: () => { location.hash = k; } },
-    ic(icon), label, k === 'payments' && pending ? h('span', { class: 'count num' }, String(pending)) : null)));
+// Tabs are built once; afterwards only the selection and the pending badge change, so the thumb slides.
+function renderTabs(instant) {
+  const tabs = byId('tabs'), pending = state.ov?.totals?.pending_payments || 0;
+  if (!tabs.children.length) tabs.replaceChildren(...NAV.map(([k, icon, label]) => h('button', { class: 'tab', type: 'button', role: 'tab', 'data-view': k, onclick: () => { location.hash = k; } },
+    ic(icon), label, k === 'payments' ? h('span', { class: 'count num' }) : null)));
+  for (const b of tabs.children) b.setAttribute('aria-selected', String(b.dataset.view === state.view));
+  const badge = tabs.querySelector('.count');
+  badge.textContent = String(pending); badge.hidden = !pending;
   requestAnimationFrame(() => {
-    const tabs = byId('tabs'), sel = tabs.querySelector('[aria-selected="true"]');
+    const sel = tabs.querySelector('[aria-selected="true"]');
     if (!sel) return;
+    tabs.classList.toggle('no-anim', !!instant);
     tabs.style.setProperty('--tx', sel.offsetLeft + 'px');
     tabs.style.setProperty('--tw', sel.offsetWidth + 'px');
   });
 }
-addEventListener('resize', () => renderTabs());
+addEventListener('resize', () => renderTabs(true));
 
 async function go(view, first) {
   if (!NAV.some(n => n[0] === view)) view = 'overview';
+  const navigating = view !== state.view || !!first;
+  const idx = v => NAV.findIndex(n => n[0] === v);
+  const dir = idx(view) >= idx(state.view) ? 'next' : 'prev';
   // a link from another view may hand over a filter (e.g. overview -> payments "paid"); otherwise each view has its default
-  if (view !== state.view || first) Object.assign(state, { query: '', filter: state.nextFilter || (view === 'payments' ? 'pending' : 'all'), page: 1, sort: { k: null, dir: 1 } });
+  if (navigating) Object.assign(state, { query: '', filter: state.nextFilter || (view === 'payments' ? 'pending' : 'all'), page: 1, sort: { k: null, dir: 1 } });
   state.nextFilter = null;
   state.view = view;
   if (location.hash.slice(1) !== view) history.replaceState(null, '', '#' + view);
+  if (navigating) ui.loading(true);
   const ov = await api('/api/admin/overview');
+  if (!ov.ok) ui.loading(false);
   if (ov.status === 401) return showLogin();
   if (!ov.ok) return toast(errText(ov));
   state.ov = ov;
-  renderTabs();
+  renderTabs(!!first);
   byId('modeText').textContent = !ov.saas ? 'پایگاه داده تنظیم نشده' : ov.upstream === 'mock' ? 'API در حالت آزمایشی' : 'API فعال';
   byId('modePill').classList.toggle('live', ov.saas && ov.upstream !== 'mock');
   const v = byId('view');
   const content = !ov.saas && view !== 'waitlist'
     ? [head('ADMIN', 'پایگاه داده تنظیم نشده', 'DATABASE_URL خالی است؛ پنل مشتریان و API خاموش‌اند. فهرست انتظار کار می‌کند.', [btn('فهرست انتظار', 'list', () => { location.hash = 'waitlist'; }, 'btn-dark')])]
     : await VIEWS[view]();
-  v.replaceChildren(...[content].flat(Infinity).filter(Boolean));
-  v.classList.remove('anim'); void v.offsetWidth; v.classList.add('anim');
-  if (!first) v.focus({ preventScroll: true });
+  ui.loading(false);
+  if (state.view !== view) return; // another tab was chosen while this one loaded
+  await ui.swapView(v, content, { animate: navigating, dir });
+  if (navigating && !first) { v.focus({ preventScroll: true }); scrollTo({ top: 0, behavior: ui.reduced() ? 'auto' : 'smooth' }); }
 }
 const rerender = () => go(state.view);
 byId('refreshBtn').onclick = () => { rerender(); toast('به‌روز شد'); };

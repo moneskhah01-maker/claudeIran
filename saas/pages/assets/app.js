@@ -125,19 +125,21 @@ document.addEventListener('click', e => { const b = e.target.closest('[data-lega
 async function start() {
   const me = await api('/api/auth/me');
   if (!me.ok) return showAuth();
-  byId('auth').hidden = true;
-  byId('dash').hidden = false;
+  const show = () => { byId('auth').hidden = true; byId('dash').hidden = false; };
+  if (document.startViewTransition && !ui.reduced() && !byId('auth').hidden) document.startViewTransition(show); else show();
   byId('meBtn').textContent = me.user.name.trim().charAt(0); // one letter: two Persian initials often spell a word (م+ا = «ما»)
   window.onhashchange = () => go(location.hash.slice(1));
   go(location.hash.slice(1) || 'overview', true);
 }
 
-function renderTabs() {
+// The tab buttons are built once; later only aria-selected changes, so the white thumb can slide between tabs.
+function renderTabs(instant) {
   const tabs = byId('tabs');
-  tabs.replaceChildren(...NAV.map(([k, icon, label]) => h('button', {
-    class: 'tab', type: 'button', role: 'tab', 'aria-selected': String(state.view === k), onclick: () => { location.hash = k; },
+  if (!tabs.children.length) tabs.replaceChildren(...NAV.map(([k, icon, label]) => h('button', {
+    class: 'tab', type: 'button', role: 'tab', 'data-view': k, onclick: () => { location.hash = k; },
   }, ic(icon), label)));
-  requestAnimationFrame(() => moveThumb(true));
+  for (const b of tabs.children) b.setAttribute('aria-selected', String(b.dataset.view === state.view));
+  requestAnimationFrame(() => moveThumb(instant));
 }
 function moveThumb(instant) {
   const tabs = byId('tabs'), sel = tabs.querySelector('[aria-selected="true"]');
@@ -150,12 +152,18 @@ addEventListener('resize', () => moveThumb(true));
 
 async function go(view, first) {
   if (!NAV.some(n => n[0] === view)) view = 'overview';
-  if (view !== state.view || first) Object.assign(state, { query: '', filter: 'all', page: 1, sort: { k: null, dir: 1 } });
+  // navigating = a different tab (animated); otherwise it is a re-render of the same view after a filter/sort (instant)
+  const navigating = view !== state.view || !!first;
+  const idx = v => NAV.findIndex(n => n[0] === v);
+  const dir = idx(view) >= idx(state.view) ? 'next' : 'prev';
+  if (navigating) Object.assign(state, { query: '', filter: 'all', page: 1, sort: { k: null, dir: 1 } });
   state.view = view;
   if (location.hash.slice(1) !== view) history.replaceState(null, '', '#' + view);
   closePop();
-  renderTabs();
+  renderTabs(!!first);
+  if (navigating) ui.loading(true);
   const ov = await api('/api/app/overview');
+  if (!ov.ok) ui.loading(false);
   if (ov.status === 401) return showAuth();
   if (!ov.ok) return toast(errText(ov));
   state.ov = ov;
@@ -169,9 +177,10 @@ async function go(view, first) {
   byId('bellBtn').classList.toggle('has', alerts().some(a => a.warn));
   const view$ = byId('view');
   const content = await VIEWS[view]();
-  view$.replaceChildren(...[content].flat(Infinity).filter(Boolean));
-  view$.classList.remove('anim'); void view$.offsetWidth; view$.classList.add('anim');
-  if (!first) view$.focus({ preventScroll: true });
+  ui.loading(false);
+  if (state.view !== view) return; // the user already moved to another tab while this one was loading
+  await ui.swapView(view$, content, { animate: navigating, dir });
+  if (navigating && !first) { view$.focus({ preventScroll: true }); scrollTo({ top: 0, behavior: ui.reduced() ? 'auto' : 'smooth' }); }
 }
 const rerender = () => go(state.view);
 

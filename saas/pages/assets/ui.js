@@ -68,6 +68,7 @@ let lastFocus = null;
 function openModal(nodes, wide = false) {
   closePop();
   const m = byId('modal');
+  m.classList.remove('closing');
   if (!m.classList.contains('open')) lastFocus = document.activeElement;
   byId('dialog').classList.toggle('wide', wide);
   byId('dlgBody').replaceChildren(...[nodes].flat(Infinity).filter(Boolean));
@@ -78,10 +79,15 @@ function openModal(nodes, wide = false) {
 }
 function closeModal() {
   const m = byId('modal');
-  if (!m.classList.contains('open')) return;
-  m.classList.remove('open'); m.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
-  if (lastFocus?.isConnected) lastFocus.focus();
+  if (!m.classList.contains('open') || m.classList.contains('closing')) return;
+  const done = () => {
+    m.classList.remove('open', 'closing'); m.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocus?.isConnected) lastFocus.focus();
+  };
+  if (reduced()) return done();
+  m.classList.add('closing');            // panel.css plays a short fade/scale-out, then the sheet is hidden
+  setTimeout(done, 180);
 }
 byId('dlgClose').onclick = closeModal;
 byId('scrim').onclick = closeModal;
@@ -127,13 +133,14 @@ function head(eyebrow, title, sub, actions = []) {
     h('div', { class: 'head-actions' }, actions));
 }
 function tile(value, label, badge, onclick) {
-  const inner = [h('span', { class: 'row' }, h('b', { class: 'num' }, value), badge || null), h('small', null, label)];
+  const plain = /^[\d,]+$/.test(String(value));
+  const inner = [h('span', { class: 'row' }, h('b', { class: 'num', 'data-count': plain ? String(value).replace(/,/g, '') : null }, value), badge || null), h('small', null, label)];
   return onclick ? h('button', { type: 'button', class: 'tile tap', onclick }, inner) : h('div', { class: 'tile' }, inner);
 }
 function figure(label, rial, unit, onclick, extraCls = '', badgeText = null) {
   const b = tmn(rial), cut = Math.max(0, b.length - 4);
   return h('button', { class: `figure ${extraCls}`.trim(), type: 'button', onclick },
-    h('span', null, h('span', { class: 'label' }, label), h('span', { class: 'big num' }, b.slice(0, cut), h('span', { class: 'tail' }, b.slice(cut))), h('span', { class: 'unit' }, unit)),
+    h('span', null, h('span', { class: 'label' }, label), h('span', { class: 'big num', 'data-count': String(Math.floor((Number(rial) || 0) / 10)), 'data-split': '' }, b.slice(0, cut), h('span', { class: 'tail' }, b.slice(cut))), h('span', { class: 'unit' }, unit)),
     badgeText ? h('span', { class: 'pill w' }, badgeText) : null);
 }
 const btn = (label, icon, onclick, cls = '') => h('button', { class: `btn ${cls}`.trim(), type: 'button', onclick }, icon ? ic(icon) : null, label);
@@ -151,6 +158,7 @@ function chart(key, days, field, unit, height, label) {
   vals.forEach((v, i) => {
     const bar = h('i', { class: [i >= n - 7 ? 'hi' : '', sel === i ? 'sel' : ''].filter(Boolean).join(' ') || null });
     bar.style.setProperty('--h', `${Math.max(1.5, (v / max) * 100).toFixed(1)}%`);
+    bar.style.setProperty('--i', i);
     field$.append(bar);
   });
   const marker = h('span', { class: 'marker hl' }, h('b', null, fmtV(vals[show])), jDay.format(dayDate(days[show].day)));
@@ -204,6 +212,7 @@ function ktable({ cols, rows, row, note, empty, all }) {
     onclick: e => { if (!e.target.closest('button')) row(r); },
     onkeydown: e => { if (e.key === 'Enter' && e.target === e.currentTarget) row(r); },
   } : null, cols.map(c => h('td', { class: [c.num ? 'n' : '', c.cls || ''].join(' ').trim() || null, 'data-l': c.label }, c.cell(r))))) : emptyRow);
+  [...tbody.rows].forEach((tr, n) => tr.style.setProperty('--r', Math.min(n, 12)));
   const from = data.length ? (state.page - 1) * state.perPage + 1 : 0, to = Math.min(data.length, state.page * state.perPage);
   const pageBtns = Array.from({ length: pages }, (_, i) => h('button', { type: 'button', 'aria-current': i + 1 === state.page ? 'page' : null, onclick: () => { state.page = i + 1; rerender(); } }, String(i + 1)))
     .slice(Math.max(0, state.page - 4), state.page + 3);
@@ -243,6 +252,63 @@ function csv(name, headRow, rows) {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
+/* ================= motion ================= */
+// Everything below is skipped when the visitor asked their system for reduced motion.
+function reduced() { return matchMedia('(prefers-reduced-motion: reduce)').matches; }
+
+// Thin progress bar at the top while a view loads; only appears if loading takes longer than 150 ms.
+const bar = h('div', { class: 'navprog', 'aria-hidden': 'true' });
+document.body.append(bar);
+let barTimer = null;
+function loading(on) {
+  clearTimeout(barTimer);
+  if (on) barTimer = setTimeout(() => bar.classList.add('on'), 150);
+  else { bar.classList.remove('on'); }
+}
+
+// Numbers count up from zero to their value (data-count), easing out.
+function countUps(root) {
+  if (reduced()) return;
+  for (const el of root.querySelectorAll('[data-count]')) {
+    const to = Number(el.dataset.count);
+    if (!Number.isFinite(to) || to <= 0) continue;
+    const split = el.hasAttribute('data-split'), t0 = performance.now(), dur = 700 + Math.min(500, Math.log10(to + 1) * 60);
+    const paint = v => {
+      const s = fmt(v);
+      if (!split) { el.textContent = s; return; }
+      const cut = Math.max(0, s.length - 4);   // keep the grey "tail" of big balances while counting
+      el.replaceChildren(s.slice(0, cut), h('span', { class: 'tail' }, s.slice(cut)));
+    };
+    const step = now => {
+      const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      paint(Math.round(to * e));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    paint(0);
+    requestAnimationFrame(step);
+  }
+}
+
+// Replaces the view's content. On navigation (animate=true) the old view slides out and the new one in,
+// from the side of the tab that was chosen (dir = 'next' | 'prev'); filtering/sorting just swaps instantly.
+async function swapView(el, nodes, { animate = false, dir = 'next' } = {}) {
+  const on = animate && !reduced();
+  const apply = () => {
+    el.replaceChildren(...[nodes].flat(Infinity).filter(Boolean));
+    el.classList.toggle('enter', on);
+  };
+  if (!on) { apply(); return; }
+  document.documentElement.dataset.dir = dir;
+  if (document.startViewTransition) {
+    // the browser snapshots the old view, runs apply(), then animates old -> new (see ::view-transition in panel.css)
+    await document.startViewTransition(apply).updateCallbackDone;
+  } else {
+    apply();
+    el.classList.remove('anim'); void el.offsetWidth; el.classList.add('anim');   // fallback: the concept's "rise" entrance
+  }
+  countUps(el);
+}
+
 // A confirm step in the console's own sheet instead of the browser's confirm() box. Resolves true/false.
 function confirmModal({ title, text, action, danger = false, note }) {
   return new Promise(resolve => {
@@ -263,5 +329,5 @@ function confirmModal({ title, text, action, danger = false, note }) {
 }
 
 return { byId, fmt, tmn, kfmt, jDate, jTime, jDay, jWd, dateOf, timeOf, stamp, dayDate, phone, ago, ic, money, signedMoney, st,
-  pwToggle, openModal, closeModal, openPop, closePop, confirmModal, head, tile, figure, btn, tapPill, cardHead, chart, ktable, tools, matches, viewBtn, csv };
+  pwToggle, openModal, closeModal, openPop, closePop, confirmModal, reduced, loading, countUps, swapView, head, tile, figure, btn, tapPill, cardHead, chart, ktable, tools, matches, viewBtn, csv };
 }

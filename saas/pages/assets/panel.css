@@ -64,3 +64,66 @@
 .btn-danger:hover{background:#9A1D23}
 /* the view is focused after each tab change for screen readers; no visible frame for that programmatic focus */
 #view:focus{outline:none}
+
+/* ===================== motion =====================
+   Navigation: the view slides in from the side of the chosen tab (View Transitions API, with the
+   concept's "rise" as fallback). After a navigation #view gets .enter and its pieces arrive in order:
+   cards rise, chart bars grow, the gauge arc draws, progress fills, table rows cascade.
+   Re-renders after a filter or sort have no .enter, so repeated work stays instant. */
+
+/* loading bar: appears only if a view takes longer than 150 ms */
+.navprog{position:fixed;top:0;inset-inline:0;height:3px;z-index:400;pointer-events:none;opacity:0;transition:opacity .25s;overflow:hidden}
+.navprog.on{opacity:1}
+.navprog::before{content:"";position:absolute;inset-block:0;width:40%;background:linear-gradient(90deg,transparent,var(--primary),transparent);animation:navprog 1.05s var(--ease) infinite}
+@keyframes navprog{from{left:-40%}to{left:100%}}
+
+/* sheets close with a short fade instead of vanishing */
+.modal.closing .scrim{animation:m-fade-out .18s var(--ease) both}
+.modal.closing .dialog{animation:m-pop-out .18s var(--ease) both}
+@keyframes m-fade-out{to{opacity:0}}
+@keyframes m-pop-out{to{opacity:0;transform:translateY(10px) scale(.97)}}
+
+@media (prefers-reduced-motion:no-preference){
+ /* view transition: only the content area moves; header and tabs stay put */
+ #view{view-transition-name:view}
+ ::view-transition-old(root),::view-transition-new(root){animation:none}
+ ::view-transition-old(view){animation:vt-out-next .2s var(--ease) both}
+ ::view-transition-new(view){animation:vt-in-next .45s var(--ease) both}
+ html[data-dir="prev"]::view-transition-old(view){animation-name:vt-out-prev}
+ html[data-dir="prev"]::view-transition-new(view){animation-name:vt-in-prev}
+ /* RTL: the next tab sits to the left, so new content comes from the left and the old leaves to the right */
+ @keyframes vt-out-next{to{opacity:0;transform:translateX(24px)}}
+ @keyframes vt-out-prev{to{opacity:0;transform:translateX(-24px)}}
+ @keyframes vt-in-next{from{opacity:0;transform:translateX(-32px)}}
+ @keyframes vt-in-prev{from{opacity:0;transform:translateX(32px)}}
+
+ /* staggered entrance of the view's sections */
+ #view.enter>*{animation:rise .5s var(--ease) both}
+ #view.enter>*:nth-child(2){animation-delay:.05s}
+ #view.enter>*:nth-child(3){animation-delay:.1s}
+ #view.enter>*:nth-child(4){animation-delay:.15s}
+ #view.enter>*:nth-child(n+5){animation-delay:.2s}
+
+ /* charts: bars grow left to right in a wave, the peak marker lands last */
+ #view.enter .barfield i{transform-origin:50% 100%;animation:grow-up .7s var(--ease) both;animation-delay:calc(var(--i,0) * 14ms + .12s)}
+ #view.enter .barfield .marker{animation:fade-up .4s var(--ease) .75s both}
+ #view.enter .steps button{transform-origin:50% 100%;animation:grow-up .75s var(--spring) both}
+ #view.enter .steps button:nth-child(2){animation-delay:.08s}
+ #view.enter .steps button:nth-child(3){animation-delay:.16s}
+ #view.enter .steps button:nth-child(4){animation-delay:.24s}
+ @keyframes grow-up{from{transform:scaleY(0)}}
+
+ /* gauge arc draws itself; progress bars fill */
+ #view.enter .gauge path[data-gsel="used"]{animation:arc-draw 1.1s var(--ease) .2s both}
+ @keyframes arc-draw{from{stroke-dasharray:0 100}}
+ #view.enter .progress span{animation:fill 1s var(--ease) .25s both}
+ @keyframes fill{from{width:0}}
+
+ /* table rows cascade */
+ #view.enter .kt tbody tr{animation:fade-up .4s var(--ease) both;animation-delay:calc(var(--r,0) * 30ms + .12s)}
+ @keyframes fade-up{from{opacity:0;transform:translateY(8px)}}
+
+ /* login card arrives; switching SMS/password forms cross-fades */
+ .auth-card{animation:popIn .55s var(--spring) both}
+ #smsForm:not([hidden]),#pwForm:not([hidden]),#codeBox:not([hidden]),#smsNew:not([hidden]){animation:fade-up .3s var(--ease) both}
+}
