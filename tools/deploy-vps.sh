@@ -11,7 +11,8 @@ SSH_CFG=/e/VeeJay/Vps-Iran/config
 
 TMP=$(mktemp -d)
 mkdir -p "$TMP/claudeiran"
-cp -r dist server.mjs "$TMP/claudeiran/"
+# every runtime module at the project root (server.mjs, admin.mjs, ...) ships with the build
+cp -r dist ./*.mjs "$TMP/claudeiran/"
 tar -C "$TMP" -czf "$TMP/claudeiran.tgz" claudeiran
 scp -F "$SSH_CFG" "$TMP/claudeiran.tgz" vps-iran:/root/claudeiran.tgz
 rm -rf "$TMP"
