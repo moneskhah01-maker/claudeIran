@@ -5,7 +5,7 @@ Branch `feature/admin-panel`. Everything lives in `saas/`; `server.mjs` hands ea
 | URL | What | Who |
 |---|---|---|
 | `/app/` | customer console, same design as `console.html` (its CSS is copied verbatim into `saas/pages/assets/console.css`): sign-up/login by SMS code (valid 2 minutes, resend after 1) or password (email or mobile + password), overview, usage, API keys, requests, wallet and top-ups, account (set/change password), quick start; terms and privacy reader | customers |
-| `/admin/` | owner panel: overview, top-up review, customers (credit adjust, suspend), early-access list, audit log | owner |
+| `/admin/` | owner panel in the landing page's flat look (same components as `/app`, themed by `admin.css`): overview with 30-day revenue/usage/requests/sign-up chart and to-do list, payment review with reasons, customer files (credit adjustment, suspend, ledger/payments/keys/requests), early-access list, audit log | owner |
 | `/v1/messages`, `/v1/models` | API gateway, same request/response shape as the Messages API, billed from credit | customers' code |
 | `/pay/zarinpal/callback` | Zarinpal return URL | Zarinpal |
 
@@ -61,6 +61,8 @@ npm run build                              # the landing (dist/) is still served
 # add to .env:  DATABASE_URL=pglite:./data/pgdata   and   ADMIN_PASSWORD_HASH=...   (node tools/admin-hash.mjs)
 node server.mjs 5230                       # http://localhost:5230/app/  and  /admin/
 ```
+
+Demo data for development: `node tools/seed-demo.mjs` adds 8 customers with a month of requests, top-ups (paid, pending, rejected), keys and a sample early-access list; `--reset` recreates them. It refuses to run unless `DATABASE_URL` is a PGlite (local) database. Demo customer login: `09120000000` + `demo-password-123`.
 
 With `SMS_PROVIDER` unset, the SMS code appears in the server console. PGlite (Postgres compiled to WebAssembly) keeps the dev database in `data/pgdata` (git-ignored); delete the folder to start over.
 

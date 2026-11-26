@@ -2,43 +2,87 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#E9E9EB">
 <title>مدیریت کلاود ایران</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/saas-assets/saas.css">
+<link rel="preload" href="/fonts/Vazirmatn-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Manrope-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/saas-assets/console.css">
+<link rel="stylesheet" href="/saas-assets/panel.css">
+<link rel="stylesheet" href="/saas-assets/admin.css">
 <script src="/saas-assets/common.js" defer></script>
+<script src="/saas-assets/ui.js" defer></script>
 <script src="/saas-assets/admin.js" defer></script>
 </head>
 <body>
-<noscript><p class="empty">این صفحه به جاوااسکریپت نیاز دارد.</p></noscript>
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="sr-only">
+ <symbol id="i-brand" viewBox="0 0 32 32"><path d="m16 3.5 10.5 12.5L16 28.5 5.5 16 16 3.5Z" stroke-width="2.6"/><path d="M11 16h10" stroke-width="2.6" stroke-linecap="round"/></symbol>
+ <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+ <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="14" rx="3"/><path d="M3 9.5h18M16 14.5h2"/></symbol>
+ <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 19.5c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5"/><path d="M15.5 5.2a3.5 3.5 0 0 1 0 6.6M18 14.8c1.8.6 3.1 2.1 3.5 4.7"/></symbol>
+ <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+ <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 19.5 6v5.5c0 4.8-3.3 8-7.5 9.5-4.2-1.5-7.5-4.7-7.5-9.5V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></symbol>
+ <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+ <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></symbol>
+ <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m-4.5-4.5L12 15l4.5-4.5M4.5 19.5h15"/></symbol>
+ <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></symbol>
+ <symbol id="i-check-sq" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/></symbol>
+ <symbol id="i-arrow-ur" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+ <symbol id="i-down" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8m-3.5-3.5L12 16l3.5-3.5"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 9.5V13l2.5 1.5M9.5 3h5"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+ <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 21 19.5H3L12 4Z"/><path d="M12 10v4.5M12 17.2h.01"/></symbol>
+ <symbol id="i-empty" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M4 13h4.5l1.5 2h4l1.5-2H20"/></symbol>
+ <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+ <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M10.6 5.6A9.7 9.7 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-2.6 3.4M6.5 7.2C3.9 9 2.5 12 2.5 12S6 18.5 12 18.5c1.8 0 3.3-.5 4.6-1.3M9.9 9.9a3 3 0 0 0 4.2 4.2M3.5 3.5l17 17"/></symbol>
+ <symbol id="i-logout" viewBox="0 0 24 24"><path d="M14 4.5h3.5a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H14M10 16l-4-4 4-4M6 12h10"/></symbol>
+ <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4.5v4h-4"/></symbol>
+ <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8.5-8.5M16 6.5l2.5 2.5M14 8.5l2 2"/></symbol>
+ <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16M8 16v-4m4 4V8m4 8v-6"/></symbol>
+</svg>
+<noscript><p class="state">این صفحه به جاوااسکریپت نیاز دارد.</p></noscript>
 
+<!-- ============ owner login ============ -->
 <section class="auth" id="auth" hidden>
-  <form class="card" id="loginForm" novalidate>
-    <div class="brand"><i aria-hidden="true"></i>کلاود ایران · مدیریت</div>
-    <div class="field">
-      <label for="pw">رمز مدیر</label>
-      <div class="pw"><input id="pw" type="password" autocomplete="current-password" class="ltr"><button type="button" id="pwEye" aria-label="نمایش رمز" aria-pressed="false"></button></div>
-    </div>
-    <div class="err" id="loginErr" role="alert"></div>
-    <button class="btn primary w100">ورود</button>
-  </form>
+ <form class="auth-card" id="loginForm" novalidate>
+  <span class="brand"><svg class="ico" aria-hidden="true"><use href="#i-brand"/></svg><span>کلاود ایران</span><span class="pill w">مدیریت</span></span>
+  <h1>ورود مدیر</h1>
+  <p class="lead">این بخش فقط برای مالک سرویس است.</p>
+  <div class="field">
+   <label for="pw">رمز مدیر</label>
+   <div class="pw"><input id="pw" type="password" autocomplete="current-password" dir="ltr"></div>
+  </div>
+  <p class="err-line" id="loginErr" role="alert"></p>
+  <button class="btn btn-dark">ورود</button>
+  <p class="legal"><a class="linkbtn" href="/">بازگشت به وب‌سایت</a></p>
+ </form>
 </section>
 
-<div class="shell" id="dash" hidden>
-  <nav class="side" aria-label="بخش‌های مدیریت">
-    <div class="brand"><i aria-hidden="true"></i>مدیریت</div>
-    <a href="#overview">نمای کلی</a>
-    <a href="#payments">پرداخت‌ها <span id="pendingBadge"></span></a>
-    <a href="#users">مشتریان</a>
-    <a href="#waitlist">فهرست انتظار</a>
-    <a href="#audit">گزارش رویدادها</a>
-    <div class="grow"></div>
-    <div class="who"><button class="btn line sm" id="logout">خروج</button></div>
-  </nav>
+<!-- ============ admin ============ -->
+<div class="app admin" id="dash" hidden>
+ <div class="screen">
+  <div class="admin-hero">
+   <header class="top">
+    <a class="brand" href="/" aria-label="کلاود ایران — وب‌سایت"><svg class="ico" aria-hidden="true"><use href="#i-brand"/></svg><span>کلاود ایران</span><span class="pill w">مدیریت</span></a>
+    <nav class="tabs" role="tablist" aria-label="بخش‌های مدیریت" id="tabs"></nav>
+    <div class="top-end">
+     <button class="demo-pill mode-pill" type="button" id="modePill"><span class="dot" aria-hidden="true"></span><span id="modeText"></span></button>
+     <button class="icon-btn" type="button" id="refreshBtn" aria-label="به‌روزرسانی"><svg class="ico" aria-hidden="true"><use href="#i-refresh"/></svg></button>
+     <button class="icon-btn" type="button" id="logoutBtn" aria-label="خروج"><svg class="ico" aria-hidden="true"><use href="#i-logout"/></svg></button>
+    </div>
+   </header>
+  </div>
   <main id="view" tabindex="-1"></main>
+  <footer class="foot"><span class="f-l"><span class="live" aria-hidden="true"></span><span id="footNote">پنل مدیریت کلاود ایران · همهٔ اقدامات در گزارش رویدادها ثبت می‌شود.</span></span><span class="f-r"><a class="foot-btn" href="/app/">کنسول مشتریان ↗</a><a class="foot-btn" href="/">وب‌سایت ↗</a></span></footer>
+ </div>
 </div>
-
-<dialog id="userDlg" class="wide" aria-labelledby="userDlgTitle"></dialog>
+<div class="pop" id="pop" role="dialog" aria-label="منو"></div>
+<div class="modal" id="modal" aria-hidden="true"><button class="scrim" type="button" id="scrim" aria-label="بستن" tabindex="-1"></button><div class="dialog" id="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgTitle"><button class="x" type="button" id="dlgClose" aria-label="بستن"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></button><div id="dlgBody"></div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

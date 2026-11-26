@@ -1,0 +1,81 @@
+/* Owner panel theme: the console components (console.css) in the landing page's flat Keel look —
+   grey canvas, a white rounded sheet, a grey header panel, solid #F5F5F7 cards, no glass or wallpaper. */
+:root{
+ --glass:#F5F5F7; --glass-hi:#FAFAFB; --glass-lo:#FFFFFF; --glass-line:transparent;
+ --chrome:#FFFFFF; --chrome-dk:#181C25; --blur:none; --blur-lg:none;
+ --card:#F5F5F7; --card-2:#FAFAFB; --line:#E2E2E6; --line-2:#D9D9DE;
+ --fill:#EDEDF0; --fill-2:#E2E2E6; --secondary:#6B6F78; --text-2:#4F535D;
+ --lift:none; --r-2xl:36px;
+}
+body{background:var(--canvas)}
+
+/* sheet + header panel, as on the landing page (.sheet / .hero-panel) */
+.app{max-width:none;padding:12px}
+.screen{background:var(--white);border:0;border-radius:var(--r-2xl);box-shadow:none;padding:0 0 22px;min-height:calc(100vh - 24px);-webkit-backdrop-filter:none;backdrop-filter:none}
+.admin-hero{background:var(--canvas);margin:12px;border-radius:calc(var(--r-2xl) - 8px);padding:16px 22px}
+.admin .top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px}
+.admin .brand{gap:10px;font-size:var(--fs-md)}
+.admin .brand .pill{height:26px;margin-inline-start:2px}
+#view{padding:6px 34px 0}
+.foot{margin:28px 34px 0}
+
+/* nav pill like the landing (.navpill): translucent white, thin border, white thumb */
+.admin .tabs{position:relative;top:auto;margin:0 auto;border-radius:14px;background:rgba(255,255,255,.55);border:1px solid var(--line-2);box-shadow:none;padding:4px}
+.admin .tabs::before{border-radius:10px;box-shadow:0 1px 2px rgba(24,28,37,.06)}
+.admin .tab{border-radius:10px;min-height:40px;font-weight:550}
+.admin .tab .count{margin-inline-start:2px;background:var(--primary);color:var(--ink)}
+
+/* surfaces */
+.card,.tile,.alerts,.tbl-card{background:var(--card);border:0;box-shadow:none}
+.card-w,.tile{background:var(--card)}
+.card .tile,.tbl-card .tile,.dialog .tile{background:var(--white)}
+.alerts .arow.focus,.itile{background:var(--white);border:0}
+.btn{border-radius:13px;box-shadow:none;background:var(--white);border-color:var(--line-2)}
+.btn:hover{background:var(--card)}
+.btn-dark{background:var(--ink);border-color:var(--ink);box-shadow:none}
+.btn-dark:hover{background:#2A303D;box-shadow:0 14px 30px -14px rgba(24,28,37,.6),0 0 0 3px var(--p-16)}
+.btn-line{background:transparent}
+.btn-danger{background:var(--down);border-color:var(--down);color:#fff} /* restated: .btn above would otherwise win (same specificity, later file) */
+.btn-danger:hover{background:#9A1D23}
+.icon-btn,.me{border-radius:13px;border:1px solid var(--line-2);background:var(--white);box-shadow:none}
+.demo-pill{background:var(--white);border:1px solid var(--line-2)}
+.dialog{background:var(--white);border:0;border-radius:28px;box-shadow:0 40px 90px -30px rgba(24,28,37,.35)}
+.modal .scrim{background:rgba(24,28,37,.42);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.pop{background:var(--white);border:1px solid var(--line)}
+.keybox{background:var(--card)}
+.field input,.field select,.field textarea{background:var(--card-2);border-color:var(--line-2);border-radius:13px}
+.search{background:var(--white);border:1px solid var(--line-2)}
+.fpills{background:var(--white);border:1px solid var(--line-2)}
+.fpills button[aria-pressed="true"]{background:var(--ink);color:#fff;box-shadow:none}
+.kt tbody tr:hover{background:var(--white)}
+.auth-card{background:var(--white);border:0;box-shadow:0 40px 90px -30px rgba(24,28,37,.25)}
+.auth-card .brand{display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:var(--fs-md);margin-bottom:18px}
+
+/* page-specific pieces */
+.kpi-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.metric-pills{margin-inline-start:auto}
+.chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.who{display:flex;align-items:center;gap:10px;min-width:0}
+.who .av{width:34px;height:34px;border:0;background:var(--white);font-size:var(--fs-xs)}
+.who b{display:block;font-weight:650;font-size:var(--fs-sm);line-height:1.4}
+.who small{display:block;font-size:var(--fs-xs);color:var(--secondary);direction:ltr;text-align:right;unicode-bidi:isolate}
+.inline-sel{height:36px;border-radius:10px;border:1px solid var(--line-2);background:var(--white);padding:0 10px;font-size:var(--fs-xs);font-weight:650}
+.inline-note{height:36px;border-radius:10px;border:1px solid var(--line-2);background:var(--white);padding:0 10px;font-size:var(--fs-xs);width:100%;min-width:140px}
+.sub-tabs{margin:16px 0 4px}
+.adj{display:grid;grid-template-columns:1fr 1.4fr auto;gap:8px;align-items:end;margin-top:6px}
+.adj .field{margin-top:0}
+.rank{font-family:Manrope,sans-serif;font-weight:700;color:var(--secondary);width:20px;text-align:center}
+.mono-detail{font:500 12px/1.6 ui-monospace,Consolas,monospace;direction:ltr;text-align:left;color:var(--text-2);white-space:normal;word-break:break-word}
+
+@media (max-width:1180px){.admin .top{grid-template-columns:1fr auto}.admin .tabs{grid-column:1 / -1;grid-row:2;width:100%}}
+@media (max-width:760px){
+ .app{padding:6px}
+ .screen{border-radius:24px}
+ .admin-hero{margin:6px;padding:12px;border-radius:20px}
+ #view{padding:4px 14px 0}
+ .foot{margin:22px 14px 0}
+ .kpi-row{grid-template-columns:1fr 1fr}
+ .adj{grid-template-columns:1fr}
+ .admin .brand span:not(.pill){display:none}
+ .demo-pill span:last-child{display:none}
+}

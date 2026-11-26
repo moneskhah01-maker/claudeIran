@@ -60,3 +60,7 @@
 .card .warn{margin-top:14px}
 @media (max-width:760px){.split-a,.split-b{grid-template-columns:1fr}.bigline strong{font-size:40px}}
 .tfoot .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn-danger{background:var(--down);border-color:var(--down);color:#fff}
+.btn-danger:hover{background:#9A1D23}
+/* the view is focused after each tab change for screen readers; no visible frame for that programmatic focus */
+#view:focus{outline:none}

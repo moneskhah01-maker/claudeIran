@@ -1,205 +1,362 @@
-// Owner panel (/admin): overview, top-up review, customers (credit adjust, suspend), early-access list, audit log.
+// Owner panel (/admin): overview, top-up review, customers (credit, suspend), early-access list, audit log.
+// Built from the same components as the customer console (ui.js), themed like the landing page (admin.css).
+(() => {
 'use strict';
 
-let saasOn = false;
-const VIEWS = { overview, payments, users, waitlist, audit };
+const state = { ov: null, view: 'overview', query: '', filter: 'all', page: 1, perPage: 10, sort: { k: null, dir: 1 }, sel: {}, metric: 'revenue', cache: {} };
+const ui = createUI({ state, rerender: () => rerender() });
+const { byId, fmt, tmn, kfmt, stamp, dateOf, phone, ago, ic, money, signedMoney, st, pwToggle, openModal, closeModal, confirmModal,
+  head, tile, figure, btn, tapPill, cardHead, chart, ktable, tools, matches, viewBtn } = ui;
 
-async function start() {
-  const me = await api('/api/admin/me');
-  if (!me.ok) return showLogin();
-  $('#auth').hidden = true;
-  $('#dash').hidden = false;
-  $('#logout').onclick = async () => { await api('/api/admin/logout', {}); showLogin(); };
-  window.onhashchange = route;
-  route();
-}
+const NAV = [['overview', 'grid', 'نمای کلی'], ['payments', 'wallet', 'پرداخت‌ها'], ['customers', 'users', 'مشتریان'], ['waitlist', 'list', 'فهرست انتظار'], ['audit', 'shield', 'گزارش رویدادها']];
+const PAY = { pending: 'در انتظار بررسی', paid: 'پرداخت‌شده', rejected: 'ردشده', failed: 'ناموفق' };
+const USTAT = { active: 'فعال', suspended: 'غیرفعال' };
+const WAIT = { new: 'جدید', approved: 'تأییدشده', invited: 'دعوت‌شده', rejected: 'ردشده' };
+const KIND = { topup: 'شارژ', usage: 'مصرف API', adjustment: 'اصلاح مدیر', refund: 'کسر/بازپرداخت' };
+const ACTION = {
+  admin_login: 'ورود مدیر', signup: 'ثبت‌نام', login: 'ورود', key_create: 'ساخت کلید', key_revoke: 'ابطال کلید', topup_manual: 'درخواست کارت‌به‌کارت',
+  payment_approve: 'تأیید پرداخت', payment_reject: 'رد پرداخت', payment_paid: 'پرداخت درگاه', credit_adjust: 'اصلاح اعتبار', user_status: 'تغییر وضعیت حساب',
+  password_set: 'تعیین رمز', password_change: 'تغییر رمز',
+};
+const who = (name, sub) => h('span', { class: 'who' }, h('span', { class: 'av' }, (name || '?').trim().charAt(0)), h('span', null, h('b', null, name), sub ? h('small', null, sub) : null));
+const contact = u => u.email || phone(u.mobile) || '—';
 
-// eye icon drawn with SVG DOM calls (no innerHTML), open or crossed out
-function eyeIcon(off) {
-  const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true');
-  const d = off ? ['M10.6 5.6A9.7 9.7 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-2.6 3.4M6.5 7.2C3.9 9 2.5 12 2.5 12S6 18.5 12 18.5c1.8 0 3.3-.5 4.6-1.3M9.9 9.9a3 3 0 0 0 4.2 4.2M3.5 3.5l17 17']
-    : ['M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z', 'M9 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0'];
-  for (const x of d) { const p = document.createElementNS(NS, 'path'); p.setAttribute('d', x); svg.append(p); }
-  return svg;
-}
-
+/* ================= login ================= */
 function showLogin() {
-  $('#dash').hidden = true;
-  $('#auth').hidden = false;
-  const eye = $('#pwEye');
-  eye.replaceChildren(eyeIcon(false));
-  eye.onclick = () => {
-    const show = $('#pw').type === 'password';
-    $('#pw').type = show ? 'text' : 'password';
-    eye.setAttribute('aria-pressed', String(show));
-    eye.setAttribute('aria-label', show ? 'پنهان کردن رمز' : 'نمایش رمز');
-    eye.replaceChildren(eyeIcon(show));
-    $('#pw').focus();
-  };
-  $('#pw').focus();
-  $('#loginForm').onsubmit = async e => {
+  byId('dash').hidden = true;
+  byId('auth').hidden = false;
+  pwToggle(byId('pw'));
+  byId('pw').focus();
+  byId('loginForm').onsubmit = async e => {
     e.preventDefault();
-    const r = await api('/api/admin/login', { password: $('#pw').value });
-    if (!r.ok) return void ($('#loginErr').textContent = errText(r));
-    $('#pw').value = '';
-    $('#pw').type = 'password';
+    const r = await api('/api/admin/login', { password: byId('pw').value });
+    if (!r.ok) { byId('loginErr').textContent = errText(r); return; }
+    byId('pw').value = ''; byId('pw').type = 'password'; byId('loginErr').textContent = '';
     start();
   };
 }
 
-async function route() {
-  const name = location.hash.slice(1) in VIEWS ? location.hash.slice(1) : 'overview';
-  document.querySelectorAll('.side a').forEach(a => a.getAttribute('href') === '#' + name ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
-  const view = $('#view');
-  view.replaceChildren(h('p', { class: 'muted' }, 'در حال بارگذاری…'));
+/* ================= shell ================= */
+async function start() {
+  const me = await api('/api/admin/me');
+  if (!me.ok) return showLogin();
+  byId('auth').hidden = true;
+  byId('dash').hidden = false;
+  window.onhashchange = () => go(location.hash.slice(1));
+  go(location.hash.slice(1) || 'overview', true);
+}
+function renderTabs() {
+  const pending = state.ov?.totals?.pending_payments || 0;
+  byId('tabs').replaceChildren(...NAV.map(([k, icon, label]) => h('button', { class: 'tab', type: 'button', role: 'tab', 'aria-selected': String(state.view === k), onclick: () => { location.hash = k; } },
+    ic(icon), label, k === 'payments' && pending ? h('span', { class: 'count num' }, String(pending)) : null)));
+  requestAnimationFrame(() => {
+    const tabs = byId('tabs'), sel = tabs.querySelector('[aria-selected="true"]');
+    if (!sel) return;
+    tabs.style.setProperty('--tx', sel.offsetLeft + 'px');
+    tabs.style.setProperty('--tw', sel.offsetWidth + 'px');
+  });
+}
+addEventListener('resize', () => renderTabs());
+
+async function go(view, first) {
+  if (!NAV.some(n => n[0] === view)) view = 'overview';
+  // a link from another view may hand over a filter (e.g. overview -> payments "paid"); otherwise each view has its default
+  if (view !== state.view || first) Object.assign(state, { query: '', filter: state.nextFilter || (view === 'payments' ? 'pending' : 'all'), page: 1, sort: { k: null, dir: 1 } });
+  state.nextFilter = null;
+  state.view = view;
+  if (location.hash.slice(1) !== view) history.replaceState(null, '', '#' + view);
   const ov = await api('/api/admin/overview');
   if (ov.status === 401) return showLogin();
-  saasOn = ov.saas;
-  $('#pendingBadge').replaceChildren(saasOn && ov.totals.pending_payments ? pill('pending', num(ov.totals.pending_payments)) : '');
-  if (!saasOn && name !== 'waitlist' && name !== 'overview') return view.replaceChildren(h('div', { class: 'banner' }, 'پایگاه داده تنظیم نشده (DATABASE_URL)؛ فقط فهرست انتظار در دسترس است.'));
-  view.replaceChildren(...[await VIEWS[name](ov)].flat().filter(Boolean));
-  view.focus({ preventScroll: true });
+  if (!ov.ok) return toast(errText(ov));
+  state.ov = ov;
+  renderTabs();
+  byId('modeText').textContent = !ov.saas ? 'پایگاه داده تنظیم نشده' : ov.upstream === 'mock' ? 'API در حالت آزمایشی' : 'API فعال';
+  byId('modePill').classList.toggle('live', ov.saas && ov.upstream !== 'mock');
+  const v = byId('view');
+  const content = !ov.saas && view !== 'waitlist'
+    ? [head('ADMIN', 'پایگاه داده تنظیم نشده', 'DATABASE_URL خالی است؛ پنل مشتریان و API خاموش‌اند. فهرست انتظار کار می‌کند.', [btn('فهرست انتظار', 'list', () => { location.hash = 'waitlist'; }, 'btn-dark')])]
+    : await VIEWS[view]();
+  v.replaceChildren(...[content].flat(Infinity).filter(Boolean));
+  v.classList.remove('anim'); void v.offsetWidth; v.classList.add('anim');
+  if (!first) v.focus({ preventScroll: true });
 }
+const rerender = () => go(state.view);
+byId('refreshBtn').onclick = () => { rerender(); toast('به‌روز شد'); };
+byId('logoutBtn').onclick = async () => { await api('/api/admin/logout', {}); history.replaceState(null, '', location.pathname); showLogin(); };
+byId('modePill').onclick = () => openModal([
+  h('h2', { id: 'dlgTitle' }, 'وضعیت سرویس'),
+  h('dl', { class: 'dl' },
+    h('div', null, h('dt', null, 'API بالادستی'), h('dd', null, state.ov.upstream === 'mock' ? 'آزمایشی (mock) — تا گذر از دروازهٔ G0' : state.ov.upstream)),
+    h('div', null, h('dt', null, 'دفتر حساب'), h('dd', null, state.ov.ledgerOk ? 'تراز است' : 'ناتراز!')),
+    h('div', null, h('dt', null, 'کارت‌به‌کارت'), h('dd', null, state.ov.payments?.manual.instructions ? 'فعال' : 'متن واریز تنظیم نشده')),
+    h('div', null, h('dt', null, 'زرین‌پال'), h('dd', null, state.ov.payments?.zarinpal.enabled ? (state.ov.payments.zarinpal.sandbox ? 'آزمایشی' : 'فعال') : 'خاموش')),
+    h('div', null, h('dt', null, 'تعرفه‌ها'), h('dd', null, state.ov.placeholderPrices ? 'موقت (placeholder)' : 'نهایی'))),
+  h('div', { class: 'f-actions' }, h('button', { class: 'btn btn-dark', type: 'button', 'data-close': '' }, 'بستن')),
+]);
 
-const pageHead = (title, ...actions) => h('div', { class: 'top' }, h('h1', null, title), h('div', { class: 'row' }, actions));
-const tile = (label, value, unit) => h('div', { class: 'card tile' }, h('div', { class: 'label' }, label), h('div', { class: 'num' }, value, unit ? h('small', null, unit) : null));
+/* ================= overview ================= */
+function adminAlerts() {
+  const o = state.ov, t = o.totals, list = [];
+  if (!o.ledgerOk) list.push({ ic: 'alert', h: 'دفتر حساب ناتراز است', p: 'جمع تراکنش‌های یک یا چند حساب با موجودی یکی نیست؛ پیش از هر اقدام بررسی کنید.', go: () => { location.hash = 'audit'; }, bad: true });
+  if (t.pending_payments) list.push({ ic: 'clock', h: `${t.pending_payments} پرداخت در انتظار بررسی`, p: 'واریزها را با حساب بانکی تطبیق دهید و تأیید یا رد کنید.', go: () => { location.hash = 'payments'; }, warn: true });
+  if (o.upstream === 'mock') list.push({ ic: 'lock', h: 'API در حالت آزمایشی', p: 'هیچ مدلی فراخوانی نمی‌شود تا دروازهٔ G0 (تأمین مجاز) باز شود.', go: () => byId('modePill').click() });
+  if (o.placeholderPrices) list.push({ ic: 'alert', h: 'تعرفه‌ها موقت‌اند', p: 'پیش از راه‌اندازی، saas/pricing.json را با قیمت‌های قرارداد به‌روز کنید.', go: () => byId('modePill').click() });
+  if (!o.payments?.manual.instructions) list.push({ ic: 'wallet', h: 'متن واریز کارت‌به‌کارت تنظیم نشده', p: 'MANUAL_PAY_INFO را در فایل تنظیمات سرور بگذارید.', go: () => byId('modePill').click() });
+  return list;
+}
+const METRICS = { revenue: ['دریافتی', 'cost', 'تومان'], usage: ['مصرف API', 'cost', 'تومان'], requests: ['درخواست', 'n', 'درخواست'], signups: ['ثبت‌نام', 'n', 'مشتری'] };
 
-function overview(ov) {
-  if (!ov.saas) return [pageHead('نمای کلی'), h('div', { class: 'banner' }, 'پایگاه داده تنظیم نشده (DATABASE_URL)؛ پنل مشتریان و API خاموش است. فهرست انتظار کار می‌کند.')];
-  const t = ov.totals;
+function overview() {
+  const o = state.ov, t = o.totals, m = state.metric;
+  // chart() reads one numeric field per day; copy the chosen metric into it
+  const days = o.series.map(d => ({ day: d.day, cost: m === 'revenue' ? d.revenue : d.usage, n: m === 'requests' ? d.requests : d.signups }));
+  const field = METRICS[m][1];
+  const sum30 = days.reduce((a, d) => a + Number(d[field]), 0);
+  const alerts = adminAlerts();
   return [
-    pageHead('نمای کلی'),
-    ov.upstream === 'mock' ? h('div', { class: 'banner' }, 'API در حالت آزمایشی (mock) است: هیچ مدلی فراخوانی نمی‌شود. اتصال به تأمین‌کننده فقط پس از گذر از دروازهٔ G0.') : null,
-    ov.ledgerOk ? null : h('div', { class: 'banner bad' }, 'هشدار: جمع دفتر حساب با موجودی یک یا چند حساب نمی‌خواند. پیش از هر تراکنش دیگری بررسی کنید.'),
-    h('div', { class: 'grid g4' },
-      tile('مشتریان', num(t.users), `+${num(t.users7)} در ۷ روز`),
-      tile('پرداخت‌های در انتظار', num(t.pending_payments)),
-      tile('دریافتی ۳۰ روز', toman(t.paid30), 'تومان'),
-      tile('مصرف API در ۳۰ روز', toman(t.usage30), 'تومان')),
-    h('div', { class: 'grid g3' },
-      tile('مجموع موجودی مشتریان', toman(t.balances), 'تومان'),
-      tile('درخواست‌های ۲۴ ساعت', num(t.requests24)),
-      h('div', { class: 'card tile' }, h('div', { class: 'label' }, 'درگاه‌ها'), h('div', { class: 'stack small' },
-        h('div', null, 'کارت‌به‌کارت: ', ov.payments.manual.instructions ? pill('ok', 'فعال') : pill('pending', 'متن واریز تنظیم نشده')),
-        h('div', null, 'زرین‌پال: ', ov.payments.zarinpal.enabled ? pill('ok', ov.payments.zarinpal.sandbox ? 'آزمایشی' : 'فعال') : pill('', 'خاموش'))))),
+    head('ADMIN · مدیریت', 'نمای کلی', 'درآمد، مصرف، مشتریان و کارهای در انتظار', [
+      btn('به‌روزرسانی', 'refresh', () => { rerender(); toast('به‌روز شد'); }),
+      t.pending_payments ? btn(`بررسی ${t.pending_payments} پرداخت`, 'wallet', () => { location.hash = 'payments'; }, 'btn-dark') : null,
+    ]),
+    h('div', { class: 'grid-main' },
+      h('div', { class: 'stack' },
+        h('article', { class: 'card' }, figure('دریافتی ۳۰ روز اخیر', t.paid30, 'تومان · پرداخت‌های تأییدشده', () => { state.nextFilter = 'paid'; location.hash = 'payments'; }),
+          h('div', { class: 'kpi-row' },
+            tile(fmt(t.users), 'کل مشتریان', h('span', { class: 'bd up' }, `+${fmt(t.users7)}`), () => { location.hash = 'customers'; }),
+            tile(tmn(t.balances), 'موجودی نزد مشتریان · تومان', null, () => { location.hash = 'customers'; }),
+            tile(tmn(t.usage30), 'مصرف API · ۳۰ روز · تومان'),
+            tile(fmt(t.requests24), 'درخواست · ۲۴ ساعت'))),
+        h('article', { class: 'card' },
+          h('div', { class: 'chart-head' }, h('div', null, h('h2', null, `${METRICS[m][0]} روزانه`), h('p', { class: 'sub' }, `۳۰ روز گذشته · جمع: ${field === 'cost' ? tmn(sum30) : fmt(sum30)} ${METRICS[m][2]}`)),
+            h('div', { class: 'fpills metric-pills', role: 'group', 'aria-label': 'شاخص نمودار' }, Object.entries(METRICS).map(([k, [label]]) =>
+              h('button', { type: 'button', 'aria-pressed': String(m === k), onclick: () => { state.metric = k; delete state.sel.admin; rerender(); } }, label)))),
+          chart('admin', days, field, METRICS[m][2], 190, `نمودار ${METRICS[m][0]} روزانه`))),
+      h('div', { class: 'stack' },
+        h('article', { class: 'alerts', 'aria-label': 'کارهای مدیر' },
+          h('div', { class: 'card-head' }, h('div', null, h('h2', { class: 'fs-md' }, 'نیاز به توجه'), h('p', { class: 'sub' }, alerts.length ? `${alerts.length} مورد` : 'همه چیز مرتب است'))),
+          alerts.length ? alerts.map(a => h('div', { class: `arow tap-row ${a.bad ? 'focus' : ''}`.trim(), role: 'button', tabindex: 0, onclick: a.go, onkeydown: e => { if (e.key === 'Enter') a.go(); } },
+            h('span', { class: 'itile' }, ic(a.ic)), h('div', null, h('h3', null, a.h, a.warn || a.bad ? h('span', { class: 'unread', 'aria-hidden': 'true' }) : null), h('p', null, a.p)),
+            h('span', { class: 'when' }, ic('arrow-ur', 'flip'))))
+            : h('div', { class: 'state' }, h('span', { class: 'itile' }, ic('check-sq')), h('h3', null, 'کاری در انتظار نیست'))),
+        h('article', { class: 'card' }, cardHead('پرمصرف‌ترین مشتریان', '۳۰ روز اخیر'),
+          o.topCustomers.length ? o.topCustomers.map((c, i) => h('div', { class: 'arow tap-row', role: 'button', tabindex: 0, onclick: () => customerModal(c.id), onkeydown: e => { if (e.key === 'Enter') customerModal(c.id); } },
+            h('span', { class: 'rank' }, String(i + 1)), h('div', null, h('h3', null, c.name), h('p', null, h('span', { class: 'num' }, fmt(c.requests)), ' درخواست')),
+            h('span', { class: 'when' }, money(c.spend)))) : h('p', { class: 'sub' }, 'هنوز مصرفی ثبت نشده است.')))),
+    h('div', { class: 'grid-main split-b' },
+      h('section', { class: 'tbl-card' },
+        h('div', { class: 'card-head' }, h('div', null, h('h2', { class: 'fs-md' }, 'آخرین پرداخت‌ها')), btn('همه', null, () => { state.nextFilter = 'all'; location.hash = 'payments'; }, 'btn-line')),
+        ktable({ all: 1, rows: o.recentPayments, row: p => paymentModal(p.id), empty: 'پرداختی نیست', note: 'برای جزئیات روی ردیف بزنید.', cols: [
+          { k: 'c', label: 'مشتری', cell: p => who(p.name) },
+          { k: 'a', label: 'مبلغ', num: 1, cell: p => money(p.amount) },
+          { k: 's', label: 'وضعیت', cls: 'lead2', cell: p => st(p.status, PAY[p.status]) },
+        ] })),
+      h('section', { class: 'tbl-card' },
+        h('div', { class: 'card-head' }, h('div', null, h('h2', { class: 'fs-md' }, 'مشتریان تازه')), btn('همه', null, () => { location.hash = 'customers'; }, 'btn-line')),
+        ktable({ all: 1, rows: o.recentUsers, row: u => customerModal(u.id), empty: 'مشتری‌ای نیست', note: 'برای پروندهٔ مشتری روی ردیف بزنید.', cols: [
+          { k: 'c', label: 'مشتری', cell: u => who(u.name, contact(u)) },
+          { k: 'j', label: 'عضویت', cell: u => h('span', { class: 'dim' }, ago(u.created_at)) },
+          { k: 's', label: 'وضعیت', cls: 'lead2', cell: u => st(u.status === 'active' ? 'ok' : 'error', USTAT[u.status]) },
+        ] }))),
   ];
 }
 
+/* ================= payments ================= */
 async function payments() {
-  const status = new URLSearchParams(location.hash.split('?')[1] || '').get('s') || 'pending';
-  const r = await api(`/api/admin/payments?status=${status}`);
-  const filter = h('div', { class: 'seg', role: 'group', 'aria-label': 'وضعیت' }, ['pending', 'paid', 'rejected', 'failed', 'all'].map(s =>
-    h('button', { type: 'button', 'aria-pressed': String(s === status), onclick: async () => { list.replaceChildren(await paymentTable(s)); filter.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.textContent === (STATUS_FA[s] || 'همه')))); } }, STATUS_FA[s] || 'همه')));
-  const list = h('div', null, render(r.rows || []));
-
-  async function paymentTable(s) { return render((await api(`/api/admin/payments?status=${s}`)).rows || []); }
-  function render(rows) {
-    return table(['زمان', 'مشتری', 'روش', 'مبلغ (تومان)', 'اطلاعات واریز / مرجع', 'وضعیت', ''], rows.map(p => h('tr', null,
-      h('td', null, when(p.created_at)),
-      h('td', null, h('button', { class: 'btn line sm', onclick: () => openUser(p.user_id) }, p.name), h('div', { class: 'small muted ltr' }, p.email || p.mobile)),
-      h('td', null, PROVIDER_FA[p.provider]), h('td', null, h('strong', null, toman(p.amount))),
-      h('td', { class: 'small' }, p.receipt || p.ref_id || '—', p.note ? h('div', { class: 'muted' }, p.note) : null),
-      h('td', null, pill(p.status, STATUS_FA[p.status])),
-      h('td', null, p.status === 'pending' && p.provider === 'manual' ? h('div', { class: 'row' },
-        h('button', { class: 'btn primary sm', onclick: () => review(p, 'approve') }, 'تأیید و شارژ'),
-        h('button', { class: 'btn danger sm', onclick: () => review(p, 'reject') }, 'رد')) : ''))), 'موردی نیست.');
-  }
-  async function review(p, decision) {
-    const msg = decision === 'approve'
-      ? `واریز ${toman(p.amount)} تومان را در حساب بانکی دیدید؟ با تأیید، این مبلغ به اعتبار «${p.name}» افزوده می‌شود.`
-      : `درخواست ${toman(p.amount)} تومانی «${p.name}» رد شود؟`;
-    if (!confirm(msg)) return;
-    const note = decision === 'reject' ? prompt('دلیل رد (به مشتری نمایش داده می‌شود):') : '';
-    if (note === null) return;
-    const x = await api('/api/admin/payments/review', { id: p.id, decision, note });
-    if (!x.ok) return toast(errText(x));
-    toast(decision === 'approve' ? 'اعتبار افزوده شد' : 'رد شد');
-    route();
-  }
-  return [pageHead('پرداخت‌ها', filter), h('div', { class: 'card' }, list)];
+  const r = await api('/api/admin/payments?status=all');
+  state.cache.payments = r.rows || [];
+  const all = state.cache.payments;
+  const rows = all.filter(p => matches(p.status, `${p.name} ${p.email || ''} ${p.mobile || ''} ${p.receipt || ''} ${p.ref_id || ''} pay_${p.id}`));
+  const pendingSum = all.filter(p => p.status === 'pending').reduce((a, p) => a + p.amount, 0);
+  return [
+    head('PAYMENTS · پرداخت‌ها', 'پرداخت‌ها', 'بررسی کارت‌به‌کارت‌ها و پیگیری پرداخت‌های درگاه', []),
+    h('div', { class: 'tiles t3' },
+      tile(String(all.filter(p => p.status === 'pending').length), 'در انتظار بررسی', null, () => { state.filter = 'pending'; rerender(); }),
+      tile(tmn(pendingSum), 'مبلغ در انتظار · تومان'),
+      tile(tmn(state.ov.totals.paid30), 'تأییدشده · ۳۰ روز · تومان', null, () => { state.filter = 'paid'; rerender(); })),
+    h('section', { class: 'tbl-card' },
+      tools('نام، ایمیل، موبایل یا شمارهٔ پیگیری', [['pending', 'در انتظار'], ['paid', 'پرداخت‌شده'], ['rejected', 'ردشده'], ['failed', 'ناموفق'], ['all', 'همه']]),
+      ktable({ rows, row: p => paymentModal(p.id), empty: 'پرداختی با این فیلتر نیست', note: 'تأیید کارت‌به‌کارت فقط پس از دیدن واریز در حساب بانکی. هر تأیید یا رد در گزارش رویدادها ثبت می‌شود.', cols: [
+        { k: 'i', label: 'شناسه', sort: p => p.id, cell: p => h('span', { class: 'id' }, `pay_${p.id}`) },
+        { k: 'c', label: 'مشتری', sort: p => p.name, cell: p => who(p.name, contact(p)) },
+        { k: 'm', label: 'روش', cell: p => PROVIDER_FA[p.provider] },
+        { k: 'a', label: 'مبلغ', num: 1, sort: p => p.amount, cell: p => money(p.amount) },
+        { k: 'r', label: 'اطلاعات واریز / مرجع', cell: p => h('span', { class: 'dim' }, p.receipt || p.ref_id || '—') },
+        { k: 'd', label: 'زمان', sort: p => p.created_at, cell: p => h('span', { class: 'num dim' }, stamp(p.created_at)) },
+        { k: 's', label: 'وضعیت', cls: 'lead2', cell: p => st(p.status, PAY[p.status]) },
+        { k: 'x', label: 'اقدام', cls: 'act', cell: p => p.status === 'pending' && p.provider === 'manual'
+          ? h('span', { class: 'row-acts' }, h('button', { class: 'rowbtn', type: 'button', onclick: () => review(p, 'approve') }, ic('check'), 'تأیید'), ' ', h('button', { class: 'rowbtn', type: 'button', onclick: () => review(p, 'reject') }, 'رد'))
+          : viewBtn(() => paymentModal(p.id)) },
+      ] })),
+  ];
+}
+async function paymentModal(id) {
+  let p = (state.cache.payments || []).find(x => x.id === id);
+  if (!p) { const r = await api('/api/admin/payments?status=all'); state.cache.payments = r.rows || []; p = state.cache.payments.find(x => x.id === id); }
+  if (!p) return toast('پرداخت پیدا نشد');
+  const can = p.status === 'pending' && p.provider === 'manual';
+  openModal([
+    h('h2', { id: 'dlgTitle' }, `پرداخت ${PROVIDER_FA[p.provider]}`), h('p', { class: 'sub' }, h('span', { class: 'id' }, `pay_${p.id}`), ' · ', st(p.status, PAY[p.status])),
+    h('div', { class: 'mbig' }, h('span', { class: 'num' }, tmn(p.amount)), ' ', h('small', null, 'تومان')),
+    h('dl', { class: 'dl' },
+      h('div', null, h('dt', null, 'مشتری'), h('dd', null, h('button', { class: 'linkbtn', type: 'button', onclick: () => customerModal(p.user_id) }, p.name))),
+      h('div', null, h('dt', null, 'تماس'), h('dd', { class: 'en' }, contact(p))),
+      h('div', null, h('dt', null, 'ثبت'), h('dd', { class: 'num' }, stamp(p.created_at))),
+      h('div', null, h('dt', null, 'نتیجه'), h('dd', { class: 'num' }, p.resolved_at ? stamp(p.resolved_at) : '—')),
+      p.receipt ? h('div', null, h('dt', null, 'اطلاعات واریز مشتری'), h('dd', null, p.receipt)) : null,
+      p.ref_id ? h('div', null, h('dt', null, 'کد مرجع درگاه'), h('dd', { class: 'num' }, p.ref_id)) : null,
+      p.card_pan ? h('div', null, h('dt', null, 'کارت'), h('dd', { class: 'num' }, p.card_pan)) : null,
+      p.note ? h('div', null, h('dt', null, 'یادداشت'), h('dd', null, p.note)) : null),
+    can ? h('div', { class: 'warn' }, ic('alert'), h('div', null, 'پیش از تأیید، واریز همین مبلغ را در حساب بانکی ببینید. تأیید، اعتبار را فوراً به حساب مشتری اضافه می‌کند.')) : null,
+    h('div', { class: 'f-actions' },
+      can ? h('button', { class: 'btn btn-dark', type: 'button', onclick: () => review(p, 'approve') }, ic('check'), 'تأیید و افزودن اعتبار') : null,
+      can ? h('button', { class: 'btn btn-line', type: 'button', onclick: () => review(p, 'reject') }, 'رد') : null,
+      h('button', { class: 'btn btn-line', type: 'button', 'data-close': '' }, 'بستن')),
+  ]);
+}
+async function review(p, decision) {
+  const ok = decision === 'approve'
+    ? await confirmModal({ title: 'تأیید پرداخت', text: `واریز ${tmn(p.amount)} تومان از «${p.name}» را در حساب بانکی دیده‌اید؟ با تأیید، این مبلغ به اعتبار مشتری افزوده می‌شود.`, action: 'تأیید و افزودن اعتبار' })
+    : await confirmModal({ title: 'رد پرداخت', text: `درخواست ${tmn(p.amount)} تومانی «${p.name}» رد شود؟ دلیل به مشتری نمایش داده می‌شود.`, action: 'رد پرداخت', danger: true, note: { label: 'دلیل رد', placeholder: 'مثلاً: واریزی با این مشخصات پیدا نشد' } });
+  if (ok === false) return;
+  const r = await api('/api/admin/payments/review', { id: p.id, decision, note: typeof ok === 'string' ? ok : '' });
+  if (!r.ok) return toast(errText(r));
+  toast(decision === 'approve' ? 'اعتبار افزوده شد' : 'پرداخت رد شد');
+  rerender();
 }
 
-async function users() {
-  const q = h('input', { type: 'search', placeholder: 'جست‌وجو: نام، ایمیل یا موبایل', 'aria-label': 'جست‌وجوی مشتری' });
-  const list = h('div');
-  let timer;
-  const load = async () => {
-    const r = await api('/api/admin/users?q=' + encodeURIComponent(latin(q.value)));
-    list.replaceChildren(table(['#', 'نام', 'ایمیل / موبایل', 'موجودی (تومان)', 'کلید فعال', 'آخرین درخواست', 'وضعیت'], (r.rows || []).map(u =>
-      h('tr', { class: 'click', tabindex: 0, onclick: () => openUser(u.id), onkeydown: e => e.key === 'Enter' && openUser(u.id) },
-        h('td', null, num(u.id)), h('td', null, u.name), h('td', { class: 'ltr small' }, u.email || u.mobile),
-        h('td', null, toman(u.balance)), h('td', null, num(u.keys)), h('td', null, when(u.last_request)), h('td', null, pill(u.status, STATUS_FA[u.status])))), 'مشتری‌ای پیدا نشد.'));
-  };
-  q.oninput = () => { clearTimeout(timer); timer = setTimeout(load, 250); };
-  await load();
-  return [pageHead('مشتریان'), h('div', { class: 'card stack' }, q, list)];
+/* ================= customers ================= */
+async function customers() {
+  const r = await api('/api/admin/users');
+  const all = r.rows || [];
+  const rows = all.filter(u => matches(u.status, `${u.name} ${u.email || ''} ${u.mobile || ''} ${phone(u.mobile)} ${u.id}`));
+  return [
+    head('CUSTOMERS · مشتریان', 'مشتریان', 'پروندهٔ هر مشتری: موجودی، کلیدها، پرداخت‌ها و گردش حساب', []),
+    h('div', { class: 'tiles t3' },
+      tile(fmt(all.length), 'کل مشتریان'), tile(fmt(all.filter(u => u.status === 'suspended').length), 'غیرفعال', null, () => { state.filter = 'suspended'; rerender(); }),
+      tile(tmn(all.reduce((a, u) => a + u.balance, 0)), 'موجودی کل · تومان')),
+    h('section', { class: 'tbl-card' },
+      tools('نام، ایمیل، موبایل یا شناسه', [['all', 'همه'], ['active', 'فعال'], ['suspended', 'غیرفعال']]),
+      ktable({ rows, row: u => customerModal(u.id), empty: 'مشتری‌ای پیدا نشد', note: 'برای پرونده، اصلاح اعتبار یا غیرفعال‌کردن حساب روی ردیف بزنید.', cols: [
+        { k: 'n', label: 'مشتری', sort: u => u.name, cell: u => who(u.name, contact(u)) },
+        { k: 'b', label: 'موجودی', num: 1, sort: u => u.balance, cell: u => money(u.balance) },
+        { k: 'k', label: 'کلید فعال', num: 1, sort: u => Number(u.keys), cell: u => h('span', { class: 'num' }, String(u.keys)) },
+        { k: 'l', label: 'آخرین درخواست', sort: u => u.last_request || '', cell: u => h('span', { class: 'dim' }, u.last_request ? ago(u.last_request) : '—') },
+        { k: 'j', label: 'عضویت', sort: u => u.created_at, cell: u => h('span', { class: 'num dim' }, dateOf(u.created_at)) },
+        { k: 's', label: 'وضعیت', cls: 'lead2', cell: u => st(u.status === 'active' ? 'ok' : 'error', USTAT[u.status]) },
+      ] })),
+  ];
 }
-
-async function openUser(id) {
-  const dlg = $('#userDlg');
+async function customerModal(id, tab = 'ledger') {
   const r = await api('/api/admin/user?id=' + id);
   if (!r.ok) return toast(errText(r));
-  const u = r.user;
-  const amount = h('input', { type: 'text', inputmode: 'numeric', class: 'ltr', id: 'adjAmount', placeholder: 'مثلاً 50000 یا -50000' });
-  const note = h('input', { type: 'text', id: 'adjNote', placeholder: 'دلیل (الزامی): هدیه، جبران خطا…' });
-  const adjust = h('form', { class: 'row end', onsubmit: async e => {
+  const u = r.user, on = u.status === 'active';
+  const amount = h('input', { id: 'adjAmount', inputmode: 'numeric', dir: 'ltr', placeholder: '50000 یا -50000' });
+  const note = h('input', { id: 'adjNote', maxlength: 300, placeholder: 'هدیه، جبران خطا، بازپرداخت…' });
+  const adjust = h('form', { class: 'adj', onsubmit: async e => {
     e.preventDefault();
     const t = Number(latin(amount.value).replace(/[^\d-]/g, ''));
-    if (!t) return toast('مبلغ را وارد کنید');
-    if (!confirm(`${t > 0 ? 'افزودن' : 'کسر'} ${toman(Math.abs(t) * 10)} تومان ${t > 0 ? 'به' : 'از'} حساب «${u.name}»؟`)) return;
+    if (!t) return toast('مبلغ را به تومان وارد کنید');
+    if (note.value.trim().length < 3) return toast('توضیح لازم است (دست‌کم ۳ حرف)');
+    const ok = await confirmModal({ title: 'اصلاح اعتبار', text: `${t > 0 ? 'افزودن' : 'کسر'} ${fmt(Math.abs(t))} تومان ${t > 0 ? 'به' : 'از'} حساب «${u.name}»؟ این تراکنش در گردش حساب مشتری و گزارش رویدادها ثبت می‌شود.`, action: 'ثبت', danger: t < 0 });
+    if (!ok) return customerModal(id, tab);
     const x = await api('/api/admin/adjust', { accountId: u.account_id, amount: t * 10, note: note.value });
+    if (!x.ok) { toast(errText(x)); return customerModal(id, tab); }
+    toast('ثبت شد'); customerModal(id, tab); if (['customers', 'overview'].includes(state.view)) rerender();
+  } }, h('div', { class: 'field' }, h('label', { for: 'adjAmount' }, 'اصلاح اعتبار (تومان)'), amount),
+    h('div', { class: 'field' }, h('label', { for: 'adjNote' }, 'توضیح'), note), h('button', { class: 'btn btn-dark', type: 'submit' }, 'ثبت'));
+  const toggle = async () => {
+    const ok = await confirmModal(on
+      ? { title: 'غیرفعال‌کردن حساب', text: `حساب «${u.name}» غیرفعال شود؟ مشتری از همهٔ دستگاه‌ها خارج می‌شود و کلیدهایش کار نمی‌کنند. موجودی دست نمی‌خورد.`, action: 'غیرفعال کن', danger: true }
+      : { title: 'فعال‌کردن حساب', text: `حساب «${u.name}» دوباره فعال شود؟`, action: 'فعال کن' });
+    if (!ok) return customerModal(id, tab);
+    const x = await api('/api/admin/users/status', { id: u.id, status: on ? 'suspended' : 'active' });
     if (!x.ok) return toast(errText(x));
-    toast('ثبت شد');
-    openUser(id);
-  } }, h('div', { class: 'grow' }, h('label', { for: 'adjAmount' }, 'اصلاح اعتبار (تومان؛ منفی برای کسر)'), amount),
-    h('div', { class: 'grow' }, h('label', { for: 'adjNote' }, 'توضیح'), note), h('button', { class: 'btn' }, 'ثبت'));
-  const toggle = h('button', { class: u.status === 'active' ? 'btn danger sm' : 'btn line sm', onclick: async () => {
-    const next = u.status === 'active' ? 'suspended' : 'active';
-    if (!confirm(next === 'suspended' ? 'حساب غیرفعال شود؟ مشتری خارج می‌شود و کلیدهایش کار نمی‌کنند.' : 'حساب دوباره فعال شود؟')) return;
-    const x = await api('/api/admin/users/status', { id: u.id, status: next });
-    if (!x.ok) return toast(errText(x));
-    openUser(id); if (location.hash.startsWith('#users')) route();
-  } }, u.status === 'active' ? 'غیرفعال‌کردن حساب' : 'فعال‌کردن دوباره');
-
-  dlg.replaceChildren(
-    h('div', { class: 'row between' }, h('h2', { id: 'userDlgTitle' }, u.name, ' ', pill(u.status, STATUS_FA[u.status])), h('button', { class: 'btn line sm', onclick: () => dlg.close() }, 'بستن')),
-    h('p', { class: 'small muted' }, h('span', { class: 'ltr' }, [u.email, u.mobile].filter(Boolean).join(' · ')), ' — عضویت: ', when(u.created_at)),
-    h('div', { class: 'grid g3' }, tile('موجودی', toman(u.balance), 'تومان'), tile('رزرو', toman(u.held), 'تومان'), h('div', { class: 'card tile' }, h('div', { class: 'label' }, 'وضعیت'), toggle)),
-    h('div', { class: 'card' }, adjust),
-    h('div', { class: 'card' }, h('h2', null, 'گردش حساب'), table(['زمان', 'نوع', 'مبلغ', 'شرح', 'انجام‌دهنده'], r.ledger.map(l => h('tr', null,
-      h('td', null, when(l.created_at)), h('td', null, KIND_FA[l.kind]), h('td', null, signed(l.amount)), h('td', { class: 'small' }, l.note || l.ref || ''), h('td', { class: 'small muted' }, l.actor))))),
-    h('div', { class: 'card' }, h('h2', null, 'پرداخت‌ها'), table(['زمان', 'روش', 'مبلغ', 'وضعیت', 'مرجع'], r.payments.map(p => h('tr', null,
-      h('td', null, when(p.created_at)), h('td', null, PROVIDER_FA[p.provider]), h('td', null, toman(p.amount)), h('td', null, pill(p.status, STATUS_FA[p.status])), h('td', { class: 'small' }, p.ref_id || p.receipt || '—'))))),
-    h('div', { class: 'card' }, h('h2', null, 'کلیدها'), table(['نام', 'شناسه', 'آخرین استفاده', 'وضعیت'], r.keys.map(k => h('tr', null,
-      h('td', null, k.name), h('td', { class: 'mono' }, k.prefix + '…'), h('td', null, when(k.last_used_at)), h('td', null, k.revoked_at ? pill('revoked', 'باطل') : pill('active', 'فعال')))))),
-  );
-  dlg.querySelectorAll('.card').forEach(c => c.style.marginTop = '14px');
-  if (!dlg.open) dlg.showModal();
+    toast(on ? 'حساب غیرفعال شد' : 'حساب فعال شد'); customerModal(id, tab); rerender();
+  };
+  const TABS = { ledger: `گردش حساب (${r.ledger.length})`, payments: `پرداخت‌ها (${r.payments.length})`, keys: `کلیدها (${r.keys.length})`, usage: `درخواست‌ها (${r.usage.length})` };
+  const tables = {
+    ledger: () => ktable({ all: 1, rows: r.ledger.slice(0, 40), empty: 'تراکنشی نیست', note: '۴۰ تراکنش آخر', cols: [
+      { k: 'd', label: 'زمان', cell: l => h('span', { class: 'num dim' }, stamp(l.created_at)) },
+      { k: 'k', label: 'نوع', cell: l => KIND[l.kind] },
+      { k: 'a', label: 'مبلغ', num: 1, cell: l => signedMoney(l.amount) },
+      { k: 'n', label: 'شرح', cell: l => h('span', { class: 'dim' }, l.note === 'manual' ? 'کارت‌به‌کارت' : l.note === 'zarinpal' ? 'زرین‌پال' : l.note || l.ref || '') },
+      { k: 'b', label: 'انجام‌دهنده', cls: 'lead2', cell: l => h('span', { class: 'dim' }, l.actor) } ] }),
+    payments: () => ktable({ all: 1, rows: r.payments, empty: 'پرداختی نیست', note: '', cols: [
+      { k: 'd', label: 'زمان', cell: p => h('span', { class: 'num dim' }, stamp(p.created_at)) },
+      { k: 'm', label: 'روش', cell: p => PROVIDER_FA[p.provider] },
+      { k: 'a', label: 'مبلغ', num: 1, cell: p => money(p.amount) },
+      { k: 'r', label: 'مرجع', cell: p => h('span', { class: 'dim' }, p.ref_id || p.receipt || '—') },
+      { k: 's', label: 'وضعیت', cls: 'lead2', cell: p => st(p.status, PAY[p.status]) } ] }),
+    keys: () => ktable({ all: 1, rows: r.keys, empty: 'کلیدی نیست', note: 'متن کامل کلیدها هیچ‌جا ذخیره نمی‌شود؛ فقط پیشوند.', cols: [
+      { k: 'n', label: 'نام', cell: k => h('span', { class: 'pc' }, k.name) },
+      { k: 'p', label: 'شناسه', cell: k => h('span', { class: 'id' }, k.prefix + '••••') },
+      { k: 'l', label: 'آخرین استفاده', cell: k => h('span', { class: 'dim' }, ago(k.last_used_at)) },
+      { k: 's', label: 'وضعیت', cls: 'lead2', cell: k => st(k.revoked_at ? 'revoked' : 'ok', k.revoked_at ? 'باطل‌شده' : 'فعال') } ] }),
+    usage: () => ktable({ all: 1, rows: r.usage, empty: 'درخواستی نیست', note: '۵۰ درخواست آخر', cols: [
+      { k: 'd', label: 'زمان', cell: x => h('span', { class: 'num dim' }, stamp(x.created_at)) },
+      { k: 'm', label: 'مدل', cell: x => h('span', { class: 'id' }, x.model) },
+      { k: 't', label: 'توکن', num: 1, cell: x => h('span', { class: 'num' }, `${kfmt(x.input_tokens)} / ${kfmt(x.output_tokens)}`) },
+      { k: 'c', label: 'هزینه', num: 1, cell: x => money(x.cost) },
+      { k: 's', label: 'وضعیت', cls: 'lead2', cell: x => st(x.status, x.status === 'ok' ? 'موفق' : x.status === 'error' ? 'ناموفق' : 'در جریان') } ] }),
+  };
+  openModal([
+    h('h2', { id: 'dlgTitle' }, u.name), h('p', { class: 'sub' }, st(on ? 'ok' : 'error', USTAT[u.status]), ' · ', h('span', { class: 'en' }, contact(u)), ' · عضویت ', ago(u.created_at)),
+    h('div', { class: 'tiles t3 mt12' }, tile(tmn(u.balance), 'موجودی · تومان'), tile(tmn(u.held), 'رزرو · تومان'), tile(String(r.keys.filter(k => !k.revoked_at).length), 'کلید فعال')),
+    h('dl', { class: 'dl' },
+      h('div', null, h('dt', null, 'موبایل'), h('dd', { class: 'en' }, phone(u.mobile) || '—', u.mobile_verified_at ? ' ✓' : '')),
+      h('div', null, h('dt', null, 'ایمیل'), h('dd', { class: 'en' }, u.email || '—'))),
+    adjust,
+    h('div', { class: 'fpills sub-tabs', role: 'group', 'aria-label': 'بخش‌های پرونده' }, Object.entries(TABS).map(([k, label]) =>
+      h('button', { type: 'button', 'aria-pressed': String(tab === k), onclick: () => customerModal(id, k) }, label))),
+    tables[tab](),
+    h('div', { class: 'f-actions' }, h('button', { class: `btn ${on ? 'btn-danger' : 'btn-dark'}`, type: 'button', onclick: toggle }, on ? 'غیرفعال‌کردن حساب' : 'فعال‌کردن حساب'), h('button', { class: 'btn btn-line', type: 'button', 'data-close': '' }, 'بستن')),
+  ], true);
 }
 
+/* ================= early-access list ================= */
 async function waitlist() {
   const r = await api('/api/admin/signups');
-  const s = r.stats || {};
-  const STAT = ['new', 'approved', 'invited', 'rejected'];
+  const s = r.stats || {}, all = (r.items || []).map(x => ({ ...x, status: x.status || 'new' }));
+  const rows = all.filter(x => matches(x.status, `${x.name} ${x.email} ${x.mobile} ${x.usecase || ''} ${x.role || ''}`));
+  const save = async (x, patch) => { const y = await api('/api/admin/signups/update', { email: x.email, ...patch }); toast(y.ok ? 'ذخیره شد' : errText(y)); };
   return [
-    pageHead('فهرست انتظار', h('a', { class: 'btn line', href: '/api/admin/signups.csv' }, 'خروجی Excel (CSV)')),
-    h('div', { class: 'grid g4' }, tile('کل', num(s.total)), tile('۷ روز اخیر', num(s.last7)), tile('جدید', num(s.new)), tile('دعوت‌شده', num(s.invited))),
-    h('div', { class: 'card' }, table(['زمان', 'نام', 'ایمیل / موبایل', 'نقش و کاربرد', 'منبع', 'وضعیت', 'یادداشت'], (r.items || []).map(x => {
-      const sel = h('select', { 'aria-label': 'وضعیت', onchange: async () => { const y = await api('/api/admin/signups/update', { email: x.email, status: sel.value }); toast(y.ok ? 'ذخیره شد' : errText(y)); } },
-        STAT.map(v => h('option', { value: v, selected: (x.status || 'new') === v }, STATUS_FA[v])));
-      const note = h('input', { type: 'text', value: x.note || '', 'aria-label': 'یادداشت', onchange: async () => { const y = await api('/api/admin/signups/update', { email: x.email, note: note.value }); toast(y.ok ? 'ذخیره شد' : errText(y)); } });
-      return h('tr', null, h('td', null, when(x.createdAt)), h('td', null, x.name), h('td', { class: 'ltr small' }, x.email, h('br'), x.mobile),
-        h('td', { class: 'small' }, x.role || '', x.usecase ? h('div', { class: 'muted' }, x.usecase) : null), h('td', { class: 'small' }, x.source), h('td', null, sel), h('td', null, note));
-    }), 'هنوز ثبت‌نامی نیست.')),
+    head('EARLY ACCESS · فهرست انتظار', 'فهرست انتظار', 'درخواست‌های دسترسی زودهنگام از فرم وب‌سایت', [
+      h('a', { class: 'btn btn-line', href: '/api/admin/signups.csv' }, ic('download'), 'خروجی Excel (CSV)')]),
+    h('div', { class: 'tiles' }, tile(fmt(s.total), 'کل درخواست‌ها'), tile(fmt(s.last7), '۷ روز اخیر'), tile(fmt(s.new), 'جدید · بررسی‌نشده', null, () => { state.filter = 'new'; rerender(); }), tile(fmt(s.invited), 'دعوت‌شده')),
+    h('section', { class: 'tbl-card' },
+      tools('نام، ایمیل، موبایل یا کاربرد', [['all', 'همه'], ['new', 'جدید'], ['approved', 'تأییدشده'], ['invited', 'دعوت‌شده'], ['rejected', 'ردشده']]),
+      ktable({ rows, empty: all.length ? 'موردی پیدا نشد' : 'هنوز درخواستی نیست', note: 'تغییر وضعیت یا یادداشت فوراً ذخیره می‌شود.', cols: [
+        { k: 'n', label: 'نام', sort: x => x.name, cell: x => who(x.name, x.email) },
+        { k: 'm', label: 'موبایل', cell: x => h('span', { class: 'num dim' }, phone(x.mobile)) },
+        { k: 'u', label: 'کاربرد', cell: x => h('span', { class: 'dim' }, x.usecase || x.role || '—') },
+        { k: 'd', label: 'زمان', sort: x => x.createdAt, cell: x => h('span', { class: 'num dim' }, dateOf(x.createdAt)) },
+        { k: 's', label: 'وضعیت', cell: x => h('select', { class: 'inline-sel', 'aria-label': 'وضعیت', onchange: e => save(x, { status: e.target.value }) },
+          Object.entries(WAIT).map(([v, l]) => h('option', { value: v, selected: x.status === v }, l))) },
+        { k: 'o', label: 'یادداشت', cls: 'act', cell: x => h('input', { class: 'inline-note', value: x.note || '', 'aria-label': 'یادداشت', placeholder: 'یادداشت…', onchange: e => save(x, { note: e.target.value }) }) },
+      ] })),
   ];
 }
 
+/* ================= audit log ================= */
 async function audit() {
   const r = await api('/api/admin/audit');
-  return [pageHead('گزارش رویدادها'), h('div', { class: 'card' }, table(['زمان', 'انجام‌دهنده', 'رویداد', 'هدف', 'جزئیات', 'IP'], (r.rows || []).map(a => h('tr', null,
-    h('td', null, when(a.created_at)), h('td', { class: 'small' }, a.actor), h('td', null, a.action), h('td', { class: 'small ltr' }, a.target || ''),
-    h('td', { class: 'mono small' }, a.detail ? JSON.stringify(a.detail) : ''), h('td', { class: 'small ltr' }, a.ip || '')))))];
+  const all = (r.rows || []).map(a => ({ ...a, status: a.actor === 'admin' ? 'admin' : a.actor.startsWith('user:') ? 'user' : 'system' }));
+  const rows = all.filter(a => matches(a.status, `${a.actor} ${a.action} ${ACTION[a.action] || ''} ${a.target || ''} ${a.ip || ''}`));
+  return [
+    head('AUDIT · گزارش رویدادها', 'گزارش رویدادها', 'هر ورود، تغییر پول و اقدام مدیر با زمان و IP', []),
+    h('section', { class: 'tbl-card' },
+      tools('رویداد، هدف یا IP', [['all', 'همه'], ['admin', 'مدیر'], ['user', 'مشتری'], ['system', 'سیستم']]),
+      ktable({ rows, empty: 'رویدادی نیست', note: '۳۰۰ رویداد آخر.', cols: [
+        { k: 'd', label: 'زمان', sort: a => a.created_at, cell: a => h('span', { class: 'num dim' }, stamp(a.created_at)) },
+        { k: 'w', label: 'انجام‌دهنده', cell: a => h('span', { class: a.actor === 'admin' ? 'pill dk' : 'pill' }, a.actor === 'admin' ? 'مدیر' : a.actor) },
+        { k: 'a', label: 'رویداد', cell: a => h('span', { class: 'pc' }, ACTION[a.action] || a.action) },
+        { k: 't', label: 'هدف', cell: a => a.target?.startsWith('user:') ? h('button', { class: 'linkbtn', type: 'button', onclick: () => customerModal(Number(a.target.slice(5))) }, a.target) : h('span', { class: 'id' }, a.target || '—') },
+        { k: 'x', label: 'جزئیات', cell: a => h('span', { class: 'mono-detail' }, a.detail ? JSON.stringify(a.detail) : '') },
+        { k: 'i', label: 'IP', cls: 'lead2', cell: a => h('span', { class: 'id' }, a.ip || '') },
+      ] })),
+  ];
 }
 
+const VIEWS = { overview, payments, customers, waitlist, audit };
 start();
+})();

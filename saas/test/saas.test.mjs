@@ -198,6 +198,7 @@ test('admin: login required, suspend logs the customer out and blocks their keys
   const { c, id } = await newUser();
   await credit(id, 5_000_000);
   const { json: { secret } } = await c.post('/api/app/keys', {});
+  assert.equal((await ask(secret)).status, 200, 'one paid request, so this customer has spend');
   const a = await admin();
   assert.equal((await a.post('/api/admin/users/status', { id, status: 'suspended' })).status, 200);
   assert.equal((await c.get('/api/auth/me')).status, 401);
@@ -206,6 +207,9 @@ test('admin: login required, suspend logs the customer out and blocks their keys
   assert.equal(detail.json.user.status, 'suspended');
   const ov = await a.get('/api/admin/overview');
   assert.equal(ov.json.ledgerOk, true);
+  assert.equal(ov.json.series.length, 30, 'one row per day for the chart');
+  assert.ok(Array.isArray(ov.json.recentPayments) && Array.isArray(ov.json.recentUsers) && Array.isArray(ov.json.topCustomers));
+  assert.ok(ov.json.topCustomers.some(c => c.id === id), 'a customer who spent shows up in the top list');
   assert.ok((await a.get('/api/admin/audit')).json.rows.some(r => r.action === 'user_status'));
 });
 

@@ -26,13 +26,6 @@ async function api(path, body) {
   return { ...j, status: r.status };
 }
 
-const nf = new Intl.NumberFormat('fa-IR');
-const toman = rial => nf.format(Math.floor(Number(rial || 0) / 10));
-const num = n => nf.format(Number(n || 0));
-const dt = new Intl.DateTimeFormat('fa-IR-u-ca-persian', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Tehran' });
-const dOnly = new Intl.DateTimeFormat('fa-IR-u-ca-persian', { month: 'short', day: 'numeric', timeZone: 'Asia/Tehran' });
-const when = v => (v ? dt.format(new Date(v)) : '—');
-const day = v => dOnly.format(new Date(v + 'T12:00:00+03:30'));
 const latin = s => String(s ?? '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
 
 const ERRORS = {
@@ -64,22 +57,4 @@ function toast(msg) {
 async function copy(text) {
   try { await navigator.clipboard.writeText(text); toast('کپی شد'); } catch { toast('کپی نشد؛ دستی انتخاب کنید'); }
 }
-function table(head, rows, empty = 'موردی نیست') {
-  if (!rows.length) return h('div', { class: 'empty' }, empty);
-  return h('div', { class: 'table-wrap' }, h('table', null,
-    h('thead', null, h('tr', null, head.map(x => h('th', null, x)))),
-    h('tbody', null, rows)));
-}
-const pill = (cls, text) => h('span', { class: `pill ${cls}` }, text);
-const signed = rial => h('span', { class: rial > 0 ? 'pos' : 'neg' }, (rial > 0 ? '+' : '−') + toman(Math.abs(rial)));
-function bars(days, key) {
-  const max = Math.max(1, ...days.map(d => Number(d[key])));
-  return h('div', { class: 'bars', role: 'img', 'aria-label': 'نمودار ۳۰ روز اخیر' },
-    days.map((d, i) => h('span', { class: i === days.length - 1 ? 'today' : null, style: `height:${Math.max(1.5, (Number(d[key]) / max) * 100)}%`, title: `${day(d.day)}: ${key === 'cost' ? toman(d[key]) + ' تومان' : num(d[key])}` })));
-}
-const STATUS_FA = {
-  ok: 'موفق', error: 'خطا', pending: 'در انتظار', paid: 'پرداخت‌شده', failed: 'ناموفق', rejected: 'ردشده',
-  active: 'فعال', suspended: 'غیرفعال', new: 'جدید', approved: 'تأییدشده', invited: 'دعوت‌شده',
-};
-const KIND_FA = { topup: 'شارژ', usage: 'مصرف API', adjustment: 'اصلاح مدیر', refund: 'کسر/بازپرداخت' };
 const PROVIDER_FA = { manual: 'کارت‌به‌کارت', zarinpal: 'زرین‌پال' };

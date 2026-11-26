@@ -3,6 +3,7 @@
 // Admin sessions live in memory: a server restart logs the owner out, which is acceptable for one person.
 import { randomToken, checkPassword, readCookie, cookie, rateLimiter } from './security.mjs';
 import { post, reconcile, InsufficientFunds } from './ledger.mjs';
+import { pricing } from './gateway.mjs';
 
 const COOKIE = 'ci_admin';
 const SESSION_MS = 12 * 60 * 60 * 1000; // 12 hours
@@ -102,7 +103,8 @@ export function createAdmin({ db, payments, send, readJson, withLock, loadList, 
   // --- SaaS ---
   async function overview(req, res) {
     if (!db) return send(req, res, 200, { ok: true, saas: false });
-    const [[t], mismatched] = await Promise.all([
+    const day = col => `${col} >= d AND ${col} < d + interval '1 day'`;
+    const [[t], mismatched, series, recentPayments, recentUsers, topCustomers] = await Promise.all([
       db.query(`SELECT
           (SELECT count(*) FROM users) AS users,
           (SELECT count(*) FROM users WHERE created_at > now() - interval '7 days') AS users7,
@@ -112,8 +114,26 @@ export function createAdmin({ db, payments, send, readJson, withLock, loadList, 
           (SELECT COALESCE(sum(cost), 0) FROM usage_events WHERE status = 'ok' AND created_at > now() - interval '30 days') AS usage30,
           (SELECT count(*) FROM usage_events WHERE created_at > now() - interval '24 hours') AS requests24`),
       reconcile(db),
+      // one row per day for the last 30 days: money in, money used, traffic, new customers
+      db.query(`SELECT to_char(d, 'YYYY-MM-DD') AS day,
+          (SELECT COALESCE(sum(amount), 0) FROM payments WHERE status = 'paid' AND ${day('resolved_at')}) AS revenue,
+          (SELECT COALESCE(sum(cost), 0) FROM usage_events WHERE status = 'ok' AND ${day('created_at')}) AS usage,
+          (SELECT count(*) FROM usage_events WHERE ${day('created_at')}) AS requests,
+          (SELECT count(*) FROM users WHERE ${day('created_at')}) AS signups
+        FROM generate_series(current_date - 29, current_date, interval '1 day') d ORDER BY d`),
+      db.query(`SELECT p.id, p.provider, p.amount, p.status, p.created_at, u.id AS user_id, u.name
+                  FROM payments p JOIN accounts a ON a.id = p.account_id JOIN users u ON u.id = a.owner_id ORDER BY p.id DESC LIMIT 6`),
+      db.query(`SELECT u.id, u.name, u.email, u.mobile, u.status, u.created_at, a.balance
+                  FROM users u JOIN accounts a ON a.owner_id = u.id ORDER BY u.id DESC LIMIT 6`),
+      db.query(`SELECT u.id, u.name, COALESCE(sum(e.cost), 0) AS spend, count(e.id) AS requests
+                  FROM usage_events e JOIN accounts a ON a.id = e.account_id JOIN users u ON u.id = a.owner_id
+                 WHERE e.created_at > now() - interval '30 days' AND e.status = 'ok'
+                 GROUP BY u.id ORDER BY spend DESC LIMIT 5`),
     ]);
-    return send(req, res, 200, { ok: true, saas: true, totals: t, ledgerOk: mismatched.length === 0, upstream: env.UPSTREAM || 'mock', payments: payments.info() });
+    return send(req, res, 200, {
+      ok: true, saas: true, totals: t, ledgerOk: mismatched.length === 0, upstream: env.UPSTREAM || 'mock', payments: payments.info(),
+      placeholderPrices: !!pricing.placeholder, series, recentPayments, recentUsers, topCustomers,
+    });
   }
 
   async function users(req, res) {
