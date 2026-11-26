@@ -80,11 +80,12 @@ export function topbar(current = '/blog/') {
    <a class="brand" href="/" aria-label="کلاود ایران — صفحهٔ اصلی"><svg class="ico" aria-hidden="true"><use href="#i-brand"/></svg><span>کلاود ایران</span></a>
    <nav class="navpill" aria-label="ناوبری اصلی">${links}</nav>
    <div class="nav-end">
+    <a class="btn btn-line nav-login" href="/app/">ورود به پنل</a>
     <a class="btn btn-dark" href="/#early-access" data-ea>درخواست دسترسی ${ARROW}</a>
     <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mnav" aria-label="باز کردن منو"><svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg></button>
    </div>
   </div>
-  <nav class="mnav" id="mnav" aria-label="ناوبری موبایل">${NAV.map(([h, t]) => `<a href="${h}"${h === current ? ' aria-current="page"' : ''}>${t === 'سؤالات' ? 'سؤالات متداول' : t}</a>`).join('')}<a href="/#early-access" data-ea>درخواست دسترسی زودهنگام ↖</a></nav>`;
+  <nav class="mnav" id="mnav" aria-label="ناوبری موبایل">${NAV.map(([h, t]) => `<a href="${h}"${h === current ? ' aria-current="page"' : ''}>${t === 'سؤالات' ? 'سؤالات متداول' : t}</a>`).join('')}<a href="/app/">ورود به پنل</a><a href="/#early-access" data-ea>درخواست دسترسی زودهنگام ↖</a></nav>`;
 }
 
 export function footer() {
@@ -97,7 +98,7 @@ export function footer() {
     <a class="f-status" href="/#early-access" data-ea><span class="dot" aria-hidden="true"></span>پیش‌عرضه · ثبت‌نام پایلوت باز است</a>
    </div>
    <nav class="f-col" aria-label="محصول"><h3>محصول</h3><a href="/#features">مزیت‌ها</a><a href="/#dashboard">داشبورد</a><a href="/#how">روش کار</a><a href="/#products">مسیر توسعه</a></nav>
-   <nav class="f-col" aria-label="اطلاعات"><h3>اطلاعات</h3><a href="/services/">خدمات و آموزش</a><a href="/blog/">بلاگ</a><a href="/#developers">توسعه‌دهندگان</a><a href="/#faq">سؤالات متداول</a><a href="/#early-access" data-ea>دسترسی زودهنگام</a></nav>
+   <nav class="f-col" aria-label="اطلاعات"><h3>اطلاعات</h3><a href="/services/">خدمات و آموزش</a><a href="/blog/">بلاگ</a><a href="/#developers">توسعه‌دهندگان</a><a href="/#faq">سؤالات متداول</a><a href="/#early-access" data-ea>دسترسی زودهنگام</a><a href="/app/">ورود به پنل</a></nav>
    <a class="f-console" href="/console.html">
     <img class="f-relief" src="/img/relief-guard.webp" width="900" height="1805" alt="" aria-hidden="true" loading="lazy">
     <span class="f-console-top"><span class="eyebrow"><span class="dot" aria-hidden="true"></span>کنسول تعاملی <span class="en">LIVE DEMO</span></span><span class="go" aria-hidden="true"><svg class="ico flip"><use href="#i-arrow-ur"/></svg></span></span>
