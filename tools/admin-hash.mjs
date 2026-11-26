@@ -1,7 +1,7 @@
 // Creates the ADMIN_PASSWORD_HASH line for .env / /etc/claudeiran.env.
 // Usage: node tools/admin-hash.mjs
 import { createInterface } from 'node:readline/promises';
-import { hashPassword } from '../admin.mjs';
+import { hashPassword } from '../saas/security.mjs';
 
 const rl = createInterface({ input: process.stdin, output: process.stdout });
 const pw = await rl.question('Admin password (min 12 characters): ');

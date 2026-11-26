@@ -10,7 +10,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createAdmin } from './admin.mjs';
+import { createSaas } from './saas/index.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(ROOT, 'dist');
@@ -216,18 +216,8 @@ if (SHEET_URL && SHEET_SECRET) {
   console.log('[sheet] SHEETS_WEBHOOK_URL / SHEETS_WEBHOOK_SECRET not set — Google Sheet mirror is off');
 }
 
-/* ---------- admin panel ---------- */
-const handleAdmin = createAdmin({ send, readJson, withLock, loadList, saveList: list => saveJson(DATA, list), clientIp });
-const ADMIN_PAGE = path.join(ROOT, 'admin', 'index.html');
-const ADMIN_HEADERS = {
-  'X-Robots-Tag': 'noindex, nofollow',
-  'X-Frame-Options': 'DENY',
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
-};
-async function serveAdminPage(req, res) {
-  if (!existsSync(ADMIN_PAGE)) return notFound(req, res);
-  return send(req, res, 200, await readFile(ADMIN_PAGE), 'text/html; charset=utf-8', ADMIN_HEADERS);
-}
+/* ---------- SaaS: customer panel /app, owner panel /admin, API gateway /v1 (see saas/index.mjs) ---------- */
+const saas = await createSaas({ send, readJson, clientIp, withLock, loadList, saveList: list => saveJson(DATA, list) });
 
 /* ---------- static files ---------- */
 async function notFound(req, res) {
@@ -268,8 +258,7 @@ http.createServer(async (req, res) => {
       if (req.method !== 'POST') return send(req, res, 405, { ok: false, error: 'method_not_allowed' });
       return await handleWaitlist(req, res);
     }
-    if (req.url.startsWith('/api/admin/')) return await handleAdmin(req, res);
-    if (/^\/admin\/?(\?.*)?$/.test(req.url)) return await serveAdminPage(req, res);
+    if (await saas.handle(req, res)) return;
     if (req.method !== 'GET' && req.method !== 'HEAD') return send(req, res, 405, 'Method not allowed', 'text/plain; charset=utf-8');
     return await serveStatic(req, res);
   } catch (e) {

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>مدیریت کلاود ایران</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/saas-assets/saas.css">
+<script src="/saas-assets/common.js" defer></script>
+<script src="/saas-assets/admin.js" defer></script>
+</head>
+<body>
+<noscript><p class="empty">این صفحه به جاوااسکریپت نیاز دارد.</p></noscript>
+
+<section class="auth" id="auth" hidden>
+  <form class="card" id="loginForm" novalidate>
+    <div class="brand"><i aria-hidden="true"></i>کلاود ایران · مدیریت</div>
+    <div class="field">
+      <label for="pw">رمز مدیر</label>
+      <input id="pw" type="password" autocomplete="current-password" class="ltr">
+    </div>
+    <div class="err" id="loginErr" role="alert"></div>
+    <button class="btn primary w100">ورود</button>
+  </form>
+</section>
+
+<div class="shell" id="dash" hidden>
+  <nav class="side" aria-label="بخش‌های مدیریت">
+    <div class="brand"><i aria-hidden="true"></i>مدیریت</div>
+    <a href="#overview">نمای کلی</a>
+    <a href="#payments">پرداخت‌ها <span id="pendingBadge"></span></a>
+    <a href="#users">مشتریان</a>
+    <a href="#waitlist">فهرست انتظار</a>
+    <a href="#audit">گزارش رویدادها</a>
+    <div class="grow"></div>
+    <div class="who"><button class="btn line sm" id="logout">خروج</button></div>
+  </nav>
+  <main id="view" tabindex="-1"></main>
+</div>
+
+<dialog id="userDlg" class="wide" aria-labelledby="userDlgTitle"></dialog>
+</body>
+</html>

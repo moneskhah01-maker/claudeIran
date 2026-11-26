@@ -9,13 +9,18 @@
     "build": "npm run pages && vite build",
     "serve": "node server.mjs",
     "pages": "node tools/build-blog.mjs && node tools/build-services.mjs",
-    "services": "node tools/build-services.mjs"
+    "services": "node tools/build-services.mjs",
+    "test": "node --test saas/test/"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.6.0",
     "@iconify-json/solar": "^1.2.17",
     "@iconify/utils": "^3.1.7",
     "marked": "^15.0.12",
     "puppeteer-core": "^25.18.1",
     "vite": "^8.3.8"
+  },
+  "dependencies": {
+    "pg": "^8.23.1"
   }
 }

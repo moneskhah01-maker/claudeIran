@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deploy the built landing (dist/ + server.mjs) to the Iran VPS as a new release of claudeiran.com.
+# Deploy the built landing (dist/ + server.mjs + saas/) to the Iran VPS as a new release of claudeiran.com.
 # Run from Git Bash in the project folder after `npm run build`:  bash tools/deploy-vps.sh
 # - releases live in /opt/claudeiran/releases/<timestamp>, /opt/claudeiran/current points at the live one
 # - early-access sign-ups live in /var/lib/claudeiran (outside the releases), linked as <release>/data
@@ -11,7 +11,8 @@ SSH_CFG=/e/VeeJay/Vps-Iran/config
 
 TMP=$(mktemp -d)
 mkdir -p "$TMP/claudeiran"
-cp -r dist server.mjs "$TMP/claudeiran/"
+cp -r dist server.mjs saas package.json package-lock.json "$TMP/claudeiran/"
+rm -rf "$TMP/claudeiran/saas/test"
 tar -C "$TMP" -czf "$TMP/claudeiran.tgz" claudeiran
 scp -F "$SSH_CFG" "$TMP/claudeiran.tgz" vps-iran:/root/claudeiran.tgz
 rm -rf "$TMP"
@@ -27,6 +28,8 @@ if [ -n "$PREV" ] && [ -d "$PREV/data" ] && [ ! -L "$PREV/data" ] && [ -f "$PREV
 fi
 tar -xzf /root/claudeiran.tgz -C "$R" --strip-components=1
 rm -f /root/claudeiran.tgz
+# production dependencies only (pg); installed before the switch, so a failed install never goes live
+(cd "$R" && npm ci --omit=dev --no-audit --no-fund --loglevel=error)
 ln -sfn /var/lib/claudeiran "$R/data"
 chown -R claudeiran:claudeiran "$R" /var/lib/claudeiran
 chmod 750 /var/lib/claudeiran

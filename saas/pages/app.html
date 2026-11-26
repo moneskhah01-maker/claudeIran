@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>کنسول کلاود ایران</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/saas-assets/saas.css">
+<script src="/saas-assets/common.js" defer></script>
+<script src="/saas-assets/app.js" defer></script>
+</head>
+<body>
+<noscript><p class="empty">این صفحه به جاوااسکریپت نیاز دارد.</p></noscript>
+
+<!-- login / sign-up -->
+<section class="auth" id="auth" hidden>
+  <div class="card">
+    <div class="brand"><i aria-hidden="true"></i>کلاود ایران</div>
+    <h1 id="authTitle">ورود به کنسول</h1>
+    <p class="muted small">پنل مشتریان: کلید API، اعتبار و گزارش مصرف.</p>
+    <div class="seg" role="group" aria-label="روش ورود" id="methodSeg">
+      <button type="button" data-method="sms" aria-pressed="true">پیامک</button>
+      <button type="button" data-method="email" aria-pressed="false">ایمیل و رمز</button>
+    </div>
+
+    <form id="smsForm" novalidate>
+      <div class="field" id="mobileField">
+        <label for="mobile">شمارهٔ موبایل</label>
+        <input id="mobile" type="tel" inputmode="numeric" autocomplete="tel" placeholder="09121234567" class="ltr">
+      </div>
+      <div class="field" id="codeField" hidden>
+        <label for="code">کد ۶ رقمی پیامک‌شده</label>
+        <input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" class="ltr">
+      </div>
+      <div id="smsNew" hidden>
+        <div class="field">
+          <label for="smsName">نام و نام خانوادگی</label>
+          <input id="smsName" type="text" autocomplete="name">
+        </div>
+        <label class="check field"><input type="checkbox" id="smsTerms"> قوانین استفاده و حریم خصوصی را می‌پذیرم.</label>
+      </div>
+      <div class="err" id="smsErr" role="alert"></div>
+      <button class="btn primary w100" id="smsBtn">دریافت کد</button>
+      <button class="btn line sm" type="button" id="smsBack" hidden>تغییر شماره</button>
+    </form>
+
+    <form id="emailForm" novalidate hidden>
+      <div class="field" id="nameField" hidden>
+        <label for="name">نام و نام خانوادگی</label>
+        <input id="name" type="text" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="email">ایمیل</label>
+        <input id="email" type="email" autocomplete="email" class="ltr">
+      </div>
+      <div class="field">
+        <label for="password">رمز عبور <span class="muted" id="pwHint" hidden>(حداقل ۱۰ نویسه)</span></label>
+        <input id="password" type="password" autocomplete="current-password" class="ltr">
+      </div>
+      <label class="check field" id="termsField" hidden><input type="checkbox" id="terms"> قوانین استفاده و حریم خصوصی را می‌پذیرم.</label>
+      <div class="err" id="emailErr" role="alert"></div>
+      <button class="btn primary w100" id="emailBtn">ورود</button>
+      <p class="small muted mt14">
+        <span id="swapText">حساب ندارید؟</span>
+        <button type="button" class="btn line sm" id="swapMode">ساخت حساب</button>
+      </p>
+    </form>
+    <p class="small muted mt18">کلاود ایران سرویسی مستقل است و وابستگی رسمی به Anthropic ندارد.</p>
+  </div>
+</section>
+
+<!-- dashboard -->
+<div class="shell" id="dash" hidden>
+  <nav class="side" aria-label="بخش‌های کنسول">
+    <div class="brand"><i aria-hidden="true"></i>کلاود ایران</div>
+    <a href="#overview">نمای کلی</a>
+    <a href="#keys">کلیدهای API</a>
+    <a href="#billing">اعتبار و پرداخت</a>
+    <a href="#usage">گزارش مصرف</a>
+    <a href="#docs">شروع سریع</a>
+    <div class="grow"></div>
+    <div class="who"><div id="whoName"></div><button class="btn line sm" id="logout">خروج</button></div>
+  </nav>
+  <main id="view" tabindex="-1"></main>
+</div>
+</body>
+</html>
