@@ -309,6 +309,18 @@ async function swapView(el, nodes, { animate = false, dir = 'next' } = {}) {
   countUps(el);
 }
 
+// Live views refresh themselves every few seconds, quietly (no animation), but never while the visitor is
+// typing, reading a sheet or menu, or the tab is in the background.
+function autoRefresh(views, ms = 15000) {
+  setInterval(() => {
+    if (document.hidden || !views.includes(state.view)) return;
+    if (byId('modal').classList.contains('open') || byId('pop').classList.contains('open')) return;
+    if (document.activeElement?.matches('input,select,textarea')) return;
+    if (byId('dash')?.hidden) return;
+    rerender();
+  }, ms);
+}
+
 // A confirm step in the console's own sheet instead of the browser's confirm() box. Resolves true/false.
 function confirmModal({ title, text, action, danger = false, note }) {
   return new Promise(resolve => {
@@ -329,5 +341,5 @@ function confirmModal({ title, text, action, danger = false, note }) {
 }
 
 return { byId, fmt, tmn, kfmt, jDate, jTime, jDay, jWd, dateOf, timeOf, stamp, dayDate, phone, ago, ic, money, signedMoney, st,
-  pwToggle, openModal, closeModal, openPop, closePop, confirmModal, reduced, loading, countUps, swapView, head, tile, figure, btn, tapPill, cardHead, chart, ktable, tools, matches, viewBtn, csv };
+  pwToggle, openModal, closeModal, openPop, closePop, confirmModal, reduced, loading, countUps, swapView, autoRefresh, head, tile, figure, btn, tapPill, cardHead, chart, ktable, tools, matches, viewBtn, csv };
 }

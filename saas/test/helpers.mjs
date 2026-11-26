@@ -26,7 +26,7 @@ export async function startTestServer({ env = {}, fetch } = {}) {
     send, readJson,
     clientIp: req => req.headers['x-test-ip'] || '127.0.0.1',
     withLock: fn => fn(), loadList: async () => waitlist, saveList: async l => { waitlist = l; },
-    env: { DATABASE_URL: 'pglite:memory', ADMIN_PASSWORD_HASH: hashPassword(ADMIN_PASSWORD), MANUAL_PAY_INFO: 'card 6037-xxxx', ...env },
+    env: { DATABASE_URL: 'pglite:memory', MOCK_LATENCY: '0', ADMIN_PASSWORD_HASH: hashPassword(ADMIN_PASSWORD), MANUAL_PAY_INFO: 'card 6037-xxxx', ...env },
     fetch,
     sms: { name: 'test', sendOtp: async (mobile, code) => { sent.push({ mobile, code }); } },
   });

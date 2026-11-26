@@ -21,7 +21,12 @@ export function createUpstream(env = process.env) {
         const last = [...body.messages].reverse().find(m => m.role === 'user');
         const said = typeof last?.content === 'string' ? last.content : (last?.content || []).map(c => c.text || '').join(' ');
         const text = `[mock] این پاسخ آزمایشی است و هیچ مدلی فراخوانی نشده. پیام شما: «${said.slice(0, 200)}»`;
-        const usage = { input_tokens: estimateTokens(prompt), output_tokens: Math.min(estimateTokens(text), body.max_tokens) };
+        // Behave like a real model in the numbers that billing and reports see: an answer of realistic
+        // length (25–90% of max_tokens) after a realistic wait. MOCK_LATENCY=0 turns the wait off (tests).
+        const share = .25 + Math.random() * .65;
+        const output = Math.max(estimateTokens(text), Math.min(body.max_tokens, Math.round(body.max_tokens * share)));
+        const usage = { input_tokens: estimateTokens(prompt), output_tokens: Math.min(output, body.max_tokens) };
+        if (env.MOCK_LATENCY !== '0') await new Promise(r => setTimeout(r, 350 + usage.output_tokens * 1.2 + Math.random() * 600));
         return {
           status: 200,
           usage,

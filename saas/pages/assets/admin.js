@@ -369,5 +369,6 @@ async function audit() {
 }
 
 const VIEWS = { overview, payments, customers, waitlist, audit };
+ui.autoRefresh(['overview', 'payments', 'customers', 'audit']); // live numbers during a demo or a busy day
 start();
 })();

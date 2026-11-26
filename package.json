@@ -10,7 +10,9 @@
     "serve": "node server.mjs",
     "pages": "node tools/build-blog.mjs && node tools/build-services.mjs",
     "services": "node tools/build-services.mjs",
-    "test": "node --test saas/test/"
+    "test": "node --test saas/test/",
+    "demo:seed": "node tools/seed-demo.mjs --reset",
+    "demo:traffic": "node tools/demo-traffic.mjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.6.0",

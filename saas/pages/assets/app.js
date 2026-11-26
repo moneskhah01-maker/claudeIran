@@ -647,5 +647,6 @@ function docs() {
 }
 
 const VIEWS = { overview, usage, keys, requests, billing, account, docs };
+ui.autoRefresh(['overview', 'usage', 'requests', 'billing']); // live numbers during a demo or a busy day
 start();
 })();
